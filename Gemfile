@@ -49,6 +49,7 @@ end
 group :test do
   gem 'rubocop', require: false
   gem 'rubocop-rspec'
+  gem 'shoulda-matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
