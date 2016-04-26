@@ -1,0 +1,26 @@
+require: rubocop-rspec
+
+AllCops:
+  Exclude:
+    - !ruby/regexp /(vendor|bundle|bin|db)\/.*/
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  TargetRubyVersion: 2.3
+
+Rails:
+  Enabled: true
+
+Metrics/LineLength:
+  Max: 125
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+    Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/BlockComments:
+  Enabled: false
