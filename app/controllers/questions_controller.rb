@@ -40,6 +40,6 @@ class QuestionsController < ApplicationController
   end
 
   def owner_check
-    return redirect_to @question if @question.user != current_user
+    redirect_to @question if @question.user_id != current_user.id
   end
 end
