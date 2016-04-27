@@ -24,3 +24,9 @@ Style/StringLiterals:
 
 Style/BlockComments:
   Enabled: false
+
+Style/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
