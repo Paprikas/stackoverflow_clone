@@ -8,8 +8,7 @@ feature 'answer on question' do
     user = create(:user)
     sign_in(user)
 
-    visit root_path
-    click_on question.title
+    visit question_path(question)
     click_on 'Reply'
     fill_in 'Answer', with: 'Dunno'
     click_on 'Reply'
