@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'answer on question' do
   given(:question) { create(:question) }
-  before { question }
+  background { question }
 
   scenario 'Authenticated user can answer on question' do
     user = create(:user)
