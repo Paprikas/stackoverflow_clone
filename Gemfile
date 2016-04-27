@@ -51,6 +51,9 @@ group :test do
   gem 'rubocop-rspec'
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
+  gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'launchy'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
