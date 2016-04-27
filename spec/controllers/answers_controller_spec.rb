@@ -58,6 +58,12 @@ RSpec.describe AnswersController, type: :controller do
           }.to change(question.answers, :count).by(1)
         end
 
+        it 'checks that answer belongs to user' do
+          expect {
+            post :create, params: {question_id: question, answer: attributes_for(:answer)}
+          }.to change(user.answers, :count).by(1)
+        end
+
         it 'redirects to @question' do
           post :create, params: {question_id: question, answer: attributes_for(:answer)}
           expect(response).to redirect_to question
