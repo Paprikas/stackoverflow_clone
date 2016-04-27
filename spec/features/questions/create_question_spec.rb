@@ -3,11 +3,7 @@ require 'rails_helper'
 feature 'create question' do
   scenario 'Authenticated user creates question' do
     user = create(:user)
-
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_button 'Log in'
+    sign_in(user)
 
     click_on 'Ask Question'
     fill_in 'Title', with: 'How much is the fish?'
