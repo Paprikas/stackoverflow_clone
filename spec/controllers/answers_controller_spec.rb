@@ -25,6 +25,11 @@ RSpec.describe AnswersController, type: :controller do
         }.to change(Answer, :count).by(1)
       end
 
+      it 'checks nested answer is persist in database' do
+        post :create, params: {question_id: question, answer: attributes_for(:answer)}
+        expect(question.answers.first).to eq assigns(:answer)
+      end
+
       it 'redirects to @answer'
     end
 
