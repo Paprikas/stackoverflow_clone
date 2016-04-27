@@ -1,0 +1,11 @@
+doctype html
+html
+  head
+    title StackoverflowClone
+  = action_cable_meta_tag
+  = csrf_meta_tags
+  = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => 'reload'
+  = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
+  body
+    = flash[:notice] if flash[:notice]
+    = yield
