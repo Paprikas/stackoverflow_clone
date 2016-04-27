@@ -61,3 +61,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'slim-rails'
+# Replace with stable when released
+gem 'devise', github: 'plataformatec/devise'
