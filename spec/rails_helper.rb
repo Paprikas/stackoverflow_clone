@@ -81,6 +81,7 @@ RSpec.configure do |config|
 
   # Allow to use FactoryGirls shorthands
   config.include FactoryGirl::Syntax::Methods
+  config.include Devise::TestHelpers, type: :controller
 end
 
 Shoulda::Matchers.configure do |config|
