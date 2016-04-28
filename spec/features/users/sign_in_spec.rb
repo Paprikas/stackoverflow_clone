@@ -4,7 +4,8 @@ feature 'User sign in' do
   given(:user) { create(:user) }
 
   scenario 'Registered user trying to sign in' do
-    visit new_user_session_path
+    visit root_path
+    click_on 'Sign in'
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
     click_button 'Log in'
