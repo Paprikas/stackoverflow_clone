@@ -52,7 +52,6 @@ group :development do
   gem 'guard-bundler', require: false
   gem 'guard-brakeman', require: false
   gem 'guard-rubocop'
-  gem 'guard-coffeescript'
   gem 'thin'
 end
 

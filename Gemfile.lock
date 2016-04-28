@@ -124,10 +124,6 @@ GEM
       bundler (~> 1.0)
       guard (~> 2.2)
       guard-compat (~> 1.1)
-    guard-coffeescript (2.0.1)
-      coffee-script (>= 2.2.0)
-      guard (>= 2.1.0)
-      guard-compat (~> 1.1)
     guard-compat (1.2.1)
     guard-rspec (4.6.5)
       guard (~> 2.1)
@@ -343,7 +339,6 @@ DEPENDENCIES
   foundation-rails
   guard-brakeman
   guard-bundler
-  guard-coffeescript
   guard-rspec (~> 4.6)
   guard-rubocop
   jbuilder (~> 2.0)
