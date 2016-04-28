@@ -5,6 +5,8 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question, user: user) }
   let(:user_owned_answer) { create(:answer, question: question, user: user) }
   let(:answer) { create(:answer, question: question) }
+  subject(:post_valid_answer) { post :create, params: {question_id: question, answer: attributes_for(:answer)} }
+  subject(:delete_answer) { delete :destroy, params: {question_id: question, id: answer} }
 
   describe 'guest user' do
     describe 'GET #new' do
@@ -20,14 +22,14 @@ RSpec.describe AnswersController, type: :controller do
 
     describe 'POST #create' do
       it 'redirects to user login form' do
-        post :create, params: {question_id: question, answer: attributes_for(:answer)}
+        post_valid_answer
         expect(response).to redirect_to(new_user_session_url)
       end
     end
 
     describe 'DELETE #destroy' do
       it 'redirects to user login form' do
-        delete :destroy, params: {question_id: question, id: answer}
+        delete_answer
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -54,18 +56,18 @@ RSpec.describe AnswersController, type: :controller do
       context 'with valid attributes' do
         it 'creates new answer in the database' do
           expect {
-            post :create, params: {question_id: question, answer: attributes_for(:answer)}
+            post_valid_answer
           }.to change(question.answers, :count).by(1)
         end
 
         it 'checks that answer belongs to user' do
           expect {
-            post :create, params: {question_id: question, answer: attributes_for(:answer)}
+            post_valid_answer
           }.to change(user.answers, :count).by(1)
         end
 
         it 'redirects to @question' do
-          post :create, params: {question_id: question, answer: attributes_for(:answer)}
+          post_valid_answer
           expect(response).to redirect_to question
         end
       end
@@ -103,12 +105,12 @@ RSpec.describe AnswersController, type: :controller do
         it 'does not deletes answer from database' do
           answer
           expect {
-            delete :destroy, params: {question_id: question, id: answer}
+            delete_answer
           }.not_to change(question.answers, :count)
         end
 
         it 'redirects to @question' do
-          delete :destroy, params: {question_id: question, id: answer}
+          delete_answer
           expect(response).to redirect_to question
         end
       end
