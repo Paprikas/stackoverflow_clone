@@ -3,18 +3,17 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:new, :create, :destroy]
   before_action :set_answer, :owner_check, only: [:destroy]
 
-  def new
-    @answer = @question.answers.new
-  end
-
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
 
-    if @answer.save
-      redirect_to @question
-    else
-      render :new
+    respond_to do |format|
+      if @answer.save
+        format.html { redirect_to @question }
+      else
+        format.html { render 'questions/show' }
+      end
+      format.js
     end
   end
 

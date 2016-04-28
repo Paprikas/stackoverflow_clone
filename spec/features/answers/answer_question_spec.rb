@@ -5,29 +5,31 @@ feature 'answer on question' do
   given(:user) { create(:user) }
   background { question }
 
-  scenario 'Authenticated user can answer on question with valid attributes' do
+  scenario 'Authenticated user can answer on question with valid attributes', js: true do
     sign_in(user)
 
     visit question_path(question)
-    click_on 'Reply'
     fill_in 'Answer', with: 'Dunno'
     click_on 'Submit answer'
-    expect(page).to have_content 'Dunno'
+    within '.answers' do
+      expect(page).to have_content 'Dunno'
+    end
+    expect(find_field('Answer').value).to be_empty
   end
 
-  scenario 'Authenticated user cannot answer on question with invalid attributes' do
+  scenario 'Authenticated user cannot answer on question with invalid attributes', js: true do
     sign_in(user)
 
     visit question_path(question)
-    click_on 'Reply'
     click_on 'Submit answer'
-    expect(page).to have_content "Body can't be blank"
+    within '#answer_errors' do
+      expect(page).to have_content "Body can't be blank"
+    end
   end
 
   scenario 'Guest user cannot answer on question' do
     visit root_path
     click_on question.title
-    click_on 'Reply'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_content 'Please sign in to answer the question.'
   end
 end

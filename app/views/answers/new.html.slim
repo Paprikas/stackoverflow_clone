@@ -1,9 +1,0 @@
-- if @answer.errors.any?
-  - @answer.errors.full_messages.each do |error|
-    p = error
-
-= form_for [@question, @answer] do |f|
-  = f.label :body, 'Answer'
-  = f.text_area :body
-
-  = f.submit @answer.new_record? ? 'Submit answer' : 'Update'

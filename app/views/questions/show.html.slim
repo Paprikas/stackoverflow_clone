@@ -1,7 +1,11 @@
-h1 = @question.title
-p = @question.body
+.question
+  h1 = @question.title
+  p = @question.body
 
-p = link_to 'Reply', new_question_answer_path(@question)
+- if signed_in?
+  = render 'answers/form'
+- else
+  | Please sign in to answer the question.
 
-- @question.answers.each do |answer|
-  p = answer.body
+.answers
+  = render @question.answers

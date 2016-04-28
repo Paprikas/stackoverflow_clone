@@ -6,16 +6,10 @@ RSpec.describe AnswersController, type: :controller do
   let(:user_owned_answer) { create(:answer, question: question, user: user) }
   let(:answer) { create(:answer, question: question) }
   subject(:post_valid_answer) { post :create, params: {question_id: question, answer: attributes_for(:answer)} }
+  subject(:post_valid_answer_js) { post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js} }
   subject(:delete_answer) { delete :destroy, params: {question_id: question, id: answer} }
 
   describe 'guest user' do
-    describe 'GET #new' do
-      it 'redirects to user login form' do
-        get :new, params: {question_id: question}
-        expect(response).to redirect_to(new_user_session_url)
-      end
-    end
-
     describe 'PATCH #update' do
       it 'redirects to user login form'
     end
@@ -38,26 +32,23 @@ RSpec.describe AnswersController, type: :controller do
   describe 'authenticated user' do
     before { sign_in user }
 
-    describe 'GET #new' do
-      before do
-        get :new, params: {question_id: question}
-      end
-
-      it 'assigns new answer @answer' do
-        expect(assigns(:answer)).to be_a_new(Answer)
-      end
-
-      it 'renders new view' do
-        expect(response).to render_template :new
-      end
-    end
-
     describe 'POST #create' do
       context 'with valid attributes' do
         it 'creates new answer in the database' do
           expect {
             post_valid_answer
           }.to change(question.answers, :count).by(1)
+        end
+
+        it 'creates new answer in the database via js' do
+          expect {
+            post_valid_answer_js
+          }.to change(question.answers, :count).by(1)
+        end
+
+        it 'renders create.js' do
+          post_valid_answer_js
+          expect(response).to render_template 'create'
         end
 
         it 'checks that answer belongs to user' do
@@ -81,7 +72,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'renders new template' do
           post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)}
-          expect(response).to render_template :new
+          expect(response).to render_template 'questions/show'
         end
       end
     end
