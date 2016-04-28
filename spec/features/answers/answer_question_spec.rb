@@ -12,7 +12,9 @@ feature 'answer on question' do
     click_on 'Reply'
     fill_in 'Answer', with: 'Dunno'
     click_on 'Submit answer'
-    expect(page).to have_content 'Dunno'
+    within '.answer' do
+      expect(page).to have_content 'Dunno'
+    end
   end
 
   scenario 'Authenticated user cannot answer on question with invalid attributes' do
