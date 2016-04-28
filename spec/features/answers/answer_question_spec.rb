@@ -11,7 +11,7 @@ feature 'answer on question' do
     visit question_path(question)
     click_on 'Reply'
     fill_in 'Answer', with: 'Dunno'
-    click_on 'Reply'
+    click_on 'Submit answer'
     expect(page).to have_content 'Dunno'
   end
 
@@ -20,7 +20,7 @@ feature 'answer on question' do
 
     visit question_path(question)
     click_on 'Reply'
-    click_on 'Reply'
+    click_on 'Submit answer'
     expect(page).to have_content "Body can't be blank"
   end
 
