@@ -93,3 +93,4 @@ Shoulda::Matchers.configure do |config|
 end
 
 Capybara.default_driver = :webkit
+Capybara.javascript_driver = :webkit

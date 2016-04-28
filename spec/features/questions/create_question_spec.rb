@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'create question' do
   given(:user) { create(:user) }
 
-  scenario 'Authenticated user creates question with valid attributes' do
+  scenario 'Authenticated user creates question with valid attributes', js: true do
     sign_in(user)
 
     click_on 'Ask Question'
@@ -16,7 +16,7 @@ feature 'create question' do
     end
   end
 
-  scenario 'Authenticated user cannot create question with invalid attributes' do
+  scenario 'Authenticated user cannot create question with invalid attributes', js: true do
     sign_in(user)
 
     click_on 'Ask Question'

@@ -6,6 +6,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:user_owned_answer) { create(:answer, question: question, user: user) }
   let(:answer) { create(:answer, question: question) }
   subject(:post_valid_answer) { post :create, params: {question_id: question, answer: attributes_for(:answer)} }
+  subject(:post_valid_answer_js) { post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js} }
   subject(:delete_answer) { delete :destroy, params: {question_id: question, id: answer} }
 
   describe 'guest user' do
@@ -37,6 +38,17 @@ RSpec.describe AnswersController, type: :controller do
           expect {
             post_valid_answer
           }.to change(question.answers, :count).by(1)
+        end
+
+        it 'creates new answer in the database via js' do
+          expect {
+            post_valid_answer_js
+          }.to change(question.answers, :count).by(1)
+        end
+
+        it 'renders create.js' do
+          post_valid_answer_js
+          expect(response).to render_template 'create'
         end
 
         it 'checks that answer belongs to user' do

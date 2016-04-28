@@ -1,8 +1,6 @@
-- if @answer.errors.any?
-  - @answer.errors.full_messages.each do |error|
-    p = error
+= render 'answers/errors'
 
-= form_for [@question, @answer] do |f|
+= form_for [@question, @answer], remote: true do |f|
   = f.label :body, 'Answer'
   = f.text_area :body
 
