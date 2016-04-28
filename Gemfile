@@ -53,6 +53,7 @@ group :development do
   gem 'guard-brakeman', require: false
   gem 'guard-rubocop'
   gem 'guard-coffeescript'
+  gem 'thin'
 end
 
 group :test do
