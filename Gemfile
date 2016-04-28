@@ -33,8 +33,10 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   # TODO: Replace with stable when released
-  gem 'rspec-rails', '3.5.0beta3'
+  gem 'rspec', '~> 3.5.0.beta3'
+  gem 'rspec-rails', '~> 3.5.0beta3'
   gem 'factory_girl_rails'
+  gem 'spring-commands-rspec'
 end
 
 group :development do
@@ -45,6 +47,12 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'quiet_assets'
+  gem 'brakeman', require: false
+  gem 'guard-rspec', '~> 4.6', require: false
+  gem 'guard-bundler', require: false
+  gem 'guard-brakeman', require: false
+  gem 'guard-rubocop'
+  gem 'guard-coffeescript'
 end
 
 group :test do
@@ -62,7 +70,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'slim-rails'
-# Replace with stable when released
+# TODO: Replace with stable when released
 gem 'devise', github: 'plataformatec/devise'
 
 gem 'foundation-rails'
