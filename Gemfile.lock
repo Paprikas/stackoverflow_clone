@@ -52,6 +52,10 @@ GEM
     addressable (2.4.0)
     arel (7.0.0)
     ast (2.2.0)
+    babel-source (5.8.35)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
     bcrypt (3.1.11)
     builder (3.2.2)
     byebug (8.2.4)
@@ -84,6 +88,10 @@ GEM
       factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
     ffi (1.9.10)
+    foundation-rails (6.2.1.0)
+      railties (>= 3.1.0)
+      sass (>= 3.3.0, < 3.5)
+      sprockets-es6 (>= 0.9.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
@@ -120,6 +128,8 @@ GEM
     pg (0.18.4)
     powerpack (0.1.1)
     puma (3.4.0)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (2.0.0.alpha)
       json
     rack-test (0.6.3)
@@ -212,6 +222,10 @@ GEM
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
+    sprockets-es6 (0.9.0)
+      babel-source (>= 5.8.11)
+      babel-transpiler
+      sprockets (>= 3.0.0)
     sprockets-rails (3.0.4)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
@@ -251,12 +265,14 @@ DEPENDENCIES
   database_cleaner
   devise!
   factory_girl_rails
+  foundation-rails
   jbuilder (~> 2.0)
   jquery-rails
   launchy
   listen (~> 3.0.5)
   pg (~> 0.18)
   puma
+  quiet_assets
   rails (>= 5.0.0.beta3, < 5.1)
   rails-controller-testing
   rspec-rails (= 3.5.0beta3)
