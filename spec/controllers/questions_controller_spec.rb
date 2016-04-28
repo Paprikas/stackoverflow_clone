@@ -17,9 +17,13 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :index
       end
     end
+  end
+
+  describe 'guest user' do
+    let(:question) { create(:question) }
+    it_behaves_like 'public access'
 
     describe 'GET #show' do
-      let(:question) { create(:question) }
       before { get :show, params: {id: question} }
 
       it 'assigns question to @question' do
@@ -30,11 +34,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :show
       end
     end
-  end
-
-  describe 'guest user' do
-    let(:question) { create(:question) }
-    it_behaves_like 'public access'
 
     describe 'GET #new' do
       it 'redirects to user login form' do
@@ -69,6 +68,22 @@ RSpec.describe QuestionsController, type: :controller do
     before { sign_in user }
 
     it_behaves_like 'public access'
+
+    describe 'GET #show' do
+      before { get :show, params: {id: question} }
+
+      it 'assigns question to @question' do
+        expect(assigns(:question)).to eq(question)
+      end
+
+      it 'assigns answer to @answer' do
+        expect(assigns(:answer)).to be_a_new(Answer)
+      end
+
+      it 'renders show template' do
+        expect(response).to render_template :show
+      end
+    end
 
     describe 'GET #new' do
       before { get :new }

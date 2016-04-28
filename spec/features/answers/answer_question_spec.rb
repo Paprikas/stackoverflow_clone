@@ -9,10 +9,9 @@ feature 'answer on question' do
     sign_in(user)
 
     visit question_path(question)
-    click_on 'Reply'
     fill_in 'Answer', with: 'Dunno'
     click_on 'Submit answer'
-    within '.answer' do
+    within '.answers' do
       expect(page).to have_content 'Dunno'
     end
   end
@@ -21,7 +20,6 @@ feature 'answer on question' do
     sign_in(user)
 
     visit question_path(question)
-    click_on 'Reply'
     click_on 'Submit answer'
     expect(page).to have_content "Body can't be blank"
   end
@@ -29,7 +27,6 @@ feature 'answer on question' do
   scenario 'Guest user cannot answer on question' do
     visit root_path
     click_on question.title
-    click_on 'Reply'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_content 'Please sign in to answer the question.'
   end
 end

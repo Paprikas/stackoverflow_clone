@@ -2,6 +2,11 @@
   h1 = @question.title
   p = @question.body
 
+- if signed_in?
+  = render 'answers/form'
+- else
+  | Please sign in to answer the question.
 p = link_to 'Reply', new_question_answer_path(@question)
 
-= render @question.answers
+.answers
+  = render @question.answers
