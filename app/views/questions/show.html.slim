@@ -6,7 +6,6 @@
   = render 'answers/form'
 - else
   | Please sign in to answer the question.
-p = link_to 'Reply', new_question_answer_path(@question)
 
 .answers
   = render @question.answers
