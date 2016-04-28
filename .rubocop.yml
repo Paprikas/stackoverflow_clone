@@ -11,7 +11,7 @@ Rails:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 125
+  Max: 155
 
 Style/Documentation:
   Enabled: false
@@ -30,3 +30,4 @@ Style/SpaceInsideHashLiteralBraces:
 
 Style/BlockDelimiters:
   Enabled: false
+
