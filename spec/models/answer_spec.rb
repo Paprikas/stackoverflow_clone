@@ -8,26 +8,32 @@ RSpec.describe Answer, type: :model do
   it { should belong_to :user }
 
   describe 'toggle accepted' do
-    it 'should toggle' do
+    it 'toggles' do
       answer = create(:answer)
       expect {
         answer.accept!
-      }.to change{answer.accepted}.from(false).to(true)
+      }.to change { answer.accepted }.from(false).to(true)
     end
 
-    it 'should untoggle' do
+    it 'untoggles' do
       answer = create(:answer, accepted: true)
       expect {
         answer.accept!
-      }.to change{answer.accepted}.from(true).to(false)
+      }.to change { answer.accepted }.from(true).to(false)
     end
 
-    it 'should not toggle unless persisted' do
+    it 'toggles new answer' do
       answer = build(:answer)
       expect {
         answer.accept!
-      }.not_to change{answer.accepted}
+      }.to change { answer.accepted }.from(false).to(true)
+    end
+
+    it 'untoggles new answer' do
+      answer = build(:answer, accepted: true)
+      expect {
+        answer.accept!
+      }.to change { answer.accepted }.from(true).to(false)
     end
   end
-
 end
