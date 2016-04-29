@@ -27,8 +27,7 @@ class AnswersController < ApplicationController
   end
 
   def accept
-    @question.answers.update_all(accepted: false)
-    @answer.toggle(:accepted).save
+    @answer.accept!
     redirect_to @question
   end
 
