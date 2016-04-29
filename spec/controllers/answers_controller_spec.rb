@@ -11,7 +11,10 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'guest user' do
     describe 'PATCH #update' do
-      it 'redirects to user login form'
+      it 'responses with 401' do
+        patch :update, xhr: true, params: {question_id: question, id: answer.id}
+        expect(response.status).to eq 401
+      end
     end
 
     describe 'POST #create' do
@@ -73,6 +76,50 @@ RSpec.describe AnswersController, type: :controller do
         it 'renders new template' do
           post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)}
           expect(response).to render_template 'questions/show'
+        end
+      end
+    end
+
+    describe 'PATCH #update' do
+      context 'owner of the question' do
+        before { user_owned_answer }
+
+        context 'with valid attributes' do
+          it 'renders update template' do
+            patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: attributes_for(:answer)}
+            expect(response).to render_template :update
+          end
+
+          it 'updates answer' do
+            patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: {body: 'New body'}}
+            user_owned_answer.reload
+            expect(user_owned_answer.body).to eq 'New body'
+          end
+        end
+
+        context 'with invalid attributes' do
+          it 'does not updates answer' do
+            patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: attributes_for(:invalid_answer) }
+            user_owned_answer.reload
+            expect(user_owned_answer.body).not_to be_empty
+            expect(response.status).to eq(422)
+          end
+        end
+      end
+
+      context 'not owner of the question' do
+        before { answer }
+
+        it 'returns 404 with no content' do
+          patch :update, xhr: true, params: {question_id: question, id: answer, answer: attributes_for(:answer) }
+          expect(response.status).to eq(401)
+          expect(response.body).to be_empty
+        end
+
+        it 'does not updates question' do
+          patch :update, xhr: true, params: {question_id: question, id: answer, answer: {body: 'New title'} }
+          answer.reload
+          expect(answer.body).not_to eq 'New title'
         end
       end
     end

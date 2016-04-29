@@ -1,3 +1,6 @@
-$('#answer_errors').replaceWith('<%= j render 'errors' %>');
-$('.answers').append('<%= j render @answer %>');
-$('#answer_body').val('');
+<% if @answer.errors.any? %>
+  $('.new_answer_wrapper .answer_errors').replaceWith('<%= j render 'answers/errors' %>');
+<% else %>
+  $('.answers').append('<%= j render @answer %>');
+  $('.new_answer_wrapper textarea').val('');
+<% end %>

@@ -1,4 +1,8 @@
-.answer id="#{dom_id(answer)}"
-  p = answer.body
-  - if answer.persisted? && signed_in? && current_user == answer.user
-    p = link_to 'Delete', question_answer_path(@question, answer.id), method: :delete, remote: true, class: 'delete-answer'
+- if answer.persisted?
+  .answer id="#{dom_id(answer)}"
+    p = answer.body
+    - if signed_in? && current_user == answer.user
+      p = link_to 'Delete', question_answer_path(@question, answer.id), method: :delete, remote: true, class: 'delete-answer'
+      p = link_to 'Edit', '', class: 'answer-edit-form-trigger', data: { answer_id: answer.id }
+
+    = render 'answers/form', answer: answer
