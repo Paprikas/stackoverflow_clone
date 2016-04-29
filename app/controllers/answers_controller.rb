@@ -19,7 +19,6 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to @question
   end
 
   private
@@ -37,6 +36,11 @@ class AnswersController < ApplicationController
   end
 
   def owner_check
-    redirect_to @question if @answer.user_id != current_user.id
+    if @answer.user_id != current_user.id
+      respond_to do |format|
+        format.html { redirect_to @question }
+        format.js { render body: nil, status: 401 }
+      end
+    end
   end
 end

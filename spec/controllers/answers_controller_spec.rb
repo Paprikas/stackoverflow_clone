@@ -7,7 +7,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer, question: question) }
   subject(:post_valid_answer) { post :create, params: {question_id: question, answer: attributes_for(:answer)} }
   subject(:post_valid_answer_js) { post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js} }
-  subject(:delete_answer) { delete :destroy, params: {question_id: question, id: answer} }
+  subject(:delete_answer) { delete :destroy, xhr: true, params: {question_id: question, id: answer} }
 
   describe 'guest user' do
     describe 'PATCH #update' do
@@ -22,9 +22,9 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     describe 'DELETE #destroy' do
-      it 'redirects to user login form' do
+      it 'responses with 401' do
         delete_answer
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response.status).to eq 401
       end
     end
   end
@@ -86,9 +86,9 @@ RSpec.describe AnswersController, type: :controller do
           }.to change(question.answers, :count).by(-1)
         end
 
-        it 'redirects to @question' do
+        it 'responses with 204' do
           delete :destroy, params: {question_id: question, id: user_owned_answer}
-          expect(response).to redirect_to question
+          expect(response.status).to eq 204
         end
       end
 
@@ -100,9 +100,9 @@ RSpec.describe AnswersController, type: :controller do
           }.not_to change(question.answers, :count)
         end
 
-        it 'redirects to @question' do
+        it 'responses with 401' do
           delete_answer
-          expect(response).to redirect_to question
+          expect(response.status).to eq 401
         end
       end
     end
