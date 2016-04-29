@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 shared_examples 'unable to edit' do
-  it 'cannot see edit link and textarea' do
+  scenario 'cannot see edit link and textarea' do
     visit question_path(not_owned_question)
 
     within '.question' do
