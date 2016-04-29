@@ -1,7 +1,4 @@
 $ ->
-  $(document).on 'ajax:success', '.delete-answer', ->
-    $(this).closest('.answer').remove();
-
   $(document).on 'click', '.answer-edit-form-trigger', (e) ->
     e.preventDefault()
     $(this).hide()
