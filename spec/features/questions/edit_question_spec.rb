@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-shared_examples 'unable to edit' do
+shared_examples 'unable to edit question' do
   scenario 'cannot see edit link and textarea' do
     visit question_path(not_owned_question)
 
@@ -17,7 +17,7 @@ feature 'edit question' do
   given!(:not_owned_question) { create(:question) }
 
   describe 'guest user' do
-    it_behaves_like 'unable to edit'
+    it_behaves_like 'unable to edit question'
   end
 
   describe 'authenticated user' do
@@ -58,7 +58,7 @@ feature 'edit question' do
     end
 
     context 'not owner of the question' do
-      it_behaves_like 'unable to edit'
+      it_behaves_like 'unable to edit question'
     end
   end
 end
