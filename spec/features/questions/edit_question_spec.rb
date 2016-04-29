@@ -5,8 +5,6 @@ shared_examples 'unable to edit' do
     visit question_path(not_owned_question)
 
     within '.question' do
-      visit question_path(not_owned_question)
-
       expect(page).not_to have_selector('textarea')
       expect(page).not_to have_content('Edit')
     end
