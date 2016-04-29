@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   # mount ActionCable.server => '/cable'
 
   resources :questions, only: [:new, :create, :show, :update, :destroy] do
-    resources :answers, only: [:new, :create, :update, :destroy]
+    resources :answers, only: [:new, :create, :update, :destroy] do
+      member do
+        post :accept
+      end
+    end
   end
 
   root to: 'questions#index'

@@ -24,6 +24,13 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
+    describe 'POST #accept' do
+      it 'redirects to user login form' do
+        post :accept, params: {question_id: question, id: answer}
+        expect(response).to redirect_to(new_user_session_url)
+      end
+    end
+
     describe 'DELETE #destroy' do
       it 'responses with 401' do
         delete_answer
@@ -120,6 +127,33 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: {body: 'New title'} }
           answer.reload
           expect(answer.body).not_to eq 'New title'
+        end
+      end
+    end
+
+    describe 'POST #accept' do
+      context 'owner of the answer' do
+        it 'assigns answer to @answer' do
+          post :accept, params: {question_id: question, id: answer}
+          expect(assigns(:answer)).to eq answer
+        end
+
+        it 'accepts the answer' do
+          expect {
+            post :accept, params: {question_id: question, id: answer}
+          }.to change { answer.reload.accepted }.from(false).to(true)
+        end
+
+        it 'accepts another answer' do
+          accepted_answer = create(:answer, question: question, accepted: true)
+          expect {
+            post :accept, params: {question_id: question, id: answer}
+          }.to change { accepted_answer.reload.accepted }.from(true).to(false)
+        end
+
+        it 'redirects to @question' do
+          post :accept, params: {question_id: question, id: answer}
+          expect(response).to redirect_to question
         end
       end
     end
