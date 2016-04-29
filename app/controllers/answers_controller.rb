@@ -1,7 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:new, :create, :update, :destroy]
-  before_action :set_answer, :owner_check, only: [:update, :destroy]
+  before_action :set_question, only: [:new, :create, :update, :destroy, :accept]
+  before_action :set_answer, only: [:update, :destroy, :accept]
+  before_action :owner_check, only: [:update, :destroy]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -23,6 +24,12 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
+  end
+
+  def accept
+    @question.answers.update_all(accepted: false)
+    @answer.toggle(:accepted).save
+    redirect_to @question
   end
 
   private

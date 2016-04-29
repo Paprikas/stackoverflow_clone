@@ -17,6 +17,17 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :index
       end
     end
+
+    describe 'GET #show' do
+      it 'shows first in list if accepted' do
+        question = create(:question)
+        answer = create(:answer, question: question)
+        accepted_answer = create(:answer, question: question, accepted: true)
+
+        get :show, params: {id: question}
+        expect(question.answers).to eq([accepted_answer, answer])
+      end
+    end
   end
 
   describe 'guest user' do
