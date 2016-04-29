@@ -22,7 +22,7 @@ feature 'answer on question' do
 
     visit question_path(question)
     click_on 'Submit answer'
-    within '#answer_errors' do
+    within '.answer_errors' do
       expect(page).to have_content "Body can't be blank"
     end
   end

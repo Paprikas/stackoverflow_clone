@@ -1,7 +1,7 @@
-= render 'answers/errors'
+.answer_form_wrapper class="#{answer.new_record? ? 'new_answer_wrapper' : ''}"
+  = render 'answers/errors'
+  = form_for [@question, answer], remote: true do |f|
+    = label_tag "form_#{dom_id(answer)}", 'Answer'
+    = f.text_area :body, id: "form_#{dom_id(answer)}"
 
-= form_for [@question, @answer], remote: true do |f|
-  = f.label :body, 'Answer'
-  = f.text_area :body
-
-  = f.submit @answer.new_record? ? 'Submit answer' : 'Update'
+    = f.submit answer.new_record? ? 'Submit answer' : 'Update answer'
