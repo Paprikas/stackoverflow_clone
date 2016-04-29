@@ -8,6 +8,8 @@ RSpec.describe AnswersController, type: :controller do
   subject(:post_valid_answer) { post :create, params: {question_id: question, answer: attributes_for(:answer)} }
   subject(:post_valid_answer_js) { post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js} }
   subject(:delete_answer) { delete :destroy, xhr: true, params: {question_id: question, id: answer} }
+  subject(:delete_own_answer) { delete :destroy, xhr: true, params: {question_id: question, id: user_owned_answer} }
+  subject(:accept_answer) { post :accept, params: {question_id: question, id: answer} }
 
   describe 'guest user' do
     describe 'PATCH #update' do
@@ -26,7 +28,7 @@ RSpec.describe AnswersController, type: :controller do
 
     describe 'POST #accept' do
       it 'redirects to user login form' do
-        post :accept, params: {question_id: question, id: answer}
+        accept_answer
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -134,25 +136,25 @@ RSpec.describe AnswersController, type: :controller do
     describe 'POST #accept' do
       context 'owner of the answer' do
         it 'assigns answer to @answer' do
-          post :accept, params: {question_id: question, id: answer}
+          accept_answer
           expect(assigns(:answer)).to eq answer
         end
 
         it 'accepts the answer' do
           expect {
-            post :accept, params: {question_id: question, id: answer}
+            accept_answer
           }.to change { answer.reload.accepted }.from(false).to(true)
         end
 
         it 'accepts another answer' do
           accepted_answer = create(:answer, question: question, accepted: true)
           expect {
-            post :accept, params: {question_id: question, id: answer}
+            accept_answer
           }.to change { accepted_answer.reload.accepted }.from(true).to(false)
         end
 
         it 'redirects to @question' do
-          post :accept, params: {question_id: question, id: answer}
+          accept_answer
           expect(response).to redirect_to question
         end
       end
@@ -163,13 +165,13 @@ RSpec.describe AnswersController, type: :controller do
         it 'deletes answer from database' do
           user_owned_answer
           expect {
-            delete :destroy, params: {question_id: question, id: user_owned_answer}
+            delete_own_answer
           }.to change(question.answers, :count).by(-1)
         end
 
-        it 'responses with 204' do
-          delete :destroy, params: {question_id: question, id: user_owned_answer}
-          expect(response.status).to eq 204
+        it 'renders destroy template' do
+          delete_own_answer
+          expect(response).to render_template :destroy
         end
       end
 
