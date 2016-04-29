@@ -1,2 +1,4 @@
-.answer
+.answer id="#{dom_id(answer)}"
   p = answer.body
+  - if answer.persisted? && signed_in? && current_user == answer.user
+    p = link_to 'Delete', question_answer_path(@question, answer.id), method: :delete, remote: true, class: 'delete-answer'
