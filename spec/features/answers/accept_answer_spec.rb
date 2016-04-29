@@ -44,7 +44,13 @@ feature 'accept answer' do
         end
       end
 
-      scenario 'accepted answer first list'
+      scenario 'accepted answer first list' do
+        create(:answer, question: question, accepted: true)
+        visit question_path(question)
+        within '.answer:first-child' do
+          expect(page).to have_content 'Accepted answer'
+        end
+      end
     end
 
     scenario 'user cannot accept answer of not own question' do
