@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:new, :create, :destroy]
-  before_action :set_answer, :owner_check, only: [:destroy]
+  before_action :set_question, only: [:new, :create, :update, :destroy]
+  before_action :set_answer, :owner_check, only: [:update, :destroy]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -15,6 +15,10 @@ class AnswersController < ApplicationController
       end
       format.js
     end
+  end
+
+  def update
+    render status: :unprocessable_entity unless @answer.update(answer_params)
   end
 
   def destroy

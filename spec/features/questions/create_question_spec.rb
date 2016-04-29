@@ -4,7 +4,7 @@ feature 'create question' do
   given(:user) { create(:user) }
 
   scenario 'Authenticated user creates question with valid attributes', js: true do
-    sign_in(user)
+    sign_in user
 
     click_on 'Ask Question'
     fill_in 'Title', with: 'How much is the fish?'
@@ -17,7 +17,7 @@ feature 'create question' do
   end
 
   scenario 'Authenticated user cannot create question with invalid attributes', js: true do
-    sign_in(user)
+    sign_in user
 
     click_on 'Ask Question'
     click_on 'Create question'

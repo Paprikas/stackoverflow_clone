@@ -26,7 +26,7 @@ feature 'delete answer' do
       expect(page).not_to have_css ".answer#answer_#{answer.id}"
     end
 
-    xscenario 'create and delete answer', js: true do
+    scenario 'create and delete answer', js: true do
       visit question_path(question)
       fill_in 'Answer', with: 'Check ajax event reloaded'
       click_on 'Submit answer'
