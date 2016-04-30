@@ -75,3 +75,4 @@ gem 'slim-rails'
 gem 'devise', git: 'https://github.com/plataformatec/devise.git'
 
 gem 'foundation-rails'
+gem 'carrierwave'
