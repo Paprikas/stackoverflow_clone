@@ -9,6 +9,13 @@ GIT
       responders
       warden (~> 1.2.3)
 
+GIT
+  remote: https://github.com/kikyous/rack.git
+  revision: 1aded61cedb07e8f0bea3b46522c4167b352c0ca
+  specs:
+    rack (2.0.0.alpha)
+      json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -188,8 +195,6 @@ GEM
     puma (3.4.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (2.0.0.alpha)
-      json
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.0.beta3)
@@ -363,6 +368,7 @@ DEPENDENCIES
   pg (~> 0.18)
   puma
   quiet_assets
+  rack!
   rails (>= 5.0.0.beta3, < 5.1)
   rails-controller-testing
   rspec (~> 3.5.0.beta3)

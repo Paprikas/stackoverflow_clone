@@ -76,3 +76,6 @@ gem 'devise', git: 'https://github.com/plataformatec/devise.git'
 
 gem 'foundation-rails'
 gem 'carrierwave'
+
+# Replace with stable when released
+gem 'rack', git: 'https://github.com/kikyous/rack.git'

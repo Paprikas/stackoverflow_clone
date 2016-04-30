@@ -1,6 +1,8 @@
 .question
   .question_wrapper
     = render @question
+    = render @question.attachments
+
 
   = render 'errors'
 

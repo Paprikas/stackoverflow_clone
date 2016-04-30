@@ -18,7 +18,7 @@ feature 'create question' do
       expect(page).to have_button 'Create question'
     end
 
-    scenario 'creates question with valid attributes', js: true do
+    scenario 'creates question with valid attributes' do
       fill_in 'Title', with: 'How much is the fish?'
       fill_in 'Body', with: "Can't find price"
       click_on 'Create question'
@@ -28,9 +28,8 @@ feature 'create question' do
       end
     end
 
-    scenario 'cannot create question with invalid attributes', js: true do
+    scenario 'cannot create question with invalid attributes' do
       click_on 'Create question'
-
       expect(page).to have_content "Title can't be blank"
       expect(page).to have_content "Body can't be blank"
     end
@@ -38,7 +37,9 @@ feature 'create question' do
     scenario 'adds file' do
       fill_in 'Title', with: 'How much is the fish?'
       fill_in 'Body', with: "Can't find price"
-      attach_file 'File', with: "#{Rails.root}/spec/spec_helper.rb"
+      attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      click_on 'Create question'
+      expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
     end
   end
 
