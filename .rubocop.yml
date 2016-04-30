@@ -3,6 +3,7 @@ require: rubocop-rspec
 AllCops:
   Exclude:
     - !ruby/regexp /(vendor|bundle|bin|db)\/.*/
+    - 'public/uploads/**/*'
   DisplayCopNames: true
   DisplayStyleGuide: true
   TargetRubyVersion: 2.3
