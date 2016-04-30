@@ -5,11 +5,9 @@ class Answer < ApplicationRecord
   validates :body, :question_id, :user_id, presence: true
 
   def accept!
-    return unless valid?
-    toggle(:accepted)
-
-    return unless persisted? && question.present?
-    question.answers.update_all(accepted: false)
-    save
+    transaction do
+      toggle(:accepted)
+      question.answers.where.not(id: self).update_all(accepted: false) if save! && accepted?
+    end
   end
 end
