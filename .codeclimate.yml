@@ -8,6 +8,8 @@ engines:
     enabled: true
   coffeelint:
     enabled: true
+    exclude_fingerprints:
+    - 7ec597457d6a9b2c095b1893596f9e3f
   duplication:
     enabled: true
     config:
