@@ -79,3 +79,7 @@ gem 'carrierwave'
 
 # Replace with stable when released
 gem 'rack', git: 'https://github.com/kikyous/rack.git'
+
+# To help submit files with remote forms
+# TODO: Replace with stable when released
+gem 'remotipart', git: 'https://github.com/mshibuya/remotipart.git', ref: '3a6acb3'

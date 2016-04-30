@@ -16,6 +16,13 @@ GIT
     rack (2.0.0.alpha)
       json
 
+GIT
+  remote: https://github.com/mshibuya/remotipart.git
+  revision: 3a6acb36d46d6769faba6bd94ed7f831321f6c6a
+  ref: 3a6acb3
+  specs:
+    remotipart (1.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -371,6 +378,7 @@ DEPENDENCIES
   rack!
   rails (>= 5.0.0.beta3, < 5.1)
   rails-controller-testing
+  remotipart!
   rspec (~> 3.5.0.beta3)
   rspec-rails (~> 3.5.0beta3)
   rubocop
