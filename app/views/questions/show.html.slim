@@ -3,7 +3,6 @@
     = render @question
     = render @question.attachments
 
-
   = render 'errors'
 
   - if signed_in? && current_user == @question.user

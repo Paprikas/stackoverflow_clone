@@ -15,6 +15,7 @@
 //= require jquery.remotipart
 //= require foundation
 //= require turbolinks
+//= require cocoon
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

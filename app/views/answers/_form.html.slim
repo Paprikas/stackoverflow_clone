@@ -5,7 +5,8 @@
     = f.text_area :body, id: "form_#{dom_id(answer)}"
 
     = f.fields_for :attachments do |a|
-      = label_tag "form_#{dom_id(answer)}_attachment", 'File'
-      = a.file_field :file, id: "form_#{dom_id(answer)}_attachment"
+      = render 'attachments/attachment_fields', f: a
+      .add-file
+        = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
 
     = f.submit answer.new_record? ? 'Submit answer' : 'Update answer'
