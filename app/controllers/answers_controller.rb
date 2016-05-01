@@ -46,11 +46,6 @@ class AnswersController < ApplicationController
   end
 
   def owner_check
-    if @answer.user_id != current_user.id
-      respond_to do |format|
-        format.html { redirect_to @question }
-        format.js { render body: nil, status: 401 }
-      end
-    end
+    render body: nil, status: 401 if @answer.user_id != current_user.id
   end
 end
