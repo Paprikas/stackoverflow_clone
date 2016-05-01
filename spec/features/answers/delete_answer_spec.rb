@@ -1,11 +1,12 @@
 require 'rails_helper'
 
-shared_examples 'cannot delete answer' do
-  scenario 'cannot delete answer' do
+shared_examples 'cannot delete answer or file' do
+  scenario 'cannot delete answer or file' do
     visit question_path(not_owned_answer.question)
     within ".answer#answer_#{not_owned_answer.id}" do
-      expect(page).not_to have_link "Delete"
+      expect(page).not_to have_link 'Delete'
     end
+    expect(page).not_to have_link 'remove file'
   end
 end
 
@@ -30,18 +31,28 @@ feature 'delete answer' do
       visit question_path(question)
       fill_in 'Answer', with: 'Check ajax event reloaded'
       click_on 'Submit answer'
-      within ".answer" do
+      within '.answer' do
         click_on 'Delete'
       end
-      expect(page).not_to have_css ".answer"
+      expect(page).not_to have_css '.answer'
+    end
+
+    scenario 'delete file', js: true do
+      create(:answer_attachment, attachable: answer)
+      visit question_path(answer.question)
+      expect(page).to have_link 'spec_helper.rb'
+      click_on 'Edit'
+      click_on 'remove file'
+      click_on 'Update answer'
+      expect(page).not_to have_link 'spec_helper.rb'
     end
 
     describe 'not own answer' do
-      it_behaves_like 'cannot delete answer'
+      it_behaves_like 'cannot delete answer or file'
     end
   end
 
   context 'guest access' do
-    it_behaves_like 'cannot delete answer'
+    it_behaves_like 'cannot delete answer or file'
   end
 end
