@@ -98,12 +98,12 @@ RSpec.describe AnswersController, type: :controller do
             answer_attachment = create(:answer_attachment, attachable: user_owned_answer)
             expect {
               patch :update, xhr: true, params: {
-                  question_id: user_owned_answer.question,
-                  id: user_owned_answer,
-                  answer: {
-                      body: 'Body',
-                      attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-                  }
+                question_id: user_owned_answer.question,
+                id: user_owned_answer,
+                answer: {
+                  body: 'Body',
+                  attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
+                }
               }
             }.to change(user_owned_answer.attachments, :count).by(-1)
           end
@@ -138,12 +138,12 @@ RSpec.describe AnswersController, type: :controller do
           answer_attachment = create(:answer_attachment, attachable: answer)
           expect {
             patch :update, xhr: true, params: {
-                question_id: answer.question,
-                id: answer,
-                answer: {
-                    body: 'Body',
-                    attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-                }
+              question_id: answer.question,
+              id: answer,
+              answer: {
+                body: 'Body',
+                attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
+              }
             }
           }.not_to change(answer.attachments, :count)
         end
