@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 feature 'answer on question' do
-  given(:question) { create(:question) }
-  background { question }
+  given!(:question) { create(:question) }
 
   describe 'authenticated user', js: true do
     given(:user) { create(:user) }
