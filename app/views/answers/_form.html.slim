@@ -4,8 +4,9 @@
     = label_tag "form_#{dom_id(answer)}", 'Answer'
     = f.text_area :body, id: "form_#{dom_id(answer)}"
 
-    = f.fields_for :attachments do |a|
-      = render 'attachments/attachment_fields', f: a
+    .attachments
+      = f.fields_for :attachments do |a|
+        = render 'attachments/attachment_fields', f: a
       .add-file
         = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
 
