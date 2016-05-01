@@ -163,6 +163,20 @@ RSpec.describe QuestionsController, type: :controller do
             expect(user_owned_question.title).to eq 'New title'
             expect(user_owned_question.body).to eq 'New body'
           end
+
+          it 'deletes file' do
+            question_attachment = create(:answer_attachment, attachable: user_owned_question)
+            expect {
+              patch :update, xhr: true, params: {
+                  id: user_owned_question,
+                  question: {
+                      title: 'Title',
+                      body: 'Body',
+                      attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
+                  }
+              }
+            }.to change(user_owned_question.attachments, :count).by(-1)
+          end
         end
 
         context 'with invalid attributes' do
@@ -188,6 +202,20 @@ RSpec.describe QuestionsController, type: :controller do
           patch :update, xhr: true, params: {id: question, question: {title: 'New title'} }
           question.reload
           expect(question.title).not_to eq 'New title'
+        end
+
+        it 'does not deletes file' do
+          question_attachment = create(:answer_attachment, attachable: question)
+          expect {
+            patch :update, xhr: true, params: {
+                id: question,
+                question: {
+                    title: 'Title',
+                    body: 'Body',
+                    attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
+                }
+            }
+          }.not_to change(question.attachments, :count)
         end
       end
     end
