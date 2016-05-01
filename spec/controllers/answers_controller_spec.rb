@@ -5,8 +5,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question, user: user) }
   let(:user_owned_answer) { create(:answer, question: question, user: user) }
   let(:answer) { create(:answer, question: question) }
-  subject(:post_valid_answer) { post :create, params: {question_id: question, answer: attributes_for(:answer)} }
-  subject(:post_valid_answer_js) { post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js} }
+  subject(:post_valid_answer) { post :create, xhr: true, params: {question_id: question, answer: attributes_for(:answer)} }
   subject(:delete_answer) { delete :destroy, xhr: true, params: {question_id: question, id: answer} }
   subject(:delete_own_answer) { delete :destroy, xhr: true, params: {question_id: question, id: user_owned_answer} }
   subject(:accept_answer) { post :accept, params: {question_id: question, id: answer} }
@@ -22,7 +21,7 @@ RSpec.describe AnswersController, type: :controller do
     describe 'POST #create' do
       it 'redirects to user login form' do
         post_valid_answer
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response.status).to eq 401
       end
     end
 
@@ -52,14 +51,9 @@ RSpec.describe AnswersController, type: :controller do
           }.to change(question.answers, :count).by(1)
         end
 
-        it 'creates new answer in the database via js' do
-          expect {
-            post_valid_answer_js
-          }.to change(question.answers, :count).by(1)
-        end
-
         it 'renders create.js' do
-          post_valid_answer_js
+          post_valid_answer
+          expect(response.status).to eq 200
           expect(response).to render_template 'create'
         end
 
@@ -67,11 +61,6 @@ RSpec.describe AnswersController, type: :controller do
           expect {
             post_valid_answer
           }.to change(user.answers, :count).by(1)
-        end
-
-        it 'redirects to @question' do
-          post_valid_answer
-          expect(response).to redirect_to question
         end
       end
 
