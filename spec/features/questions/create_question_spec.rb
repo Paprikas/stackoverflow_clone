@@ -42,15 +42,20 @@ feature 'create question' do
       expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
     end
 
-    scenario 'adds file via cocoon', js: true do
+    scenario 'adds files via cocoon', js: true do
       fill_in 'Title', with: 'How much is the fish?'
       fill_in 'Body', with: "Can't find price"
       click_on 'add file'
       within '.nested-fields:nth-child(2)' do
         attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
       end
+      click_on 'add file'
+      within '.nested-fields:nth-child(3)' do
+        attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+      end
       click_on 'Create question'
       expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+      expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
     end
   end
 
