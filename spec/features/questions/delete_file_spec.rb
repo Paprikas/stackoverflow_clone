@@ -13,7 +13,7 @@ feature 'delete file' do
     expect(page).to have_link 'spec_helper.rb'
     click_on 'Edit'
     click_on 'remove file'
-    click_on 'Update question'
+    click_on 'Update Question'
     expect(page).not_to have_link 'spec_helper.rb'
   end
 end

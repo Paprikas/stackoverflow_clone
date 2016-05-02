@@ -33,7 +33,7 @@ feature 'edit question' do
           expect(page).not_to have_content 'Edit'
           fill_in 'Title', with: 'New title'
           fill_in 'Body', with: 'New body'
-          click_on 'Update question'
+          click_on 'Update Question'
           expect(page).to have_content 'New title'
           expect(page).to have_content 'New body'
           expect(page).to have_content 'Edit'
@@ -48,7 +48,7 @@ feature 'edit question' do
           expect(page).not_to have_content 'Edit'
           fill_in 'Title', with: ''
           fill_in 'Body', with: ''
-          click_on 'Update question'
+          click_on 'Update Question'
           expect(page).to have_content "Title can't be blank"
           expect(page).to have_content "Body can't be blank"
           expect(page).not_to have_content 'Edit'

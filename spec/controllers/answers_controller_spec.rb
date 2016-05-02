@@ -120,7 +120,8 @@ RSpec.describe AnswersController, type: :controller do
                 }
               },
               question_id: user_owned_answer.question,
-              id: user_owned_answer
+              id: user_owned_answer,
+              format: :js
             }
             should permit(:body, attachments_attributes: [:id, :file, :_destroy])
               .for(:update, params: {params: params})
