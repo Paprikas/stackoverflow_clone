@@ -27,7 +27,7 @@ class AnswersController < ApplicationController
   end
 
   def accept
-    @answer.accept!
+    @answer.toggle_accept!
     redirect_to @question
   end
 

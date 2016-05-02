@@ -7,10 +7,12 @@ class Answer < ApplicationRecord
 
   validates :body, :question_id, :user_id, presence: true
 
-  def accept!
+  def toggle_accept!
     transaction do
       toggle(:accepted)
-      question.answers.where.not(id: self).update_all(accepted: false) if save! && accepted?
+      # TODO: move to scope
+      question.answers.where(accepted: true).update_all(accepted: false) if accepted?
+      save!
     end
   end
 end

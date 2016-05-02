@@ -13,28 +13,28 @@ RSpec.describe Answer, type: :model do
     it 'toggles' do
       answer = create(:answer)
       expect {
-        answer.accept!
+        answer.toggle_accept!
       }.to change { answer.accepted }.from(false).to(true)
     end
 
     it 'untoggles' do
       answer = create(:answer, accepted: true)
       expect {
-        answer.accept!
+        answer.toggle_accept!
       }.to change { answer.accepted }.from(true).to(false)
     end
 
     it 'toggles new answer' do
       answer = build(:answer)
       expect {
-        answer.accept!
+        answer.toggle_accept!
       }.to change { answer.accepted }.from(false).to(true)
     end
 
     it 'untoggles new answer' do
       answer = build(:answer, accepted: true)
       expect {
-        answer.accept!
+        answer.toggle_accept!
       }.to change { answer.accepted }.from(true).to(false)
     end
   end
