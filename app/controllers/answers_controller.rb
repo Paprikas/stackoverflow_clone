@@ -1,7 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:new, :create, :destroy]
-  before_action :set_answer, :owner_check, only: [:destroy]
+  before_action :set_question, only: [:new, :create, :update, :destroy, :accept]
+  before_action :set_answer, only: [:update, :destroy, :accept]
+  before_action :owner_check, only: [:update, :destroy]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -17,8 +18,16 @@ class AnswersController < ApplicationController
     end
   end
 
+  def update
+    render status: :unprocessable_entity unless @answer.update(answer_params)
+  end
+
   def destroy
     @answer.destroy
+  end
+
+  def accept
+    @answer.accept!
     redirect_to @question
   end
 
@@ -33,10 +42,10 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy])
   end
 
   def owner_check
-    redirect_to @question if @answer.user_id != current_user.id
+    render body: nil, status: 401 if @answer.user_id != current_user.id
   end
 end

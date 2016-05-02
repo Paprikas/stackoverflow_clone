@@ -17,6 +17,17 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :index
       end
     end
+
+    describe 'GET #show' do
+      it 'shows first in list if accepted' do
+        question = create(:question)
+        answer = create(:answer, question: question)
+        accepted_answer = create(:answer, question: question, accepted: true)
+
+        get :show, params: {id: question}
+        expect(question.answers).to eq([accepted_answer, answer])
+      end
+    end
   end
 
   describe 'guest user' do
@@ -43,7 +54,10 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     describe 'PATCH #update' do
-      it 'redirects to user login form'
+      it 'responses with 401' do
+        patch :update, xhr: true, params: {id: question}
+        expect(response.status).to eq 401
+      end
     end
 
     describe 'POST #create' do
@@ -80,6 +94,10 @@ RSpec.describe QuestionsController, type: :controller do
         expect(assigns(:answer)).to be_a_new(Answer)
       end
 
+      it 'builds attachment' do
+        expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
+      end
+
       it 'renders show template' do
         expect(response).to render_template :show
       end
@@ -90,6 +108,10 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'assigns new question to @question' do
         expect(assigns(:question)).to be_a_new(Question)
+      end
+
+      it 'builds attachment' do
+        expect(assigns(:question).attachments.first).to be_a_new(Attachment)
       end
 
       it 'renders new template' do
@@ -121,6 +143,79 @@ RSpec.describe QuestionsController, type: :controller do
         it 'renders new template' do
           post :create, params: {question: attributes_for(:invalid_question)}
           expect(response).to render_template :new
+        end
+      end
+    end
+
+    describe 'PATCH #update' do
+      context 'owner of the question' do
+        before { user_owned_question }
+
+        context 'with valid attributes' do
+          it 'renders update template' do
+            patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:question)}
+            expect(response).to render_template :update
+          end
+
+          it 'updates question' do
+            patch :update, xhr: true, params: {id: user_owned_question, question: {title: 'New title', body: 'New body'}}
+            user_owned_question.reload
+            expect(user_owned_question.title).to eq 'New title'
+            expect(user_owned_question.body).to eq 'New body'
+          end
+
+          it 'deletes file' do
+            question_attachment = create(:answer_attachment, attachable: user_owned_question)
+            expect {
+              patch :update, xhr: true, params: {
+                id: user_owned_question,
+                question: {
+                  title: 'Title',
+                  body: 'Body',
+                  attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
+                }
+              }
+            }.to change(user_owned_question.attachments, :count).by(-1)
+          end
+        end
+
+        context 'with invalid attributes' do
+          it 'does not updates question' do
+            patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:invalid_question) }
+            user_owned_question.reload
+            expect(user_owned_question.title).not_to be_empty
+            expect(response.status).to eq(422)
+          end
+        end
+      end
+
+      context 'not owner of the question' do
+        before { question }
+
+        it 'returns 404 with no content' do
+          patch :update, xhr: true, params: {id: question, question: attributes_for(:question) }
+          expect(response.status).to eq(401)
+          expect(response.body).to be_empty
+        end
+
+        it 'does not updates question' do
+          patch :update, xhr: true, params: {id: question, question: {title: 'New title'} }
+          question.reload
+          expect(question.title).not_to eq 'New title'
+        end
+
+        it 'does not deletes file' do
+          question_attachment = create(:answer_attachment, attachable: question)
+          expect {
+            patch :update, xhr: true, params: {
+              id: question,
+              question: {
+                title: 'Title',
+                body: 'Body',
+                attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
+              }
+            }
+          }.not_to change(question.attachments, :count)
         end
       end
     end

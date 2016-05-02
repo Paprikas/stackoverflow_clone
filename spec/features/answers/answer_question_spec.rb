@@ -1,29 +1,54 @@
 require 'rails_helper'
 
 feature 'answer on question' do
-  given(:question) { create(:question) }
-  given(:user) { create(:user) }
-  background { question }
+  given!(:question) { create(:question) }
 
-  scenario 'Authenticated user can answer on question with valid attributes', js: true do
-    sign_in(user)
+  describe 'authenticated user', js: true do
+    given(:user) { create(:user) }
 
-    visit question_path(question)
-    fill_in 'Answer', with: 'Dunno'
-    click_on 'Submit answer'
-    within '.answers' do
-      expect(page).to have_content 'Dunno'
+    background do
+      sign_in user
+      visit question_path(question)
     end
-    expect(find_field('Answer').value).to be_empty
-  end
 
-  scenario 'Authenticated user cannot answer on question with invalid attributes', js: true do
-    sign_in(user)
+    scenario 'can answer on question with valid attributes' do
+      fill_in 'Answer', with: 'Dunno'
+      click_on 'Submit answer'
+      within '.answers' do
+        expect(page).to have_content 'Dunno'
+      end
+      expect(find_field('Answer').value).to be_empty
+    end
 
-    visit question_path(question)
-    click_on 'Submit answer'
-    within '#answer_errors' do
-      expect(page).to have_content "Body can't be blank"
+    scenario 'cannot answer on question with invalid attributes' do
+      click_on 'Submit answer'
+      within '.answer_errors' do
+        expect(page).to have_content "Body can't be blank"
+      end
+    end
+
+    scenario 'answer with file' do
+      fill_in 'Answer', with: 'Dunno'
+      attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      click_on 'Submit answer'
+      within '.answers' do
+        expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+      end
+    end
+
+    scenario 'adds files via cocoon', js: true do
+      fill_in 'Answer', with: 'Dunno'
+      click_on 'add file'
+      within all('.nested-fields').last do
+        attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      end
+      click_on 'add file'
+      within all('.nested-fields').last do
+        attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+      end
+      click_on 'Submit answer'
+      expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+      expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
     end
   end
 

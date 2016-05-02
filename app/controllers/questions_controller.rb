@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:show, :destroy]
-  before_action :owner_check, only: :destroy
+  before_action :set_question, only: [:show, :update, :destroy]
+  before_action :owner_check, only: [:update, :destroy]
 
   def index
     @questions = Question.all
@@ -9,10 +9,12 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
+    @answer.attachments.build
   end
 
   def new
     @question = current_user.questions.new
+    @question.attachments.build
   end
 
   def create
@@ -25,6 +27,10 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    render status: :unprocessable_entity unless @question.update(question_params)
+  end
+
   def destroy
     @question.destroy
     redirect_to root_path
@@ -33,7 +39,7 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, attachments_attributes: [:id, :file, :_destroy])
   end
 
   def set_question
@@ -41,6 +47,11 @@ class QuestionsController < ApplicationController
   end
 
   def owner_check
-    redirect_to @question if @question.user_id != current_user.id
+    if @question.user_id != current_user.id
+      respond_to do |format|
+        format.html { redirect_to @question }
+        format.js { render body: nil, status: 401 }
+      end
+    end
   end
 end

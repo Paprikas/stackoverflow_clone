@@ -9,6 +9,20 @@ GIT
       responders
       warden (~> 1.2.3)
 
+GIT
+  remote: https://github.com/kikyous/rack.git
+  revision: 1aded61cedb07e8f0bea3b46522c4167b352c0ca
+  specs:
+    rack (2.0.0.alpha)
+      json
+
+GIT
+  remote: https://github.com/mshibuya/remotipart.git
+  revision: 3a6acb36d46d6769faba6bd94ed7f831321f6c6a
+  ref: 3a6acb3
+  specs:
+    remotipart (1.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -79,8 +93,14 @@ GEM
     capybara-webkit (1.10.1)
       capybara (>= 2.3.0, < 2.8.0)
       json
+    carrierwave (0.11.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
     codeclimate-test-reporter (0.5.0)
       simplecov (>= 0.7.1, < 1.0.0)
+    cocoon (1.2.9)
     coderay (1.1.1)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
@@ -183,8 +203,6 @@ GEM
     puma (3.4.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
-    rack (2.0.0.alpha)
-      json
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.0.beta3)
@@ -340,7 +358,9 @@ DEPENDENCIES
   byebug
   capybara
   capybara-webkit
+  carrierwave
   codeclimate-test-reporter
+  cocoon
   coffee-rails (~> 4.1.0)
   database_cleaner
   devise!
@@ -357,8 +377,10 @@ DEPENDENCIES
   pg (~> 0.18)
   puma
   quiet_assets
+  rack!
   rails (>= 5.0.0.beta3, < 5.1)
   rails-controller-testing
+  remotipart!
   rspec (~> 3.5.0.beta3)
   rspec-rails (~> 3.5.0beta3)
   rubocop

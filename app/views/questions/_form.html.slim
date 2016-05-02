@@ -1,0 +1,15 @@
+= form_for @question, remote: @question.persisted? ? true : false do |f|
+  = f.label :title
+  = f.text_field :title
+
+  = f.label :body
+  = f.text_area :body
+
+  .attachments
+    = f.fields_for :attachments do |a|
+      = render 'attachments/attachment_fields', f: a
+
+    .add-file
+      = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
+
+  = f.submit
