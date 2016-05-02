@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :answers, only: [:new, :create, :update, :destroy] do
       member do
         post :accept
+        post :vote
       end
     end
   end

@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:new, :create, :update, :destroy, :accept]
-  before_action :set_answer, only: [:update, :destroy, :accept]
+  before_action :set_question, only: [:new, :create, :update, :destroy, :accept, :vote]
+  before_action :set_answer, only: [:update, :destroy, :accept, :vote]
   before_action :owner_check, only: [:update, :destroy]
 
   def create
@@ -28,6 +28,18 @@ class AnswersController < ApplicationController
 
   def accept
     @answer.toggle_accept!
+    redirect_to @question
+  end
+
+  def vote
+    return redirect_to @question if @answer.user_id == current_user.id # remove when refactored with xhr
+    if params[:mode] == 'up'
+      @answer.vote_up!(current_user)
+    elsif params[:mode] == 'down'
+      @answer.vote_down!(current_user)
+    else
+      @answer.remove_vote!(current_user)
+    end
     redirect_to @question
   end
 

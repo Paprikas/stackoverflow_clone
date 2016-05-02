@@ -10,6 +10,10 @@ RSpec.describe AnswersController, type: :controller do
   subject(:delete_own_answer) { delete :destroy, xhr: true, params: {question_id: question, id: user_owned_answer} }
   subject(:accept_answer) { post :accept, params: {question_id: question, id: answer} }
 
+  subject(:vote_up) { post :vote, params: {question_id: question, id: answer, mode: :up} }
+  subject(:vote_down) { post :vote, params: {question_id: question, id: answer, mode: :down} }
+  subject(:vote_remove) { post :vote, params: {question_id: question, id: answer, mode: :remove} }
+
   describe 'guest user' do
     describe 'PATCH #update' do
       it 'responses with 401' do
@@ -28,6 +32,13 @@ RSpec.describe AnswersController, type: :controller do
     describe 'POST #accept' do
       it 'redirects to user login form' do
         accept_answer
+        expect(response).to redirect_to(new_user_session_url)
+      end
+    end
+
+    describe 'POST #vote' do
+      it 'redirects to user login form' do
+        vote_up
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -193,6 +204,54 @@ RSpec.describe AnswersController, type: :controller do
         it 'redirects to @question' do
           accept_answer
           expect(response).to redirect_to question
+        end
+      end
+    end
+
+    describe 'POST #vote' do
+      it 'assigns answer to @answer' do
+        vote_up
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'redirects to @question' do
+        vote_up
+        expect(response).to redirect_to question
+      end
+
+      context 'owner of the answer' do
+        it 'does not votes up answer' do
+          expect {
+            post :vote, params: {question_id: question, id: user_owned_answer, mode: :up}
+          }.not_to change(user_owned_answer.votes, :count)
+        end
+      end
+
+      context 'not owner of the answer' do
+        it 'votes up answer' do
+          expect {
+            vote_up
+          }.to change(answer.votes, :count).by(1)
+        end
+
+        it 'votes down answer' do
+          expect {
+            vote_down
+          }.to change(answer.votes, :count).by(1)
+        end
+
+        it 'removes vote' do
+          create(:answer_vote, user: user, votable: answer)
+          expect {
+            vote_remove
+          }.to change(answer.votes, :count).by(-1)
+        end
+
+        it 'does not votes second time' do
+          create(:answer_vote, user: user, votable: answer)
+          expect {
+            vote_up
+          }.not_to change(answer.votes, :count)
         end
       end
     end
