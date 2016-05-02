@@ -3,7 +3,7 @@
     = render @question
     = render @question.attachments
 
-  = render 'errors'
+  = render 'shared/errors', object: @question
 
   - if signed_in? && current_user == @question.user
     p = link_to 'Edit', '', class: 'question-edit-form-trigger', data: { question_id: @question.id }

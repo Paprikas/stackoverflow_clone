@@ -1,5 +1,5 @@
 <% if @answer.errors.any? %>
-  $('.answer#<%= dom_id(@answer) %> .answer_errors').replaceWith('<%= j render 'answers/errors' %>');
+  $('.answer#<%= dom_id(@answer) %> .answer_errors').replaceWith('<%= j render 'shared/errors', object: @answer %>');
 <% else %>
   $('.answer#<%= dom_id(@answer) %>').replaceWith('<%= j render @answer %>');
 <% end %>

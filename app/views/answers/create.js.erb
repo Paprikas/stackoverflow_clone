@@ -1,5 +1,5 @@
 <% if @answer.errors.any? %>
-  $('.new_answer_wrapper .answer_errors').replaceWith('<%= j render 'answers/errors' %>');
+  $('.new_answer_wrapper .answer_errors').replaceWith('<%= j render 'shared/errors', object: @answer %>');
 <% else %>
   $('.answers').append('<%= j render @answer %>');
   $('.new_answer_wrapper textarea').val('');

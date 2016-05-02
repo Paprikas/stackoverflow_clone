@@ -1,5 +1,3 @@
-- if @question.errors.any?
-  - @question.errors.full_messages.each do |error|
-    p = error
+= render 'shared/errors', object: @question
 
 = render 'form'
