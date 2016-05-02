@@ -80,7 +80,7 @@ RSpec.describe AnswersController, type: :controller do
 
     describe 'PATCH #update' do
       context 'owner of the question' do
-        let(:answer_attachment) { create(:answer_attachment, attachable: user_owned_answer) }
+        let!(:answer_attachment) { create(:answer_attachment, attachable: user_owned_answer) }
         before { user_owned_answer }
 
         context 'with valid attributes' do
@@ -115,7 +115,7 @@ RSpec.describe AnswersController, type: :controller do
                 attachments_attributes: {
                   '0': {
                     _destroy: 1,
-                    id: answer_attachment2
+                    id: answer_attachment
                   }
                 }
               },
