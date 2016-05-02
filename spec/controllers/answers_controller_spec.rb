@@ -80,6 +80,7 @@ RSpec.describe AnswersController, type: :controller do
 
     describe 'PATCH #update' do
       context 'owner of the question' do
+        let(:answer_attachment) { create(:answer_attachment, attachable: user_owned_answer) }
         before { user_owned_answer }
 
         context 'with valid attributes' do
@@ -95,7 +96,6 @@ RSpec.describe AnswersController, type: :controller do
           end
 
           it 'deletes file' do
-            answer_attachment = create(:answer_attachment, attachable: user_owned_answer)
             expect {
               patch :update, xhr: true, params: {
                 question_id: user_owned_answer.question,
@@ -106,6 +106,25 @@ RSpec.describe AnswersController, type: :controller do
                 }
               }
             }.to change(user_owned_answer.attachments, :count).by(-1)
+          end
+
+          it do
+            params = {
+              answer: {
+                body: 'Body',
+                attachments_attributes: {
+                  '0': {
+                    _destroy: 1,
+                    id: answer_attachment2
+                  }
+                }
+              },
+              question_id: user_owned_answer.question,
+              id: user_owned_answer
+            }
+            should permit(:body, attachments_attributes: [:id, :file, :_destroy])
+              .for(:update, params: {params: params})
+              .on(:answer)
           end
         end
 
