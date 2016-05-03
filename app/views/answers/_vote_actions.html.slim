@@ -1,0 +1,14 @@
+- if signed_in? && current_user != answer.user
+  - cur_user_votes_exists = answer.votes.exists?(user_id: current_user.id) ? true : false
+
+  p class="#{cur_user_votes_exists ? '' : 'hidden'}"
+    = link_to 'Remove vote', vote_question_answer_path(@question, answer, mode: :remove), \
+      method: :post, remote: true, data: { type: :json }, class: 'voting vote-remove'
+
+  p
+    = link_to 'Vote up', vote_question_answer_path(@question, answer, mode: :up), \
+      method: :post, remote: true, data: { type: :json }, class: 'voting vote-up'
+
+  p
+    = link_to 'Vote down', vote_question_answer_path(@question, answer, mode: :down), \
+      method: :post, remote: true, data: { type: :json }, class: 'voting vote-down'

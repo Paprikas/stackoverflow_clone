@@ -32,7 +32,8 @@ class AnswersController < ApplicationController
   end
 
   def vote
-    return redirect_to @question if @answer.user_id == current_user.id # remove when refactored with xhr
+    return render body: nil, status: :unprocessable_entity if @answer.user_id == current_user.id
+
     if params[:mode] == 'up'
       @answer.vote_up!(current_user)
     elsif params[:mode] == 'down'
@@ -40,7 +41,8 @@ class AnswersController < ApplicationController
     else
       @answer.remove_vote!(current_user)
     end
-    redirect_to @question
+
+    render json: {id: @answer.id, score: @answer.vote_score}
   end
 
   private

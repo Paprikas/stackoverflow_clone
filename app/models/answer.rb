@@ -35,4 +35,8 @@ class Answer < ApplicationRecord
   def remove_vote!(current_user)
     votes.where(user_id: current_user).destroy_all
   end
+
+  def vote_score
+    votes.sum(:score)
+  end
 end

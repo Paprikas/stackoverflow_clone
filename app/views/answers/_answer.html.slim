@@ -1,11 +1,10 @@
 - if answer.persisted?
   .answer id="#{dom_id(answer)}"
-    - if signed_in? && current_user != answer.user
-      - if answer.votes.exists?(user_id: current_user.id)
-        p = link_to 'Remove vote', vote_question_answer_path(@question, answer, mode: :remove), method: :post
-      - else
-        p = link_to 'Vote up this answer', vote_question_answer_path(@question, answer, mode: :up), method: :post
-        p = link_to 'Vote down this answer', vote_question_answer_path(@question, answer, mode: :down), method: :post
+    p
+      | Score
+      '
+      span.score #{answer.vote_score}
+    = render 'answers/vote_actions', answer: answer
 
     p = answer.body
 
