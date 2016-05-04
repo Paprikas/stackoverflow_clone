@@ -221,10 +221,10 @@ RSpec.describe AnswersController, type: :controller do
       context 'owner of the answer' do
         it 'does not votes up\down answer' do
           expect {
-            post :vote_up, params: {question_id: question, id: user_owned_answer, mode: :up, format: :json}
+            post :vote_up, params: {question_id: question, id: user_owned_answer, format: :json}
           }.not_to change(user_owned_answer.votes, :count)
           expect {
-            post :vote_down, params: {question_id: question, id: user_owned_answer, mode: :up, format: :json}
+            post :vote_down, params: {question_id: question, id: user_owned_answer, format: :json}
           }.not_to change(user_owned_answer.votes, :count)
         end
       end
