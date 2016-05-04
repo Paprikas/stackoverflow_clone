@@ -52,7 +52,7 @@ class QuestionsController < ApplicationController
     if @question.user_id != current_user.id
       respond_to do |format|
         format.html { redirect_to @question }
-        format.js { render body: nil, status: 401 }
+        format.js { head 401 }
       end
     end
   end
