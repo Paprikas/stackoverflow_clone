@@ -208,9 +208,9 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     describe 'POST #vote' do
-      it 'assigns answer to @answer' do
+      it 'assigns votable to @answer' do
         vote_up
-        expect(assigns(:answer)).to eq answer
+        expect(assigns(:votable)).to eq answer
       end
 
       it 'responses with 200' do

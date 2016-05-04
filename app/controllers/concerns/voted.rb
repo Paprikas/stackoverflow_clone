@@ -2,7 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_votable
+    before_action :set_votable, only: [:vote_up, :vote_down]
     before_action :can_vote?, only: [:vote_up, :vote_down]
   end
 
@@ -18,8 +18,12 @@ module Voted
 
   private
 
+  def model_klass
+    controller_name.classify.constantize
+  end
+
   def set_votable
-    @votable = instance_variable_get("@#{controller_name.singularize}")
+    @votable = model_klass.find(params[:id])
   end
 
   def can_vote?
