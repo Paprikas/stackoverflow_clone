@@ -1,2 +1,5 @@
-h1 = @question.title
-p = @question.body
+div id="#{dom_id(@question)}"
+  h1 = @question.title
+  p = @question.body
+
+  = render 'shared/vote_actions', votable: @question, path_args: @question

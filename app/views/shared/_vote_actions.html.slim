@@ -1,7 +1,13 @@
-- if signed_in? && current_user != votable.user
+div id="votable_#{dom_id(votable)}"
   p
-    = link_to 'Vote up', polymorphic_path([:vote_up, path_args].flatten), \
-      method: :post, remote: true, data: { type: :json }, class: 'voting vote-up'
-  p
-    = link_to 'Vote down', polymorphic_path([:vote_down, path_args].flatten), \
-      method: :post, remote: true, data: { type: :json }, class: 'voting vote-down'
+    | Score
+    '
+    span.score #{votable.vote_score}
+
+  - if signed_in? && current_user != votable.user
+    p
+      = link_to 'Vote up', polymorphic_path([:vote_up, path_args].flatten), \
+        method: :post, remote: true, data: { type: :json, resource_type: votable.class.name.underscore }, class: 'voting vote-up'
+    p
+      = link_to 'Vote down', polymorphic_path([:vote_down, path_args].flatten), \
+        method: :post, remote: true, data: { type: :json, resource_type: votable.class.name.underscore }, class: 'voting vote-down'

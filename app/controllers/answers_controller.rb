@@ -3,7 +3,8 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:new, :create, :update, :destroy, :accept, :vote_up, :vote_down]
   before_action :set_answer, only: [:update, :destroy, :accept, :vote_up, :vote_down]
   before_action :owner_check, only: [:update, :destroy]
-  before_action :can_vote?, only: [:vote_up, :vote_down]
+
+  include Voted
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -32,16 +33,6 @@ class AnswersController < ApplicationController
     redirect_to @question
   end
 
-  def vote_up
-    @answer.toggle_vote_up!(current_user)
-    render json: {id: @answer.id, score: @answer.vote_score}
-  end
-
-  def vote_down
-    @answer.toggle_vote_down!(current_user)
-    render json: {id: @answer.id, score: @answer.vote_score}
-  end
-
   private
 
   def set_question
@@ -58,9 +49,5 @@ class AnswersController < ApplicationController
 
   def owner_check
     render body: nil, status: 401 if @answer.user_id != current_user.id
-  end
-
-  def can_vote?
-    render body: nil, status: :unprocessable_entity if @answer.user_id == current_user.id
   end
 end

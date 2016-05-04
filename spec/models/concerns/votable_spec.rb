@@ -2,8 +2,13 @@ require 'rails_helper'
 
 describe 'votable' do
   with_model :WithVotable do
+    table do |t|
+      t.references :user
+    end
+
     model do
       include Votable
+      belongs_to :user
     end
   end
 
@@ -70,6 +75,14 @@ describe 'votable' do
       votable.toggle_vote_up!(user)
       votable.toggle_vote_down!(user2)
       expect(votable.vote_score).to eq 0
+    end
+  end
+
+  describe 'do not allow vote for subject owner' do
+    it 'does not votes' do
+      votable = WithVotable.create(user: user)
+      votable.toggle_vote_up!(user)
+      expect(votable.votes.count).to eq 0
     end
   end
 end

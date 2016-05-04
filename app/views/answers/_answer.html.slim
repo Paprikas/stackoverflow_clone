@@ -1,9 +1,5 @@
 - if answer.persisted?
   .answer id="#{dom_id(answer)}"
-    p
-      | Score
-      '
-      span.score #{answer.vote_score}
     = render 'shared/vote_actions', votable: answer, path_args: [@question, answer]
 
     p = answer.body

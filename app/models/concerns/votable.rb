@@ -28,9 +28,9 @@ module Votable
 
   def toggle_vote(*args)
     setup(args)
-    remove_vote!(@score_to_remove)
 
     transaction do
+      remove_vote!(@score_to_remove)
       if votes_exists?
         remove_vote!(@score)
       else
@@ -48,6 +48,6 @@ module Votable
   end
 
   def create_vote
-    votes.create!(user: @current_user, score: @score)
+    votes.create(user: @current_user, score: @score)
   end
 end

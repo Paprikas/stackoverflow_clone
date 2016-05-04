@@ -5,12 +5,21 @@ Rails.application.routes.draw do
   # Serve websocket cable requests in-process
   # mount ActionCable.server => '/cable'
 
-  resources :questions, only: [:new, :create, :show, :update, :destroy] do
-    resources :answers, only: [:new, :create, :update, :destroy] do
+  concern :votable do
+    member do
+      post :vote_up
+      post :vote_down
+    end
+  end
+
+  resources :questions,
+            only: [:new, :create, :show, :update, :destroy],
+            concerns: :votable do
+    resources :answers,
+              only: [:new, :create, :update, :destroy],
+              concerns: :votable do
       member do
         post :accept
-        post :vote_up
-        post :vote_down
       end
     end
   end
