@@ -5,12 +5,18 @@ module Votable
     has_many :votes, as: :votable, dependent: :destroy
   end
 
-  def toggle_vote_up!(current_user)
-    toggle_vote(current_user, 'up')
+  def vote_up(user)
+    votes.create(user: user, score: 1)
   end
 
-  def toggle_vote_down!(current_user)
-    toggle_vote(current_user, 'down')
+  def vote_down(user)
+    votes.create(user: user, score: -1)
+  end
+
+  def cancel_vote(user)
+    return false unless voted_by?(user)
+    votes.where(user: user).destroy_all
+    true
   end
 
   def vote_score
@@ -19,35 +25,7 @@ module Votable
 
   private
 
-  def setup(args)
-    user, mode = args
-    @current_user = user
-    @score = mode == 'up' ? 1 : -1
-    @score_to_remove = mode == 'up' ? -1 : 1
-  end
-
-  def toggle_vote(*args)
-    setup(args)
-
-    transaction do
-      remove_vote!(@score_to_remove)
-      if votes_exists?
-        remove_vote!(@score)
-      else
-        create_vote
-      end
-    end
-  end
-
-  def remove_vote!(score)
-    votes.where(user_id: @current_user, score: score).destroy_all
-  end
-
-  def votes_exists?
-    votes.where(user_id: @current_user, score: @score).exists?
-  end
-
-  def create_vote
-    votes.create(user: @current_user, score: @score)
+  def voted_by?(user)
+    votes.where(user: user).exists?
   end
 end

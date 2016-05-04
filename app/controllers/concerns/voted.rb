@@ -7,12 +7,12 @@ module Voted
   end
 
   def vote_up
-    @votable.toggle_vote_up!(current_user)
+    @votable.vote_up(current_user) unless @votable.cancel_vote(current_user)
     render json: {id: @votable.id, score: @votable.vote_score}
   end
 
   def vote_down
-    @votable.toggle_vote_down!(current_user)
+    @votable.vote_down(current_user) unless @votable.cancel_vote(current_user)
     render json: {id: @votable.id, score: @votable.vote_score}
   end
 

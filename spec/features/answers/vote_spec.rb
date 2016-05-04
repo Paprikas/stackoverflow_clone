@@ -30,7 +30,7 @@ feature 'vote for answer' do
       end
     end
 
-    scenario 'user can vote' do
+    xscenario 'user can vote' do
       visit question_path(question)
 
       within "#answer_#{answer.id}" do
