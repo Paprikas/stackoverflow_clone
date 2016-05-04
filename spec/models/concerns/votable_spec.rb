@@ -45,6 +45,14 @@ describe 'votable' do
     end
   end
 
+  describe 'replace' do
+    it 'replaces vote' do
+      votable.toggle_vote_up!(user)
+      votable.toggle_vote_down!(user)
+      expect(votable.vote_score).to eq(-1)
+    end
+  end
+
   describe 'vote score' do
     it 'checks score calculation, 2 positive' do
       votable.toggle_vote_up!(user)

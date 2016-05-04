@@ -19,28 +19,35 @@ module Votable
 
   private
 
-  def toggle_vote(current_user, mode = 'up')
-    @current_user = current_user
+  def setup(args)
+    user, mode = args
+    @current_user = user
+    @score = mode == 'up' ? 1 : -1
+    @score_to_remove = mode == 'up' ? -1 : 1
+  end
+
+  def toggle_vote(*args)
+    setup(args)
+    remove_vote!(@score_to_remove)
 
     transaction do
       if votes_exists?
-        remove_vote!
+        remove_vote!(@score)
       else
-        create_vote(mode)
+        create_vote
       end
     end
   end
 
-  def remove_vote!
-    votes.where(user_id: @current_user).destroy_all
+  def remove_vote!(score)
+    votes.where(user_id: @current_user, score: score).destroy_all
   end
 
   def votes_exists?
-    votes.where(user_id: @current_user).exists?
+    votes.where(user_id: @current_user, score: @score).exists?
   end
 
-  def create_vote(mode = 'up')
-    score = mode == 'up' ? 1 : -1
-    votes.create!(user: @current_user, score: score)
+  def create_vote
+    votes.create!(user: @current_user, score: @score)
   end
 end

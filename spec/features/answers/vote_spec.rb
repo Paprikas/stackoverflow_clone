@@ -1,5 +1,16 @@
 require 'rails_helper'
 
+shared_examples 'view answer vote score' do
+  scenario 'can view answer vote score' do
+    create(:answer_vote, votable: answer, score: 1)
+    visit question_path(question)
+
+    within "#answer_#{answer.id}" do
+      expect(page).to have_content 'Score 1'
+    end
+  end
+end
+
 feature 'vote for answer' do
   given(:user) { create(:user) }
   given(:question) { create(:question) }
@@ -21,42 +32,36 @@ feature 'vote for answer' do
 
     scenario 'user can vote' do
       visit question_path(question)
-      click_on 'Vote up'
+
       within "#answer_#{answer.id}" do
+        click_on 'Vote up'
         expect(page).to have_content 'Score 1'
-        expect(page).to have_content 'Remove vote'
-      end
-
-      click_on 'Vote down'
-      within "#answer_#{answer.id}" do
+        click_on 'Vote down'
         expect(page).to have_content 'Score -1'
-        expect(page).to have_content 'Remove vote'
       end
     end
 
-    scenario 'user can remove vote' do
-      create(:answer_vote, votable: answer, user: user)
+    scenario 'user can toggle vote' do
       visit question_path(question)
-      click_on 'Remove vote'
+
       within "#answer_#{answer.id}" do
+        click_on 'Vote up'
+        expect(page).to have_content 'Score 1'
+        click_on 'Vote up'
         expect(page).to have_content 'Score 0'
-        expect(page).not_to have_content 'Remove vote'
       end
     end
+
+    it_behaves_like 'view answer vote score'
   end
 
-  scenario 'guest cannot participate in voting' do
-    visit question_path(question)
-    expect(page).not_to have_content 'Vote up'
-    expect(page).not_to have_content 'Vote down'
-    expect(page).not_to have_content 'Remove vote'
-  end
+  context 'guest user' do
+    it_behaves_like 'view answer vote score'
 
-  scenario 'can view vote score' do
-    create(:answer_vote, votable: answer, score: 1)
-    visit question_path(question)
-    within "#answer_#{answer.id}" do
-      expect(page).to have_content 'Score 1'
+    scenario 'cannot participate in voting' do
+      visit question_path(question)
+      expect(page).not_to have_content 'Vote up'
+      expect(page).not_to have_content 'Vote down'
     end
   end
 end

@@ -4,7 +4,7 @@
       | Score
       '
       span.score #{answer.vote_score}
-    = render 'answers/vote_actions', answer: answer
+    = render 'shared/vote_actions', votable: answer, path_args: [@question, answer]
 
     p = answer.body
 
