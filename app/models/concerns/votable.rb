@@ -25,8 +25,6 @@ module Votable
     votes.sum(:score)
   end
 
-  private
-
   def voted_by?(user)
     votes.where(user: user).exists?
   end

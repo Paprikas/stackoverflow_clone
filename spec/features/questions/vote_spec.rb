@@ -33,21 +33,21 @@ feature 'vote for question' do
       visit question_path(question)
 
       within "#question_#{question.id}" do
+        expect(page).to have_content 'Score 0'
+        expect(page).to have_content 'Vote up'
+        expect(page).to have_content 'Vote down'
         click_on 'Vote up'
         expect(page).to have_content 'Score 1'
+        expect(page).not_to have_content 'Vote up'
+        expect(page).not_to have_content 'Vote down'
+        click_on 'Remove vote'
+        expect(page).to have_content 'Score 0'
+        expect(page).to have_content 'Vote up'
+        expect(page).to have_content 'Vote down'
         click_on 'Vote down'
         expect(page).to have_content 'Score -1'
-      end
-    end
-
-    xscenario 'user can toggle vote' do
-      visit question_path(question)
-
-      within "#question_#{question.id}" do
-        click_on 'Vote up'
-        expect(page).to have_content 'Score 1'
-        click_on 'Vote up'
-        expect(page).to have_content 'Score 0'
+        expect(page).not_to have_content 'Vote up'
+        expect(page).not_to have_content 'Vote down'
       end
     end
 
