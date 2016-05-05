@@ -65,6 +65,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'capybara'
   gem 'capybara-webkit'
+  gem 'poltergeist'
   gem 'launchy'
   gem 'database_cleaner'
   gem 'codeclimate-test-reporter', require: false
