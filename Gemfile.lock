@@ -151,6 +151,9 @@ GEM
       guard (~> 2.2)
       guard-compat (~> 1.1)
     guard-compat (1.2.1)
+    guard-rails (0.7.2)
+      guard (~> 2.11)
+      guard-compat (~> 1.0)
     guard-rspec (4.6.5)
       guard (~> 2.1)
       guard-compat (~> 1.1)
@@ -374,6 +377,7 @@ DEPENDENCIES
   foundation-rails
   guard-brakeman
   guard-bundler
+  guard-rails
   guard-rspec (~> 4.6)
   guard-rubocop
   jbuilder (~> 2.0)

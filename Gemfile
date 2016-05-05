@@ -52,6 +52,7 @@ group :development do
   gem 'guard-bundler', require: false
   gem 'guard-brakeman', require: false
   gem 'guard-rubocop'
+  gem 'guard-rails'
   gem 'pry-rails'
   gem 'thin'
 end
