@@ -52,7 +52,6 @@ feature 'vote for answer' do
       end
     end
 
-
     it_behaves_like 'view answer vote score'
   end
 
