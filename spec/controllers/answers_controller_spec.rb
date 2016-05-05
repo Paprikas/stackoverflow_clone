@@ -221,10 +221,13 @@ RSpec.describe AnswersController, type: :controller do
       context 'owner of the answer' do
         it 'does not votes up\down answer' do
           expect {
-            post :vote_up, params: {question_id: question, id: user_owned_answer, format: :json}
+            post :vote_up, params: {question_id: question, id: user_owned_answer}
           }.not_to change(user_owned_answer.votes, :count)
           expect {
-            post :vote_down, params: {question_id: question, id: user_owned_answer, format: :json}
+            post :vote_down, params: {question_id: question, id: user_owned_answer}
+          }.not_to change(user_owned_answer.votes, :count)
+          expect {
+            post :cancel_vote, params: {question_id: question, id: user_owned_answer}
           }.not_to change(user_owned_answer.votes, :count)
         end
       end
@@ -242,17 +245,10 @@ RSpec.describe AnswersController, type: :controller do
           }.to change(answer.votes, :count).by(1)
         end
 
-        it 'toggles vote up (remove if already voted)' do
+        it 'removes vote' do
           create(:answer_vote, user: user, votable: answer)
           expect {
-            vote_up
-          }.to change(answer.votes, :count).by(-1)
-        end
-
-        it 'toggles vote down (remove if already voted)' do
-          create(:answer_vote, user: user, votable: answer, score: -1)
-          expect {
-            vote_down
+            post :cancel_vote, xhr: true, params: {question_id: question, id: answer}
           }.to change(answer.votes, :count).by(-1)
         end
       end

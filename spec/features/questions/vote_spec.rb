@@ -29,7 +29,7 @@ feature 'vote for question' do
       end
     end
 
-    xscenario 'user can vote' do
+    scenario 'user can vote' do
       visit question_path(question)
 
       within "#question_#{question.id}" do
@@ -40,7 +40,7 @@ feature 'vote for question' do
       end
     end
 
-    scenario 'user can toggle vote' do
+    xscenario 'user can toggle vote' do
       visit question_path(question)
 
       within "#question_#{question.id}" do

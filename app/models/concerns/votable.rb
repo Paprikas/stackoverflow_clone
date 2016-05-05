@@ -5,8 +5,14 @@ module Votable
     has_many :votes, as: :votable, dependent: :destroy
   end
 
-  def vote(user, score)
-    votes.create(user: user, score: score)
+  def vote_up(user)
+    vote = votes.find_or_initialize_by(user: user)
+    vote.update(score: 1)
+  end
+
+  def vote_down(user)
+    vote = votes.find_or_initialize_by(user: user)
+    vote.update(score: -1)
   end
 
   def cancel_vote(user)

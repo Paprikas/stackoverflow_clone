@@ -19,13 +19,13 @@ describe Votable do
   describe 'votes up' do
     it 'votes up' do
       expect {
-        votable.vote(user, 1)
+        votable.vote_up(user)
       }.to change(votable.votes, :count).by(1)
       expect(votable.vote_score).to eq 1
     end
 
     it 'cancels vote' do
-      votable.vote(user, 1)
+      votable.vote_up(user)
       expect {
         votable.cancel_vote(user)
       }.to change(votable.votes, :count).by(-1)
@@ -36,13 +36,13 @@ describe Votable do
   describe 'votes down' do
     it 'votes down votable' do
       expect {
-        votable.vote(user, -1)
+        votable.vote_down(user)
       }.to change(votable.votes, :count).by(1)
       expect(votable.vote_score).to eq(-1)
     end
 
     it 'cancels vote' do
-      votable.vote(user, -1)
+      votable.vote_down(user)
       expect {
         votable.cancel_vote(user)
       }.to change(votable.votes, :count).by(-1)
@@ -51,29 +51,29 @@ describe Votable do
   end
 
   describe 'replace' do
-    xit 'replaces vote' do
-      votable.vote(user, 1)
-      votable.vote(user, -1)
+    it 'replaces vote' do
+      votable.vote_up(user)
+      votable.vote_down(user)
       expect(votable.vote_score).to eq(-1)
     end
   end
 
   describe 'vote score' do
     it 'checks score calculation, 2 positive' do
-      votable.vote(user, 1)
-      votable.vote(user2, 1)
+      votable.vote_up(user)
+      votable.vote_up(user2)
       expect(votable.vote_score).to eq 2
     end
 
     it 'checks score calculation, 2 negative' do
-      votable.vote(user, -1)
-      votable.vote(user2, -1)
+      votable.vote_down(user)
+      votable.vote_down(user2)
       expect(votable.vote_score).to eq(-2)
     end
 
     it 'checks score calculation, 1 negative, 1 positive' do
-      votable.vote(user, 1)
-      votable.vote(user2, -1)
+      votable.vote_up(user)
+      votable.vote_down(user2)
       expect(votable.vote_score).to eq 0
     end
   end

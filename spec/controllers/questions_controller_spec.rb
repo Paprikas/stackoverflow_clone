@@ -301,17 +301,10 @@ RSpec.describe QuestionsController, type: :controller do
           }.to change(question.votes, :count).by(1)
         end
 
-        it 'toggles vote up (remove if already voted)' do
+        it 'removes vote' do
           create(:answer_vote, user: user, votable: question)
           expect {
-            vote_up
-          }.to change(question.votes, :count).by(-1)
-        end
-
-        it 'toggles vote down (remove if already voted)' do
-          create(:question_vote, user: user, votable: question, score: -1)
-          expect {
-            vote_down
+            post :cancel_vote, xhr: true, params: {id: question}
           }.to change(question.votes, :count).by(-1)
         end
       end
