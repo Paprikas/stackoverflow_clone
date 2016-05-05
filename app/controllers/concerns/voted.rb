@@ -32,6 +32,6 @@ module Voted
   end
 
   def can_vote?
-    head :unprocessable_entity if @votable.user_id == current_user.id
+    head :forbidden if @votable.user_id == current_user.id
   end
 end

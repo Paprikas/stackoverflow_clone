@@ -48,6 +48,6 @@ class AnswersController < ApplicationController
   end
 
   def owner_check
-    head 401 if @answer.user_id != current_user.id
+    head :forbidden if @answer.user_id != current_user.id
   end
 end

@@ -154,7 +154,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: attributes_for(:answer) }
-          expect(response.status).to eq(401)
+          expect(response.status).to eq 403
           expect(response.body).to be_empty
         end
 
@@ -279,7 +279,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'responses with 401' do
           delete_answer
-          expect(response.status).to eq 401
+          expect(response.status).to eq 403
         end
       end
     end

@@ -193,7 +193,7 @@ RSpec.describe QuestionsController, type: :controller do
             patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:invalid_question) }
             user_owned_question.reload
             expect(user_owned_question.title).not_to be_empty
-            expect(response.status).to eq(422)
+            expect(response.status).to eq 422
           end
         end
       end
@@ -203,7 +203,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {id: question, question: attributes_for(:question) }
-          expect(response.status).to eq(401)
+          expect(response.status).to eq 403
           expect(response.body).to be_empty
         end
 
