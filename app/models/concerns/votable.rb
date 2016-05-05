@@ -5,12 +5,8 @@ module Votable
     has_many :votes, as: :votable, dependent: :destroy
   end
 
-  def vote_up(user)
-    votes.create(user: user, score: 1)
-  end
-
-  def vote_down(user)
-    votes.create(user: user, score: -1)
+  def vote(user, score)
+    votes.create(user: user, score: score)
   end
 
   def cancel_vote(user)

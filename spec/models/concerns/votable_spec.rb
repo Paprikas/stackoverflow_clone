@@ -7,7 +7,7 @@ describe Votable do
     end
 
     model do
-      include described_class
+      include Votable
       belongs_to :user
     end
   end
@@ -19,13 +19,13 @@ describe Votable do
   describe 'votes up' do
     it 'votes up' do
       expect {
-        votable.vote_up(user)
+        votable.vote(user, 1)
       }.to change(votable.votes, :count).by(1)
       expect(votable.vote_score).to eq 1
     end
 
     it 'cancels vote' do
-      votable.vote_up(user)
+      votable.vote(user, 1)
       expect {
         votable.cancel_vote(user)
       }.to change(votable.votes, :count).by(-1)
@@ -36,13 +36,13 @@ describe Votable do
   describe 'votes down' do
     it 'votes down votable' do
       expect {
-        votable.vote_down(user)
+        votable.vote(user, -1)
       }.to change(votable.votes, :count).by(1)
       expect(votable.vote_score).to eq(-1)
     end
 
     it 'cancels vote' do
-      votable.vote_down(user)
+      votable.vote(user, -1)
       expect {
         votable.cancel_vote(user)
       }.to change(votable.votes, :count).by(-1)
@@ -52,28 +52,28 @@ describe Votable do
 
   describe 'replace' do
     xit 'replaces vote' do
-      votable.vote_up(user)
-      votable.vote_down(user)
+      votable.vote(user, 1)
+      votable.vote(user, -1)
       expect(votable.vote_score).to eq(-1)
     end
   end
 
   describe 'vote score' do
     it 'checks score calculation, 2 positive' do
-      votable.vote_up(user)
-      votable.vote_up(user2)
+      votable.vote(user, 1)
+      votable.vote(user2, 1)
       expect(votable.vote_score).to eq 2
     end
 
     it 'checks score calculation, 2 negative' do
-      votable.vote_down(user)
-      votable.vote_down(user2)
+      votable.vote(user, -1)
+      votable.vote(user2, -1)
       expect(votable.vote_score).to eq(-2)
     end
 
     it 'checks score calculation, 1 negative, 1 positive' do
-      votable.vote_up(user)
-      votable.vote_down(user2)
+      votable.vote(user, 1)
+      votable.vote(user2, -1)
       expect(votable.vote_score).to eq 0
     end
   end
@@ -81,7 +81,7 @@ describe Votable do
   describe 'do not allow vote for subject owner' do
     it 'does not votes' do
       votable = WithVotable.create(user: user)
-      votable.vote_up(user)
+      votable.vote(user, 1)
       expect(votable.votes.count).to eq 0
     end
   end
