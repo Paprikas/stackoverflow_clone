@@ -77,12 +77,4 @@ describe Votable do
       expect(votable.vote_score).to eq 0
     end
   end
-
-  describe 'do not allow vote for subject owner' do
-    it 'does not votes' do
-      votable = WithVotable.create(user: user)
-      votable.vote(user, 1)
-      expect(votable.votes.count).to eq 0
-    end
-  end
 end
