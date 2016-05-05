@@ -1,0 +1,21 @@
+language: ruby
+rvm:
+  - 2.3
+  - ruby-head
+
+addons:
+  postgresql: "9.5"
+
+services:
+  - postgresql
+
+bundler_args: --without development --deployment --jobs=3 --retry=3
+cache: bundler
+
+before_script:
+  - psql -c 'create database stackoverflow_clone_test;' -U postgres
+  - cp config/database.yml.example config/database.yml
+  - bundle exec rake db:setup
+
+gemfile:
+  - Gemfile
