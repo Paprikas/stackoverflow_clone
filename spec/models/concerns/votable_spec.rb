@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-describe 'votable' do
+describe Votable do
   with_model :WithVotable do
     table do |t|
       t.references :user
     end
 
     model do
-      include Votable
+      include described_class
       belongs_to :user
     end
   end
