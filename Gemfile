@@ -50,9 +50,9 @@ group :development do
   gem 'brakeman', require: false
   gem 'guard-rspec', '~> 4.6', require: false
   gem 'guard-bundler', require: false
-  gem 'guard-brakeman', require: false
-  gem 'guard-rubocop'
-  gem 'guard-rails'
+  gem 'guard-rubocop', require: false
+  gem 'guard-rails', require: false
+  gem 'guard-spring', require: false
   gem 'pry-rails'
   gem 'thin'
 end
