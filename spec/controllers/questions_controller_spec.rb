@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let(:question) { create(:question) }
+  subject(:vote_up) { post :vote_up, xhr: true, params: {id: question} }
+  subject(:vote_down) { post :vote_down, xhr: true, params: {id: question} }
+
   # DHH on testing templates and vars in controller
   # https://github.com/rails/rails/issues/18950
 
@@ -31,7 +35,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'guest user' do
-    let(:question) { create(:question) }
     it_behaves_like 'public access'
 
     describe 'GET #show' do
@@ -60,6 +63,13 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
+    describe 'POST #vote' do
+      it 'responses with 401' do
+        vote_up
+        expect(response.status).to eq 401
+      end
+    end
+
     describe 'POST #create' do
       it 'redirects to user login form' do
         post :create
@@ -78,7 +88,6 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'authenticated user' do
     let(:user) { create(:user) }
     let(:user_owned_question) { create(:question, user: user) }
-    let(:question) { create(:question) }
     before { sign_in user }
 
     it_behaves_like 'public access'
@@ -184,7 +193,7 @@ RSpec.describe QuestionsController, type: :controller do
             patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:invalid_question) }
             user_owned_question.reload
             expect(user_owned_question.title).not_to be_empty
-            expect(response.status).to eq(422)
+            expect(response.status).to eq 422
           end
         end
       end
@@ -194,7 +203,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {id: question, question: attributes_for(:question) }
-          expect(response.status).to eq(401)
+          expect(response.status).to eq 403
           expect(response.body).to be_empty
         end
 
@@ -253,6 +262,50 @@ RSpec.describe QuestionsController, type: :controller do
         it 'redirects to @question' do
           delete :destroy, params: {id: question}
           expect(response).to redirect_to question
+        end
+      end
+    end
+
+    describe 'POST #vote' do
+      it 'assigns votable to @question' do
+        vote_up
+        expect(assigns(:votable)).to eq question
+      end
+
+      it 'responses with 200' do
+        vote_up
+        expect(response.status).to eq 200
+      end
+
+      context 'owner of the question' do
+        it 'does not votes up\down question' do
+          expect {
+            post :vote_up, params: {id: user_owned_question, format: :json}
+          }.not_to change(user_owned_question.votes, :count)
+          expect {
+            post :vote_down, params: {id: user_owned_question, format: :json}
+          }.not_to change(user_owned_question.votes, :count)
+        end
+      end
+
+      context 'not owner of the question' do
+        it 'votes up' do
+          expect {
+            vote_up
+          }.to change(question.votes, :count).by(1)
+        end
+
+        it 'votes down' do
+          expect {
+            vote_down
+          }.to change(question.votes, :count).by(1)
+        end
+
+        it 'removes vote' do
+          create(:answer_vote, user: user, votable: question)
+          expect {
+            post :cancel_vote, xhr: true, params: {id: question}
+          }.to change(question.votes, :count).by(-1)
         end
       end
     end

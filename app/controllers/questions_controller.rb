@@ -3,6 +3,8 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :update, :destroy]
   before_action :owner_check, only: [:update, :destroy]
 
+  include Voted
+
   def index
     @questions = Question.all
   end
@@ -50,7 +52,7 @@ class QuestionsController < ApplicationController
     if @question.user_id != current_user.id
       respond_to do |format|
         format.html { redirect_to @question }
-        format.js { render body: nil, status: 401 }
+        format.js { head :forbidden }
       end
     end
   end

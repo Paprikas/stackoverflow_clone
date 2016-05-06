@@ -4,6 +4,8 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:update, :destroy, :accept]
   before_action :owner_check, only: [:update, :destroy]
 
+  include Voted
+
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
@@ -46,6 +48,6 @@ class AnswersController < ApplicationController
   end
 
   def owner_check
-    render body: nil, status: 401 if @answer.user_id != current_user.id
+    head :forbidden if @answer.user_id != current_user.id
   end
 end

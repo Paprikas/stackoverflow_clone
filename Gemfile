@@ -31,17 +31,18 @@ gem 'jbuilder', '~> 2.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  gem 'pry-byebug'
   # TODO: Replace with stable when released
   gem 'rspec', '~> 3.5.0.beta3'
   gem 'rspec-rails', '~> 3.5.0beta3'
   gem 'factory_girl_rails'
   gem 'spring-commands-rspec'
+  gem 'parallel_tests'
 end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 3.0'
+  gem 'better_errors'
   gem 'listen', '~> 3.0.5'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -50,8 +51,10 @@ group :development do
   gem 'brakeman', require: false
   gem 'guard-rspec', '~> 4.6', require: false
   gem 'guard-bundler', require: false
-  gem 'guard-brakeman', require: false
-  gem 'guard-rubocop'
+  gem 'guard-rubocop', require: false
+  gem 'guard-rails', require: false
+  gem 'guard-spring', require: false
+  gem 'pry-rails'
   gem 'thin'
 end
 
@@ -62,9 +65,11 @@ group :test do
   gem 'rails-controller-testing'
   gem 'capybara'
   gem 'capybara-webkit'
+  gem 'poltergeist'
   gem 'launchy'
   gem 'database_cleaner'
-  gem "codeclimate-test-reporter", require: false
+  gem 'codeclimate-test-reporter', require: false
+  gem 'with_model'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+  include Votable
+
   has_many :answers, -> { order(accepted: :desc) }, dependent: :destroy
   belongs_to :user
 

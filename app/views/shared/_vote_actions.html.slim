@@ -1,0 +1,17 @@
+div id="votable_#{dom_id(votable)}"
+  p
+    | Score
+    '
+    span.score #{votable.vote_score}
+
+  - if signed_in? && current_user != votable.user
+    - voted = votable.voted_by?(current_user)
+    p.vote-remove style="#{voted ? ' ' : 'display:none;'}"
+      = link_to 'Remove vote', polymorphic_path([:cancel_vote, path_args].flatten), \
+        method: :post, remote: true, data: { type: :json, resource_type: votable.class.name.underscore }, class: 'voting'
+    p.vote-change style="#{voted ? ' display:none;' : ''}"
+      = link_to 'Vote up', polymorphic_path([:vote_up, path_args].flatten), \
+        method: :post, remote: true, data: { type: :json, resource_type: votable.class.name.underscore }, class: 'voting'
+    p.vote-change style="#{voted ? ' display:none;' : ''}"
+      = link_to 'Vote down', polymorphic_path([:vote_down, path_args].flatten), \
+        method: :post, remote: true, data: { type: :json, resource_type: votable.class.name.underscore }, class: 'voting'

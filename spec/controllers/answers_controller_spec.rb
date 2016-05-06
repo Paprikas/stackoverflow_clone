@@ -10,6 +10,9 @@ RSpec.describe AnswersController, type: :controller do
   subject(:delete_own_answer) { delete :destroy, xhr: true, params: {question_id: question, id: user_owned_answer} }
   subject(:accept_answer) { post :accept, params: {question_id: question, id: answer} }
 
+  subject(:vote_up) { post :vote_up, xhr: true, params: {question_id: question, id: answer} }
+  subject(:vote_down) { post :vote_down, xhr: true, params: {question_id: question, id: answer} }
+
   describe 'guest user' do
     describe 'PATCH #update' do
       it 'responses with 401' do
@@ -29,6 +32,13 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirects to user login form' do
         accept_answer
         expect(response).to redirect_to(new_user_session_url)
+      end
+    end
+
+    describe 'POST #vote' do
+      it 'responses with 401' do
+        vote_up
+        expect(response.status).to eq 401
       end
     end
 
@@ -144,7 +154,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: attributes_for(:answer) }
-          expect(response.status).to eq(401)
+          expect(response.status).to eq 403
           expect(response.body).to be_empty
         end
 
@@ -197,6 +207,53 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
+    describe 'POST #vote' do
+      it 'assigns votable to @answer' do
+        vote_up
+        expect(assigns(:votable)).to eq answer
+      end
+
+      it 'responses with 200' do
+        vote_up
+        expect(response.status).to eq 200
+      end
+
+      context 'owner of the answer' do
+        it 'does not votes up\down answer' do
+          expect {
+            post :vote_up, params: {question_id: question, id: user_owned_answer}
+          }.not_to change(user_owned_answer.votes, :count)
+          expect {
+            post :vote_down, params: {question_id: question, id: user_owned_answer}
+          }.not_to change(user_owned_answer.votes, :count)
+          expect {
+            post :cancel_vote, params: {question_id: question, id: user_owned_answer}
+          }.not_to change(user_owned_answer.votes, :count)
+        end
+      end
+
+      context 'not owner of the answer' do
+        it 'votes up answer' do
+          expect {
+            vote_up
+          }.to change(answer.votes, :count).by(1)
+        end
+
+        it 'votes down answer' do
+          expect {
+            vote_down
+          }.to change(answer.votes, :count).by(1)
+        end
+
+        it 'removes vote' do
+          create(:answer_vote, user: user, votable: answer)
+          expect {
+            post :cancel_vote, xhr: true, params: {question_id: question, id: answer}
+          }.to change(answer.votes, :count).by(-1)
+        end
+      end
+    end
+
     describe 'DELETE #destroy' do
       context 'owner of the answer' do
         it 'deletes answer from database' do
@@ -222,7 +279,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'responses with 401' do
           delete_answer
-          expect(response.status).to eq 401
+          expect(response.status).to eq 403
         end
       end
     end

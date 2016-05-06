@@ -6,6 +6,8 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'spec_helper'
 require 'rspec/rails'
 require 'shoulda/matchers'
+require 'with_model'
+require 'capybara/poltergeist' if ENV['TRAVIS']
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -83,6 +85,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
   config.include FeatureHelper, type: :feature
+  config.extend WithModel
 end
 
 Shoulda::Matchers.configure do |config|
@@ -92,5 +95,6 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-Capybara.default_driver = :webkit
-Capybara.javascript_driver = :webkit
+Capybara.default_driver = ENV['TRAVIS'] ? :poltergeist : :webkit
+Capybara.javascript_driver = ENV['TRAVIS'] ? :poltergeist : :webkit
+Capybara.default_max_wait_time = 5
