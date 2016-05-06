@@ -1,8 +1,9 @@
 $ ->
   $('.open-comment-form').on 'click', (e) ->
     e.preventDefault()
-    $('.comment-form').show()
-    $('.open-comment-form').hide()
+    comments = $(this).closest('.comments')
+    comments.find('.comment-form').show()
+    comments.find('.open-comment-form').hide()
 
   $(document).on 'ajax:success', '.new_comment', (e, data, status, xhr) ->
     comments = $(this).closest('.comments')

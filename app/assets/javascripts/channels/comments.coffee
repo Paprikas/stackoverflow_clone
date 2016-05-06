@@ -12,9 +12,7 @@ App.comments = App.cable.subscriptions.create "CommentsChannel",
     # Called when the subscription has been terminated by the server
 
   received: (data) ->
-    console.log data
     comments = $('#' + data.commentable + '_' + data.commentable_id + '_comments')
-    console.log '#' + data.commentable + '_' + data.commentable_id + '_comments'
     comments.append(data.comment)
 
   followCurrentPage: ->

@@ -18,3 +18,5 @@
       = link_to 'Accept answer', accept_question_answer_path(@question, answer), method: :post
 
     = render 'answers/form', answer: answer
+
+    = render 'comments/comments', commentable: answer
