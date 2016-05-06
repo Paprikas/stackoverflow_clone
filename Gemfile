@@ -55,7 +55,6 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-spring', require: false
   gem 'pry-rails'
-  gem 'thin'
 end
 
 group :test do

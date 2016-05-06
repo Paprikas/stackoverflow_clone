@@ -6,7 +6,10 @@ class CommentsController < ApplicationController
     @comment = @commentable.comments.new(comment_params)
     @comment.user = current_user
     if @comment.save
-      render json: {comment: @comment.body}
+      render json: {
+        commentable: @commentable.class.name.underscore,
+        commentable_id: @commentable.id
+      }
     else
       render json: {errors: @comment.errors.full_messages}, status: :unprocessable_entity
     end
