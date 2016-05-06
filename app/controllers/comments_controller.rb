@@ -1,11 +1,8 @@
-module Commented
-  extend ActiveSupport::Concern
+class CommentsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_commentable
 
-  included do
-    before_action :set_commentable, only: :comment
-  end
-
-  def comment
+  def create
     @comment = @commentable.comments.new(comment_params)
     @comment.user = current_user
     if @comment.save
@@ -22,10 +19,12 @@ module Commented
   end
 
   def model_klass
-    controller_name.classify.constantize
+    params[:commentable].classify.constantize
   end
 
   def set_commentable
-    @commentable = model_klass.find(params[:id])
+    @commentable = model_klass.find(params[:commentable_id])
+  rescue
+    head :unprocessable_entity
   end
 end

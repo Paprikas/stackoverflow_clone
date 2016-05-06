@@ -13,15 +13,11 @@ Rails.application.routes.draw do
     end
   end
 
-  concern :commentable do
-    member do
-      post :comment
-    end
-  end
+  post 'comment/:commentable/:commentable_id/', to: 'comments#create', as: :comment
 
   resources :questions,
             only: [:new, :create, :show, :update, :destroy],
-            concerns: [:votable, :commentable] do
+            concerns: :votable do
     resources :answers,
               only: [:new, :create, :update, :destroy],
               concerns: :votable do

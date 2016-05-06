@@ -8,5 +8,9 @@ FactoryGirl.define do
     factory :answer_comment do
       association :commentable, factory: :answer
     end
+
+    trait :invalid do
+      body nil
+    end
   end
 end

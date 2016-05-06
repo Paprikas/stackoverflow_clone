@@ -1,0 +1,13 @@
+.comments
+  - if signed_in?
+    = link_to 'add a comment', '#', class: 'open-comment-form'
+
+  .comment-form
+    .comment_errors
+    - params = {commentable: commentable.class.name.underscore, commentable_id: commentable}
+    = form_for commentable.comments.build, url: comment_path(params), remote: true do |f|
+      = f.label :body, 'Comment'
+      = f.text_area :body
+      = f.submit 'Add Comment'
+
+  = render commentable.comments

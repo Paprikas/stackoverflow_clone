@@ -83,19 +83,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to redirect_to(new_user_session_url)
       end
     end
-
-    describe 'POST #comment' do
-      it "doesn't posts comment" do
-        expect {
-          post :comment, xhr: true, params: {id: question, comment: attributes_for(:comment)}
-        }.not_to change(Comment, :count)
-      end
-
-      it 'responses with 401' do
-        post :comment, xhr: true, params: {id: question, comment: attributes_for(:comment)}
-        expect(response.status).to eq 401
-      end
-    end
   end
 
   describe 'authenticated user' do
@@ -320,25 +307,6 @@ RSpec.describe QuestionsController, type: :controller do
             post :cancel_vote, xhr: true, params: {id: question}
           }.to change(question.votes, :count).by(-1)
         end
-      end
-    end
-
-    describe 'POST #comment' do
-      it 'assigns question to @commentable' do
-        post :comment, xhr: true, params: {id: question, comment: attributes_for(:comment)}
-        expect(assigns(:commentable)).to eq question
-      end
-
-      it 'posts comment' do
-        expect {
-          post :comment, xhr: true, params: {id: question, comment: attributes_for(:comment)}
-        }.to change(Comment, :count).by(1)
-      end
-
-      it "doesn't posts invalid comment" do
-        expect {
-          post :comment, xhr: true, params: {id: question, comment: attributes_for(:comment, body: nil)}
-        }.not_to change(Comment, :count)
       end
     end
   end
