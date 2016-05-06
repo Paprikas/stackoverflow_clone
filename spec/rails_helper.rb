@@ -97,3 +97,4 @@ end
 
 Capybara.default_driver = ENV['TRAVIS'] ? :poltergeist : :webkit
 Capybara.javascript_driver = ENV['TRAVIS'] ? :poltergeist : :webkit
+Capybara.default_max_wait_time = 5

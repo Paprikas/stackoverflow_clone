@@ -62,7 +62,6 @@ feature 'accept answer' do
 
   scenario 'guest cannot accept answer' do
     visit question_path(question)
-    sleep(0.5) # trying to fix Capybara::Poltergeist::StatusFailError on travis
     expect(page).not_to have_content 'Accept answer'
   end
 
