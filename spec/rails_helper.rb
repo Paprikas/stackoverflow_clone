@@ -7,7 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'shoulda/matchers'
 require 'with_model'
-require 'capybara/poltergeist' if ENV['TRAVIS']
+require 'capybara/poltergeist' unless ENV['WEBKIT']
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -95,6 +95,6 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-Capybara.default_driver = ENV['TRAVIS'] ? :poltergeist : :webkit
-Capybara.javascript_driver = ENV['TRAVIS'] ? :poltergeist : :webkit
+Capybara.default_driver = ENV['WEBKIT'] ? :webkit : :poltergeist
+Capybara.javascript_driver = ENV['WEBKIT'] ? :webkit : :poltergeist
 Capybara.default_max_wait_time = 5
