@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     end
   end
 
-  post 'comment/:commentable/:commentable_id/', to: 'comments#create', as: :comment
+  post 'comment/:commentable/:commentable_id', to: 'comments#create', as: :comment
 
   resources :questions,
             only: [:new, :create, :show, :update, :destroy],
