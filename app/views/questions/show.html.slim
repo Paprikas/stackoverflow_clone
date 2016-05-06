@@ -11,6 +11,19 @@
     .question_form_wrapper id="form_#{dom_id(@question)}"
       = render 'form'
 
+  .comments
+    - if signed_in?
+      = link_to 'add a comment', '#', class: 'open-comment-form'
+
+    .comment-form
+      .comment_errors
+      = form_for @question.comments.build, url: comment_question_path(@question), remote: true do |f|
+        = f.label :body, 'Comment'
+        = f.text_area :body
+        = f.submit 'Add Comment'
+
+    = render @question.comments
+
 - if signed_in?
   = render 'answers/form', answer: @answer
 - else
