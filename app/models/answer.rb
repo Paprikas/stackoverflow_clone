@@ -10,6 +10,8 @@ class Answer < ApplicationRecord
 
   validates :body, :question_id, :user_id, presence: true
 
+  after_commit { QuestionAnswerRelayJob.perform_later(self) }
+
   def toggle_accept!
     transaction do
       toggle(:accepted)

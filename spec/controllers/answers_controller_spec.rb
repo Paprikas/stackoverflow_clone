@@ -61,10 +61,9 @@ RSpec.describe AnswersController, type: :controller do
           }.to change(question.answers, :count).by(1)
         end
 
-        it 'renders create.js' do
+        it 'returns http created' do
           post_valid_answer
-          expect(response.status).to eq 200
-          expect(response).to render_template 'create'
+          expect(response).to have_http_status :created
         end
 
         it 'checks that answer belongs to user' do
@@ -81,9 +80,9 @@ RSpec.describe AnswersController, type: :controller do
           }.not_to change(Answer, :count)
         end
 
-        it 'renders new template' do
+        it 'returns http unprocessable_entity' do
           post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)}
-          expect(response).to render_template 'questions/show'
+          expect(response).to have_http_status :unprocessable_entity
         end
       end
     end
