@@ -21,4 +21,4 @@ App.questions = App.cable.subscriptions.create "QuestionsChannel",
   installPageChangeCallback: ->
     unless @installedPageChangeCallback
       @installedPageChangeCallback = true
-      $(document).on 'page:change', -> App.comments.followCurrentPage()
+      $(document).on 'page:change', -> App.questions.followCurrentPage()
