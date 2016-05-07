@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let(:user) { create(:user) }
   let(:question) { create(:question) }
   subject(:vote_up) { post :vote_up, xhr: true, params: {id: question} }
   subject(:vote_down) { post :vote_down, xhr: true, params: {id: question} }
@@ -86,7 +87,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'authenticated user' do
-    let(:user) { create(:user) }
     let(:user_owned_question) { create(:question, user: user) }
     before { sign_in user }
 
@@ -309,5 +309,11 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
     end
+  end
+
+  describe 'comments' do
+    let(:commentable) { question }
+
+    it_behaves_like 'create controller comments'
   end
 end

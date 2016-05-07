@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
   before_action :owner_check, only: [:update, :destroy]
 
   include Voted
+  include Commented
 
   def create
     @answer = @question.answers.new(answer_params)
