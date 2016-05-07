@@ -1,30 +1,23 @@
-require 'rails_helper'
+shared_examples 'comments feature' do
+  context 'as user' do
+    background do
+      sign_in question.user
+      visit question_path(question)
+    end
 
-shared_examples 'views answer comment' do
-  scenario 'views answer comment' do
-    comment = create(:answer_comment, commentable: answer)
-    visit question_path(answer.question)
-    expect(page).to have_content comment.body
-  end
-end
+    it_behaves_like 'views comments'
 
-feature 'create comments' do
-  given(:user) { create(:user) }
-  given(:answer) { create(:answer) }
-
-  context 'as user', :js do
-    background { sign_in user }
-
-    it_behaves_like 'views answer comment'
-
-    xscenario 'creates comment' do
-      visit question_path(answer.question)
-      within '.answer' do
+    # Disabled until fix ActionCable response
+    xscenario 'create comment', :js do
+      within commentable_selector do
         click_on 'add a comment'
         expect(page).not_to have_content 'add a comment'
 
         fill_in 'Comment', with: 'New comment'
         click_on 'Add Comment'
+
+        sleep(1)
+
         within '.comments' do
           expect(page).to have_content 'New comment'
         end
@@ -36,9 +29,8 @@ feature 'create comments' do
       end
     end
 
-    scenario 'creates invalid comment' do
-      visit question_path(answer.question)
-      within '.answer' do
+    scenario "can't create invalid comment" do
+      within commentable_selector do
         click_on 'add a comment'
         click_on 'Add Comment'
 
@@ -51,11 +43,19 @@ feature 'create comments' do
   end
 
   context 'as guest' do
-    it_behaves_like 'views answer comment'
+    it_behaves_like 'views comments'
 
-    scenario "can't create comment" do
-      visit question_path(answer.question)
+    scenario "can't see add a comment link" do
+      visit question_path(question)
       expect(page).not_to have_content 'add a comment'
     end
+  end
+end
+
+shared_examples 'views comments' do
+  scenario 'views comment' do
+    comment = create(:comment, commentable: commentable)
+    visit question_path(question)
+    expect(page).to have_content comment.body
   end
 end
