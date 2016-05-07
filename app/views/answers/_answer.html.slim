@@ -2,7 +2,7 @@
   .answer id="#{dom_id(answer)}"
     = render 'shared/vote_actions', votable: answer, path_args: [answer.question, answer]
 
-    p = answer.body
+    .body = answer.body
 
     = render answer.attachments
 

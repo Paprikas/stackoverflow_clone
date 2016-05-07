@@ -8,12 +8,15 @@ $ ->
   (e, data, status, xhr) ->
     form_wrapper = $(this).closest('.answer_form_wrapper')
     form_wrapper.find('.answer_errors').text('')
-    form_wrapper.find('textarea').val('')
 
     if $(this).hasClass('edit_answer')
       form_wrapper.hide()
-      $(this).closest('.answer').find('.answer-edit-form-trigger').show()
-      
+      answer = $(this).closest('.answer')
+      answer.find('.answer-edit-form-trigger').show()
+      answer.find('.body').html(xhr.responseJSON.answer)
+    else
+      form_wrapper.find('textarea').val('')
+
   .on 'ajax:error', '.new_answer, .edit_answer', (e, xhr) ->
     errors = ''
     for error in xhr.responseJSON.errors

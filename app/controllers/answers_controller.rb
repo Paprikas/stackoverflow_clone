@@ -19,7 +19,11 @@ class AnswersController < ApplicationController
   end
 
   def update
-    render status: :unprocessable_entity unless @answer.update(answer_params)
+    if @answer.update(answer_params)
+      render json: {answer: @answer.body}
+    else
+      render json: {errors: @answer.errors.full_messages}, status: :unprocessable_entity
+    end
   end
 
   def destroy
