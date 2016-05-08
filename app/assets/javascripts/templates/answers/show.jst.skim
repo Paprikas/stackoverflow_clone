@@ -1,0 +1,2 @@
+.answer id="answer_#{@id}"
+  .body = @body

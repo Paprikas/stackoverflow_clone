@@ -90,6 +90,10 @@ gem 'remotipart', git: 'https://github.com/mshibuya/remotipart.git', ref: '3a6ac
 # For nested forms
 gem 'cocoon'
 
+# JS templating
+gem 'skim'
+gem 'gon'
+
 local_gemfile = 'Gemfile.local'
 
 eval(File.read(local_gemfile)) if File.exist?(local_gemfile) # rubocop:disable Lint/Eval

@@ -10,8 +10,7 @@ App.question_answer = App.cable.subscriptions.create "QuestionAnswerChannel",
   disconnected: ->
 
   received: (data) ->
-    console.log data
-    $('.answers').append(data.answer)
+    $('.answers').append(JST['templates/answers/show'](data.answer))
 
   followCurrentPage: ->
     if questionId = @question().data('question-channel')

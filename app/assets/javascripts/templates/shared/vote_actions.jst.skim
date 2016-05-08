@@ -1,0 +1,5 @@
+.voting
+  p
+    | Score
+    '
+    span.score 0
