@@ -92,6 +92,4 @@ gem 'cocoon'
 
 local_gemfile = 'Gemfile.local'
 
-if File.exist?(local_gemfile)
-  eval(File.read(local_gemfile))
-end
+eval(File.read(local_gemfile)) if File.exist?(local_gemfile) # rubocop:disable Lint/Eval
