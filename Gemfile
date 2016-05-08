@@ -63,7 +63,6 @@ group :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
   gem 'capybara'
-  gem 'capybara-webkit'
   gem 'poltergeist'
   gem 'launchy'
   gem 'database_cleaner'
@@ -90,3 +89,9 @@ gem 'remotipart', git: 'https://github.com/mshibuya/remotipart.git', ref: '3a6ac
 
 # For nested forms
 gem 'cocoon'
+
+local_gemfile = 'Gemfile.local'
+
+if File.exist?(local_gemfile)
+  eval(File.read(local_gemfile))
+end
