@@ -283,11 +283,4 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-
-  # split?
-  describe 'comments' do
-    let(:commentable) { answer }
-
-    it_behaves_like 'create controller comments'
-  end
 end

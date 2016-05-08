@@ -310,10 +310,4 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
-
-  describe 'comments' do
-    let(:commentable) { question }
-
-    it_behaves_like 'create controller comments'
-  end
 end

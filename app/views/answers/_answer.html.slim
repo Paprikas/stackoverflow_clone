@@ -19,4 +19,4 @@
 
     = render 'answers/form', answer: answer
 
-    = render 'comments/comments', commentable: answer
+    = render 'comments/comments', commentable: answer, path_args: [answer.question, answer]

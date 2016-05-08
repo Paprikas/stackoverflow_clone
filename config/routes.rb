@@ -10,20 +10,15 @@ Rails.application.routes.draw do
     end
   end
 
-  concern :commentable do
-    shallow do
-      member do
-        post :comment
-      end
-    end
-  end
-
   resources :questions,
             only: [:new, :create, :show, :update, :destroy],
-            concerns: [:votable, :commentable] do
+            concerns: :votable do
+    resources :comments, only: :create, defaults: {commentable: 'questions'}
+
     resources :answers,
               only: [:new, :create, :update, :destroy],
-              concerns: [:votable, :commentable] do
+              concerns: :votable do
+      resources :comments, only: :create, defaults: {commentable: 'answers'}
       member do
         post :accept
       end
