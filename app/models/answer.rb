@@ -10,7 +10,8 @@ class Answer < ApplicationRecord
 
   validates :body, :question_id, :user_id, presence: true
 
-  after_commit { QuestionAnswerRelayJob.perform_later(self) }
+  # ???
+  after_commit :question_answer_relay, on: :create
 
   def toggle_accept!
     transaction do
@@ -19,5 +20,11 @@ class Answer < ApplicationRecord
       question.answers.where(accepted: true).update_all(accepted: false) if accepted?
       save!
     end
+  end
+
+  private
+
+  def question_answer_relay
+    QuestionAnswerRelayJob.perform_later(self)
   end
 end

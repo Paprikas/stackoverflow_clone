@@ -9,3 +9,16 @@
 .comment-form {
   display: none;
 }
+
+.vote-remove {
+  display: none
+}
+
+.voted {
+  .vote-change {
+    display: none;
+  }
+  .vote-remove {
+    display: block;
+  }
+}
