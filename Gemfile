@@ -55,7 +55,6 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-spring', require: false
   gem 'pry-rails'
-  gem 'thin'
 end
 
 group :test do
@@ -64,7 +63,6 @@ group :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
   gem 'capybara'
-  gem 'capybara-webkit'
   gem 'poltergeist'
   gem 'launchy'
   gem 'database_cleaner'
@@ -91,3 +89,11 @@ gem 'remotipart', git: 'https://github.com/mshibuya/remotipart.git', ref: '3a6ac
 
 # For nested forms
 gem 'cocoon'
+
+# JS templating
+gem 'skim'
+gem 'gon'
+
+local_gemfile = 'Gemfile.local'
+
+eval(File.read(local_gemfile)) if File.exist?(local_gemfile) # rubocop:disable Lint/Eval

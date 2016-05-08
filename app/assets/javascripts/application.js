@@ -16,6 +16,7 @@
 //= require foundation
 //= require turbolinks
 //= require cocoon
+//= require_tree ./templates
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

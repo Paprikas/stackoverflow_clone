@@ -10,18 +10,19 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
 
-    respond_to do |format|
-      if @answer.save
-        format.html { redirect_to @question }
-      else
-        format.html { render 'questions/show' }
-      end
-      format.js
+    if @answer.save
+      head :created, location: @question
+    else
+      render json: {errors: @answer.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
   def update
-    render status: :unprocessable_entity unless @answer.update(answer_params)
+    if @answer.update(answer_params)
+      render json: {answer: @answer.body}
+    else
+      render json: {errors: @answer.errors.full_messages}, status: :unprocessable_entity
+    end
   end
 
   def destroy

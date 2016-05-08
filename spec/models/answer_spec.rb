@@ -9,6 +9,7 @@ RSpec.describe Answer, type: :model do
   it { should have_many(:attachments).dependent(:destroy) }
   it { should accept_nested_attributes_for(:attachments).allow_destroy(true) }
   it { should have_many(:votes).dependent(:destroy) }
+  it { should have_many(:comments).dependent(:destroy) }
 
   describe 'toggle accepted' do
     it 'toggles' do
@@ -39,4 +40,6 @@ RSpec.describe Answer, type: :model do
       }.to change { answer.accepted }.from(true).to(false)
     end
   end
+
+  it 'tests after commit hook'
 end

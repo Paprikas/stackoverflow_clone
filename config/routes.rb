@@ -2,9 +2,6 @@ Rails.application.routes.draw do
   devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  # Serve websocket cable requests in-process
-  # mount ActionCable.server => '/cable'
-
   concern :votable do
     member do
       post :vote_up
@@ -16,9 +13,12 @@ Rails.application.routes.draw do
   resources :questions,
             only: [:new, :create, :show, :update, :destroy],
             concerns: :votable do
+    resources :comments, only: :create, defaults: {commentable: 'questions'}
+
     resources :answers,
               only: [:new, :create, :update, :destroy],
               concerns: :votable do
+      resources :comments, only: :create, defaults: {commentable: 'answers'}
       member do
         post :accept
       end
@@ -26,4 +26,7 @@ Rails.application.routes.draw do
   end
 
   root to: 'questions#index'
+
+  # Serve websocket cable requests in-process
+  mount ActionCable.server => '/cable'
 end

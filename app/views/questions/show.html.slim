@@ -1,4 +1,4 @@
-.question
+.question data-question-channel="#{@question.id}"
   .question_wrapper
     = render @question
     = render @question.attachments
@@ -10,6 +10,8 @@
 
     .question_form_wrapper id="form_#{dom_id(@question)}"
       = render 'form'
+
+  = render 'comments/comments', commentable: @question, path_args: [@question]
 
 - if signed_in?
   = render 'answers/form', answer: @answer

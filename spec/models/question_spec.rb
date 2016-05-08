@@ -9,4 +9,7 @@ RSpec.describe Question, type: :model do
   it { should have_many(:attachments).dependent(:destroy) }
   it { should accept_nested_attributes_for(:attachments).allow_destroy(true) }
   it { should have_many(:votes).dependent(:destroy) }
+  it { should have_many(:comments).dependent(:destroy) }
+
+  it 'tests after commit hook'
 end
