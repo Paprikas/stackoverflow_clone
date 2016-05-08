@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 shared_examples 'comments feature' do
   context 'as user' do
     background do
@@ -15,8 +17,6 @@ shared_examples 'comments feature' do
 
         fill_in 'Comment', with: 'New comment'
         click_on 'Add Comment'
-
-        sleep(1)
 
         within '.comments' do
           expect(page).to have_content 'New comment'
@@ -58,4 +58,21 @@ shared_examples 'views comments' do
     visit question_path(question)
     expect(page).to have_content comment.body
   end
+end
+
+feature 'comment answer' do
+  given(:question) { create(:question) }
+  given!(:answer) { create(:answer, question: question) }
+  given(:commentable) { answer }
+  given(:commentable_selector) { '.answer' }
+
+  it_behaves_like 'comments feature'
+end
+
+feature 'comment question' do
+  given(:question) { create(:question) }
+  given(:commentable) { question }
+  given(:commentable_selector) { '.question' }
+
+  it_behaves_like 'comments feature'
 end
