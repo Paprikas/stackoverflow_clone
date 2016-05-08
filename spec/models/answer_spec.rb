@@ -40,4 +40,6 @@ RSpec.describe Answer, type: :model do
       }.to change { answer.accepted }.from(true).to(false)
     end
   end
+
+  it 'tests after commit hook'
 end
