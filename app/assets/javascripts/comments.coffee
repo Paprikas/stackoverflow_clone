@@ -12,8 +12,5 @@ $ ->
     comments.find('.comment-form').hide()
     comments.find('.open-comment-form').show()
   .on 'ajax:error', '.new_comment', (e, xhr) ->
-    errors = ''
-    for error in xhr.responseJSON.errors
-      do (error) ->
-        errors += '<p>' + error + '</p>'
-    $(this).closest('.comments').find('.comment_errors').html(errors)
+    selector = $(this).closest('.comment-form').find('.comment_errors')
+    App.utils.errorsHandler(selector, xhr.responseJSON.errors)

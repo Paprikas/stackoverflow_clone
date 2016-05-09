@@ -1,1 +1,1 @@
-p = "#{@field} #{@error}"
+p = @error

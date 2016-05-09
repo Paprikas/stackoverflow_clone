@@ -24,7 +24,7 @@ feature 'answer on question' do
     scenario 'cannot answer on question with invalid attributes' do
       click_on 'Submit answer'
       within '.answer_errors' do
-        expect(page).to have_content "body can't be blank"
+        expect(page).to have_content "Body can't be blank"
       end
     end
 
