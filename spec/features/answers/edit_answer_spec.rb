@@ -47,7 +47,7 @@ feature 'edit answer' do
           expect(page).not_to have_content 'Edit'
           fill_in 'Answer', with: ''
           click_on 'Update answer'
-          expect(page).to have_content "Body can't be blank"
+          expect(page).to have_content "body can't be blank"
           expect(page).not_to have_content 'Edit'
           expect(page).to have_selector('textarea')
         end

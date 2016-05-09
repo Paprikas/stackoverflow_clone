@@ -76,19 +76,19 @@ RSpec.describe AnswersController, type: :controller do
       context 'with invalid attributes' do
         it "doesn't create new answer in the database" do
           expect {
-            post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)}
+            post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
           }.not_to change(Answer, :count)
         end
 
         it 'returns http unprocessable_entity' do
-          post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)}
+          post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
           expect(response).to have_http_status :unprocessable_entity
         end
       end
     end
 
     describe 'PATCH #update' do
-      context 'owner of the question' do
+      context 'owner' do
         let!(:answer_attachment) { create(:answer_attachment, attachable: user_owned_answer) }
         before { user_owned_answer }
 
@@ -130,7 +130,7 @@ RSpec.describe AnswersController, type: :controller do
               },
               question_id: user_owned_answer.question,
               id: user_owned_answer,
-              format: :js
+              format: :json
             }
             should permit(:body, attachments_attributes: [:id, :file, :_destroy])
               .for(:update, params: {params: params})
@@ -262,9 +262,9 @@ RSpec.describe AnswersController, type: :controller do
           }.to change(question.answers, :count).by(-1)
         end
 
-        it 'renders destroy template' do
+        it 'returns http success' do
           delete_own_answer
-          expect(response).to render_template :destroy
+          expect(response).to have_http_status :success
         end
       end
 

@@ -94,6 +94,9 @@ gem 'cocoon'
 gem 'skim'
 gem 'gon'
 
+# Skinny controllers
+gem 'responders'
+
 local_gemfile = 'Gemfile.local'
 
 eval(File.read(local_gemfile)) if File.exist?(local_gemfile) # rubocop:disable Lint/Eval

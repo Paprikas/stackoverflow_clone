@@ -407,6 +407,7 @@ DEPENDENCIES
   rails (>= 5.0.0.beta3, < 5.1)
   rails-controller-testing
   remotipart!
+  responders
   rspec (~> 3.5.0.beta3)
   rspec-rails (~> 3.5.0beta3)
   rubocop
