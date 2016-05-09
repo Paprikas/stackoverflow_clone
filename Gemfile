@@ -94,7 +94,3 @@ gem 'gon', git: 'https://github.com/gazay/gon.git'
 
 # Skinny controllers
 gem 'responders'
-
-local_gemfile = 'Gemfile.local'
-
-eval(File.read(local_gemfile)) if File.exist?(local_gemfile) # rubocop:disable Lint/Eval
