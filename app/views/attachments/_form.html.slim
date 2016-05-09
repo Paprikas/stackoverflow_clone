@@ -1,4 +1,6 @@
 .attachments
+  / ??? @question.attachments.build removed
+  - f.object.attachments.build if f.object.new_record?
   = f.fields_for :attachments do |a|
     = render 'attachments/attachment_fields', f: a
   .add-file

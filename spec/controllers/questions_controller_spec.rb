@@ -103,10 +103,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect(assigns(:answer)).to be_a_new(Answer)
       end
 
-      it 'builds attachment' do
-        expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-      end
-
       it 'renders show template' do
         expect(response).to render_template :show
       end
@@ -117,10 +113,6 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'assigns new question to @question' do
         expect(assigns(:question)).to be_a_new(Question)
-      end
-
-      it 'builds attachment' do
-        expect(assigns(:question).attachments.first).to be_a_new(Attachment)
       end
 
       it 'renders new template' do
@@ -193,7 +185,7 @@ RSpec.describe QuestionsController, type: :controller do
             patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:invalid_question) }
             user_owned_question.reload
             expect(user_owned_question.title).not_to be_empty
-            expect(response.status).to eq 422
+            expect(response).to have_http_status :success
           end
         end
       end
