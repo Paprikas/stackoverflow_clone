@@ -6,23 +6,22 @@ class AnswersController < ApplicationController
 
   include Voted
 
-  respond_to :json
+  respond_to :json, except: :accept
   respond_to :html, only: :accept
 
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-    respond_with @answer do
-      # ???
-      return head :created, location: @question if @answer.save
-    end
+    @answer.save
+    respond_with @answer, location: @question
   end
 
   def update
-    @answer.update(answer_params)
-    respond_with @answer do
-      # ???
-      return render json: @answer, location: @question if @answer.valid?
+    # ??? render json: @answer // no content
+    if @answer.update(answer_params)
+      render json: @answer
+    else
+      render json: {errors: @answer.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
@@ -32,7 +31,7 @@ class AnswersController < ApplicationController
 
   def accept
     @answer.toggle_accept!
-    respond_with @answer, location: -> { question_path(@question) }
+    respond_with @answer, location: question_path(@question)
   end
 
   private
