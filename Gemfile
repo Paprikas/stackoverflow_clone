@@ -92,7 +92,7 @@ gem 'cocoon'
 
 # JS templating
 gem 'skim'
-gem 'gon'
+gem 'gon', git: 'https://github.com/gazay/gon.git'
 
 # Skinny controllers
 gem 'responders'

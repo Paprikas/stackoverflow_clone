@@ -1,4 +1,14 @@
 GIT
+  remote: https://github.com/gazay/gon.git
+  revision: 3d221a0d81d8c5efe5ff590875b6fccb3819b773
+  specs:
+    gon (6.0.1)
+      actionpack (>= 3.0)
+      json
+      multi_json
+      request_store (>= 1.0)
+
+GIT
   remote: https://github.com/kikyous/rack.git
   revision: 1aded61cedb07e8f0bea3b46522c4167b352c0ca
   specs:
@@ -130,11 +140,6 @@ GEM
       sprockets-es6 (>= 0.9.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    gon (6.0.1)
-      actionpack (>= 3.0)
-      json
-      multi_json
-      request_store (>= 1.0)
     guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
@@ -386,7 +391,7 @@ DEPENDENCIES
   devise!
   factory_girl_rails
   foundation-rails
-  gon
+  gon!
   guard-bundler
   guard-rails
   guard-rspec (~> 4.6)
