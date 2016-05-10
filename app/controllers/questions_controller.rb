@@ -7,7 +7,6 @@ class QuestionsController < ApplicationController
   include Voted
 
   respond_to :html, except: :update
-  respond_to :js, only: :update
 
   def index
     respond_with(@questions = Question.all)
@@ -26,9 +25,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    # 200 ???
-    @question.update(question_params)
-    respond_with @question
+    render status: :unprocessable_entity unless @question.update(question_params)
   end
 
   def destroy

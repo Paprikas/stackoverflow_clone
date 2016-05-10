@@ -16,7 +16,6 @@ class AnswersController < ApplicationController
   end
 
   def update
-    # ??? render json: @answer // no content
     if @answer.update(answer_params)
       render json: @answer
     else

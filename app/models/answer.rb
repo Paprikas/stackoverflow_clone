@@ -10,7 +10,6 @@ class Answer < ApplicationRecord
 
   validates :body, :question_id, :user_id, presence: true
 
-  # ???
   after_commit :question_answer_relay, on: :create
 
   def toggle_accept!

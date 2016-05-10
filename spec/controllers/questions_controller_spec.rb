@@ -185,7 +185,7 @@ RSpec.describe QuestionsController, type: :controller do
             patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:invalid_question) }
             user_owned_question.reload
             expect(user_owned_question.title).not_to be_empty
-            expect(response).to have_http_status :success
+            expect(response).to have_http_status :unprocessable_entity
           end
         end
       end
