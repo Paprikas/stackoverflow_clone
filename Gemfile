@@ -91,3 +91,6 @@ gem 'gon', git: 'https://github.com/gazay/gon.git'
 
 # Skinny controllers
 gem 'responders'
+
+gem 'omniauth'
+gem 'omniauth-facebook'

@@ -99,3 +99,5 @@ end
 Capybara.default_driver = ENV['WEBKIT'] ? :webkit : :poltergeist
 Capybara.javascript_driver = ENV['WEBKIT'] ? :webkit : :poltergeist
 Capybara.default_max_wait_time = 5
+
+OmniAuth.config.test_mode = true
