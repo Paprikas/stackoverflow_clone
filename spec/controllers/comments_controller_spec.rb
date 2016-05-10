@@ -11,7 +11,7 @@ shared_examples 'comments' do
 
       it "returns http success and assigns @comment, @commentable", :aggregate_failures do
         post_comment
-        expect(response).to have_http_status :success
+        expect(response).to have_http_status :created
         expect(assigns(:comment)).to eq commentable.comments.first
         expect(assigns(:commentable)).to eq commentable
       end
