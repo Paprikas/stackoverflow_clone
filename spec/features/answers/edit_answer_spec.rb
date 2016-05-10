@@ -27,7 +27,7 @@ feature 'edit answer' do
     context 'owner of the answer' do
       background { visit question_path(question) }
 
-      scenario 'edits with valid attributes', js: true do
+      scenario 'edits with valid attributes', :js do
         within '.answer' do
           expect(page).not_to have_selector('textarea')
           click_on 'Edit'
@@ -40,7 +40,7 @@ feature 'edit answer' do
         end
       end
 
-      scenario 'edits with invalid attributes', js: true do
+      scenario 'edits with invalid attributes', :js do
         within '.answer' do
           expect(page).not_to have_selector('textarea')
           click_on 'Edit'
