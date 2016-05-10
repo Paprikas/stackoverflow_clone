@@ -10,8 +10,7 @@ class AnswersController < ApplicationController
   respond_to :html, only: :accept
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
+    @answer = @question.answers.new(answer_params.merge(user: current_user))
     @answer.save
     respond_with @answer, location: @question
   end

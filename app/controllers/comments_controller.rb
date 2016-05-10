@@ -5,9 +5,7 @@ class CommentsController < ApplicationController
   respond_to :json
 
   def create
-    @comment = @commentable.comments.new(comment_params)
-    # ???
-    @comment.user = current_user
+    @comment = @commentable.comments.new(comment_params.merge(user: current_user))
     @comment.save
     respond_with @comment, location: root_path
   end
