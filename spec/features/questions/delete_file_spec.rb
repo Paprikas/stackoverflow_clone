@@ -9,7 +9,7 @@ feature 'delete file' do
     visit question_path(question)
   end
 
-  scenario 'delete file', js: true do
+  scenario 'delete file', :js do
     expect(page).to have_link 'spec_helper.rb'
     click_on 'Edit'
     click_on 'remove file'

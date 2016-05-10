@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '>= 5.0.0.beta3', '< 5.1'
+gem 'rails', '>= 5.0.0.rc1', '< 5.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
@@ -32,7 +32,7 @@ gem 'jbuilder', '~> 2.0'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry-byebug'
-  # TODO: Replace with stable when released
+  # Replace with stable when released
   gem 'rspec', '~> 3.5.0.beta3'
   gem 'rspec-rails', '~> 3.5.0beta3'
   gem 'factory_girl_rails'
@@ -74,14 +74,9 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'slim-rails'
-# TODO: Replace with stable when released
-gem 'devise', git: 'https://github.com/plataformatec/devise.git'
-
+gem 'devise'
 gem 'foundation-rails'
 gem 'carrierwave'
-
-# Replace with stable when released
-gem 'rack', git: 'https://github.com/kikyous/rack.git'
 
 # To help submit files with remote forms
 # TODO: Replace with stable when released
@@ -92,8 +87,7 @@ gem 'cocoon'
 
 # JS templating
 gem 'skim'
-gem 'gon'
+gem 'gon', git: 'https://github.com/gazay/gon.git'
 
-local_gemfile = 'Gemfile.local'
-
-eval(File.read(local_gemfile)) if File.exist?(local_gemfile) # rubocop:disable Lint/Eval
+# Skinny controllers
+gem 'responders'

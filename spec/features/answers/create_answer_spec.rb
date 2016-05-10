@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'answer on question' do
   given!(:question) { create(:question) }
 
-  describe 'authenticated user', js: true do
+  describe 'authenticated user', :js do
     given(:user) { create(:user) }
 
     background do
@@ -38,7 +38,7 @@ feature 'answer on question' do
       end
     end
 
-    xscenario 'adds files via cocoon', js: true do
+    xscenario 'adds files via cocoon', :js do
       fill_in 'Answer', with: 'Dunno'
       click_on 'add file'
       within all('.nested-fields').last do

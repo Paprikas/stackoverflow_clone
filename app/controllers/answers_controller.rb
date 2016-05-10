@@ -6,32 +6,30 @@ class AnswersController < ApplicationController
 
   include Voted
 
-  def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
+  respond_to :json, except: :accept
+  respond_to :html, only: :accept
 
-    if @answer.save
-      head :created, location: @question
-    else
-      render json: {errors: @answer.errors.full_messages}, status: :unprocessable_entity
-    end
+  def create
+    @answer = @question.answers.new(answer_params.merge(user: current_user))
+    @answer.save
+    respond_with @answer, location: @question
   end
 
   def update
     if @answer.update(answer_params)
-      render json: {answer: @answer.body}
+      render json: @answer
     else
       render json: {errors: @answer.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @answer.destroy
+    respond_with @answer.destroy
   end
 
   def accept
     @answer.toggle_accept!
-    redirect_to @question
+    respond_with @answer, location: question_path(@question)
   end
 
   private

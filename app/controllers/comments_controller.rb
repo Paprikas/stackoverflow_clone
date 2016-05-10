@@ -2,17 +2,12 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_commentable, only: :create
 
+  respond_to :json
+
   def create
-    @comment = @commentable.comments.new(comment_params)
-    @comment.user = current_user
-    if @comment.save
-      render json: {
-        commentable: @commentable.class.name.underscore,
-        commentable_id: @commentable.id
-      }
-    else
-      render json: {errors: @comment.errors.full_messages}, status: :unprocessable_entity
-    end
+    @comment = @commentable.comments.new(comment_params.merge(user: current_user))
+    @comment.save
+    respond_with @comment, location: root_path
   end
 
   private

@@ -2,31 +2,26 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :update, :destroy]
   before_action :owner_check, only: [:update, :destroy]
+  before_action :build_answer, only: :show
 
   include Voted
 
+  respond_to :html, except: :update
+
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = @question.answers.build
-    @answer.attachments.build
+    respond_with @question
   end
 
   def new
-    @question = current_user.questions.new
-    @question.attachments.build
+    respond_with(@question = current_user.questions.new)
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-
-    if @question.save
-      redirect_to @question
-    else
-      render :new
-    end
+    respond_with(@question = current_user.questions.create(question_params))
   end
 
   def update
@@ -34,8 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    redirect_to root_path
+    respond_with @question.destroy, location: root_path
   end
 
   private
@@ -55,5 +49,9 @@ class QuestionsController < ApplicationController
         format.js { head :forbidden }
       end
     end
+  end
+
+  def build_answer
+    @answer = @question.answers.build
   end
 end

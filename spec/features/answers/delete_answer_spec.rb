@@ -19,7 +19,7 @@ feature 'delete answer' do
   context 'user access' do
     background { sign_in user }
 
-    scenario 'own answer', js: true do
+    scenario 'own answer', :js do
       visit question_path(answer.question)
       within ".answer#answer_#{answer.id}" do
         click_on 'Delete'
@@ -28,7 +28,7 @@ feature 'delete answer' do
     end
 
     # Disabled until ActionCable fix
-    xscenario 'create and delete answer', js: true do
+    xscenario 'create and delete answer', :js do
       visit question_path(question)
       fill_in 'Answer', with: 'Check ajax event reloaded'
       click_on 'Submit answer'
@@ -38,7 +38,7 @@ feature 'delete answer' do
       expect(page).not_to have_css '.answer'
     end
 
-    xscenario 'delete file', js: true do
+    xscenario 'delete file', :js do
       create(:answer_attachment, attachable: answer)
       visit question_path(answer.question)
       expect(page).to have_link 'spec_helper.rb'
