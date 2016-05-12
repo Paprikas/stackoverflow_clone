@@ -69,6 +69,7 @@ group :test do
   gem 'database_cleaner'
   gem 'codeclimate-test-reporter', require: false
   gem 'with_model'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
