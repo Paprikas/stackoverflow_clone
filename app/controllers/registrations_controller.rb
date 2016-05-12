@@ -1,10 +1,12 @@
 class RegistrationsController < ApplicationController
   before_action :authenticate_user!
+  before_action :redirect_if_confirmed
 
   def finish_signup
   end
 
   def send_confirmation_email
+    # ??? valid data?
     user = User.find_by(user_params)
 
     if user && current_user != user
@@ -19,6 +21,10 @@ class RegistrationsController < ApplicationController
   end
 
   private
+
+  def redirect_if_confirmed
+    redirect_to root_path, notice: 'Registration successfully finished' if current_user.confirmed?
+  end
 
   def user_params
     params.require(:user).permit(:email)

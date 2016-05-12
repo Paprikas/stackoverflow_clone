@@ -1,4 +1,6 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  before_action :redirect_if_signed_in
+
   def facebook
     auth = request.env['omniauth.auth']
 
@@ -9,9 +11,15 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     sign_in_with_oauth(user) if user.persisted?
   end
 
+  private
+
   def sign_in_with_oauth(user)
     sign_in_and_redirect user, event: :authentication
     set_flash_message :notice, :success, kind: 'Facebook' if is_navigational_format?
+  end
+
+  def redirect_if_signed_in
+    redirect_to root_path if signed_in?
   end
 
   protected

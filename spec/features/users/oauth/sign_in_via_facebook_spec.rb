@@ -120,4 +120,13 @@ feature 'Sign in with Oauth via facebook' do
     click_on 'Continue'
     expect(page).to have_content 'User with provided email already registered'
   end
+
+  context 'confirmed' do
+    background { sign_in user }
+
+    scenario 'see success message' do
+      visit finish_signup_path
+      expect(page).to have_content 'Registration successfully finished'
+    end
+  end
 end
