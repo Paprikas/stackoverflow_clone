@@ -1,33 +1,40 @@
 class User < ApplicationRecord
+  TEMP_EMAIL_PREFIX = 'change@me'.freeze # ???
+  TEMP_EMAIL_REGEX = /\Achange@me/
+
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :identities, dependent: :destroy
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook]
 
-  def self.find_with_oauth(auth)
-    identity = Identity.find_by(provider: auth.provider, uid: auth.uid)
-    return identity.user if identity
-    user = User.find_by(email: auth.info['email'])
-    if user
-      user.identities.create(provider: auth.provider, uid: auth.uid)
+  def self.find_for_oauth(auth)
+    email = auth.try(:info).try(:email) # ???
+    user = find_by(email: email) if email
+    if user.present?
+      user.create_identities(auth)
     else
-      # ??? return create_user_from_auth(auth)
       user = create_user_from_auth(auth)
     end
     user
   end
 
-  private
-
-  # need test?
   def self.create_user_from_auth(auth)
-    password = Devise.friendly_token[0, 20]
-    user = create!(email: auth.info['email'], password: password)
-    user.identities.create(provider: auth.provider, uid: auth.uid)
+    email = auth.try(:info).try(:email) ? auth.info.email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com"
+    user = new(email: email, password: Devise.friendly_token[0, 20])
+    user.skip_confirmation! if auth.try(:info).try(:email)
+    user.save!
+    user.create_identities(auth)
     user
+  end
+
+  def email_verified?
+    email && email !~ TEMP_EMAIL_REGEX
+  end
+
+  def create_identities(auth)
+    identities.create(provider: auth.provider, uid: auth.uid)
   end
 end

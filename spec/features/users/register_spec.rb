@@ -9,6 +9,7 @@ feature 'Register User' do
     fill_in 'Password confirmation', with: '123456'
     click_on 'Sign up'
     expect(page).to have_content 'Welcome! You have signed up successfully.'
+    expect(page).to have_content 'Your registration is not yet finished, please confirm your email address'
   end
 
   scenario 'with existing user in database' do

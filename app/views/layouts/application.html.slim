@@ -17,6 +17,13 @@ html lang="en"
     - else
       => link_to 'Registration', new_user_registration_path
       = link_to 'Sign in', new_user_session_path
+
+    / ??? to var?
+    - if signed_in? && controller_name != 'registrations' && (!current_user.email_verified? || !current_user.confirmed?)
+      p
+        | Your registration is not yet finished, please
+        =< link_to 'confirm your email address', finish_signup_path
+
     = flash[:notice] if flash[:notice]
     = flash[:alert] if flash[:alert]
     = yield

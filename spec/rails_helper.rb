@@ -86,6 +86,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
   config.include FeatureHelper, type: :feature
+  config.include OmniauthMacros, type: :feature
   config.extend WithModel
 end
 
@@ -101,3 +102,7 @@ Capybara.javascript_driver = ENV['WEBKIT'] ? :webkit : :poltergeist
 Capybara.default_max_wait_time = 5
 
 OmniAuth.config.test_mode = true
+
+# email template ???
+Capybara.server_port = 3001
+Capybara.app_host = 'http://localhost:3001'

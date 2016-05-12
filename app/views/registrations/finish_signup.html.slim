@@ -1,0 +1,22 @@
+- form_class = current_user.unconfirmed_email.present? ? 'hidden' : ''
+
+h1 Almost there
+
+p
+  - if !current_user.unconfirmed_email.present?
+    | Please enter your email address to continue registration
+  - else
+    | Confirmation email sent to #{current_user.unconfirmed_email},
+      check your inbox and follow the instructions
+
+    p If you haven't received email please check spam folder
+    p
+      => link_to 'Click here', '#', class: 'email-confirmation-form-trigger'
+      | to resend confirmation instructions
+
+
+= form_for current_user, url: send_confirmation_email_path, html: {class: "#{form_class} email-confirmation-form"} do |f|
+  = f.label :email
+  = f.email_field :email, value: (current_user.pending_reconfirmation? ? current_user.unconfirmed_email : '')
+
+  = f.submit current_user.unconfirmed_email.present? ? 'Resend confirmation instructions' : 'Continue'
