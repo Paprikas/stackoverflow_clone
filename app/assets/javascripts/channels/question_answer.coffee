@@ -21,4 +21,4 @@ App.question_answer = App.cable.subscriptions.create "QuestionAnswerChannel",
   installPageChangeCallback: ->
     unless @installedPageChangeCallback
       @installedPageChangeCallback = true
-      $(document).on 'page:change', -> App.question_answer.followCurrentPage()
+      $(document).on 'turbolinks:load', -> App.question_answer.followCurrentPage()
