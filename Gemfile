@@ -96,3 +96,4 @@ gem 'responders'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'omniauth-twitter'

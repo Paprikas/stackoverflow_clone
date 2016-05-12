@@ -243,8 +243,11 @@ Devise.setup do |config|
   # up on your models and hooks.
   config.omniauth :facebook,
                   Rails.application.secrets.facebook_app_id,
-                  Rails.application.secrets.facebook_app_secret,
-                  scope: :email
+                  Rails.application.secrets.facebook_app_secret
+
+  config.omniauth :twitter,
+                  Rails.application.secrets.twitter_api_key,
+                  Rails.application.secrets.twitter_api_secret
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

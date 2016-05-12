@@ -2,6 +2,18 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :redirect_if_signed_in
 
   def facebook
+    general_auth
+  end
+
+  def twitter
+    general_auth
+  end
+
+  # class_eval ???
+
+  private
+
+  def general_auth
     auth = request.env['omniauth.auth']
 
     identity = Identity.find_for_oauth(auth)
@@ -10,8 +22,6 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     user = User.find_for_oauth(auth)
     sign_in_with_oauth(user) if user.persisted?
   end
-
-  private
 
   def sign_in_with_oauth(user)
     sign_in_and_redirect user, event: :authentication
