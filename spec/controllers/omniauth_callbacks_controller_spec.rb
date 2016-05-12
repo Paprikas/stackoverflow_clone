@@ -60,9 +60,45 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
       end
     end
   end
+
+  describe 'GET #twitter' do
+    context 'signed_in' do
+      before do
+        sign_in user
+        get :twitter
+      end
+
+      it { should respond_with(302) }
+      it { should redirect_to root_path }
+    end
+
+    context 'identity exists' do
+      let(:identity) { create(:identity, user: user) }
+
+      before do
+        stub_env_for_omniauth(provider: identity.provider, uid: identity.uid, info: {email: user.email})
+        get :twitter
+      end
+
+      it { should be_user_signed_in }
+      it { should redirect_to root_path }
+    end
+
+    context 'user not exists' do
+      context 'email not provided' do
+        before do
+          stub_env_for_omniauth(provider: 'twitter', info: nil)
+          get :twitter
+        end
+
+        it { should be_user_signed_in }
+        it { should redirect_to finish_signup_path }
+      end
+    end
+  end
 end
 
 def stub_env_for_omniauth(hash = {})
   hash = OmniAuth::AuthHash.new({provider: 'facebook', uid: '123', info: {email: 'test@example.com'}}.merge(hash))
-  request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:facebook] = hash
+  request.env["omniauth.auth"] = OmniAuth.config.mock_auth[hash.provider.to_sym] = hash
 end

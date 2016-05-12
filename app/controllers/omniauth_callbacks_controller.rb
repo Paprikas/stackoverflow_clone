@@ -17,15 +17,15 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     auth = request.env['omniauth.auth']
 
     identity = Identity.find_for_oauth(auth)
-    return sign_in_with_oauth(identity.user) if identity.present?
+    return sign_in_with_oauth(identity.user, auth.provider) if identity.present?
 
     user = User.find_for_oauth(auth)
-    sign_in_with_oauth(user) if user.persisted?
+    sign_in_with_oauth(user, auth.provider) if user.persisted?
   end
 
-  def sign_in_with_oauth(user)
+  def sign_in_with_oauth(user, provider)
     sign_in_and_redirect user, event: :authentication
-    set_flash_message :notice, :success, kind: 'Facebook' if is_navigational_format?
+    set_flash_message :notice, :success, kind: provider.to_s.camelize if is_navigational_format?
   end
 
   def redirect_if_signed_in
