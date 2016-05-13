@@ -113,7 +113,6 @@ RSpec.describe User, type: :model do
       end
 
       it 'creates user' do
-        puts params
         expect { described_class.create_user_from_session(auth, params) }.to change(described_class, :count).by(1)
       end
 
