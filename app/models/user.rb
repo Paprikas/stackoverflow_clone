@@ -1,7 +1,4 @@
 class User < ApplicationRecord
-  TEMP_EMAIL_PREFIX = 'change@me'.freeze # ???
-  TEMP_EMAIL_REGEX = /\Achange@me/
-
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :identities, dependent: :destroy
