@@ -19,4 +19,8 @@ class ApplicationController < ActionController::Base
     sign_in_and_redirect user, event: :authentication
     flash[:notice] = t('devise.omniauth_callbacks.success', kind: provider.to_s.camelize) if is_navigational_format?
   end
+
+  def redirect_if_signed_in(path = root_path)
+    redirect_to path if signed_in?
+  end
 end

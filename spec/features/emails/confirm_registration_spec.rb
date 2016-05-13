@@ -7,7 +7,6 @@ feature 'confirm registration' do
 
   context 'regular registration' do
     background do
-      # ??? allowed?
       visit new_user_registration_path
       fill_in 'Email', with: 'test@example.com'
       fill_in 'Password', with: '123456'

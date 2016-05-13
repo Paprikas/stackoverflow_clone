@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :redirect_if_no_oauth_sess_or_signed
+  before_action :redirect_if_signed_in, :redirect_if_no_oauth_session
 
   def finish_signup
   end
@@ -19,9 +19,8 @@ class RegistrationsController < ApplicationController
 
   private
 
-  # ???
-  def redirect_if_no_oauth_sess_or_signed
-    redirect_to root_path, notice: 'Registration successfully finished' if signed_in? || !session['devise.oauth_data']
+  def redirect_if_no_oauth_session
+    redirect_to root_path, notice: 'Registration successfully finished' if !session['devise.oauth_data']
   end
 
   def user_params

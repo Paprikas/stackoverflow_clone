@@ -75,7 +75,7 @@ shared_examples 'sign in via oauth' do
     scenario 'redirect if signed in' do
       sign_in user
       visit finish_signup_path
-      expect(page).to have_content 'Registration successfully finished'
+      expect(page).not_to have_content 'Almost there'
     end
 
     scenario 'redirect if no session with auth data' do
