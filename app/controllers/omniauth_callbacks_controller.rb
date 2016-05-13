@@ -20,7 +20,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     user = User.find_for_oauth(auth)
     return sign_in_with_oauth(user, auth.provider) if user.present?
 
-    session["devise.oauth_data"] = {provider: auth.provider, uid: auth.uid, info: {email: auth.try(:info).try(:email)}}
+    session["devise.oauth_data"] = {provider: auth.provider, uid: auth.uid}
     redirect_to finish_signup_path
   end
 
