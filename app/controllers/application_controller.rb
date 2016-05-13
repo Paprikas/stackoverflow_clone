@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :set_gon_user
-  before_action :ensure_signup_finished, except: [:index, :show]
 
   private
 
@@ -16,8 +15,8 @@ class ApplicationController < ActionController::Base
     gon.user_id = current_user.try(:id)
   end
 
-  def ensure_signup_finished
-    return if %w(sessions).include?(controller_name) || %w(finish_signup send_confirmation_email).include?(action_name)
-    redirect_to finish_signup_path if current_user && (!current_user.email_verified? || !current_user.confirmed?)
+  def sign_in_with_oauth(user, provider)
+    sign_in_and_redirect user, event: :authentication
+    flash[:notice] = t('devise.omniauth_callbacks.success', kind: provider.to_s.camelize) if is_navigational_format?
   end
 end

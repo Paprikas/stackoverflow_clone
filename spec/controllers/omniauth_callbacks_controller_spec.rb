@@ -55,7 +55,13 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           get :facebook
         end
 
-        it { should be_user_signed_in }
+        it 'stores data in session' do
+          hash = stub_env_for_omniauth
+          expect(session['devise.oauth_data'][:provider]).to eq hash.provider
+          expect(session['devise.oauth_data'][:uid]).to eq hash.uid
+        end
+
+        it { should_not be_user_signed_in }
         it { should redirect_to finish_signup_path }
       end
     end
@@ -91,7 +97,13 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           get :twitter
         end
 
-        it { should be_user_signed_in }
+        it 'stores data in session' do
+          hash = stub_env_for_omniauth(provider: 'twitter', info: nil)
+          expect(session['devise.oauth_data'][:provider]).to eq hash.provider
+          expect(session['devise.oauth_data'][:uid]).to eq hash.uid
+        end
+
+        it { should_not be_user_signed_in }
         it { should redirect_to finish_signup_path }
       end
     end

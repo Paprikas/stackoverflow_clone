@@ -1,32 +1,30 @@
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :redirect_if_confirmed
+  before_action :redirect_if_no_oauth_sess_or_signed
 
   def finish_signup
   end
 
   def send_confirmation_email
-    # ??? valid data?
     user = User.find_by(user_params)
 
-    if user && current_user != user
+    if user.present?
       flash[:notice] = 'User with provided email already registered'
-    elsif current_user.update(user_params)
-      flash[:notice] = 'Confirmation email successfully sent'
     else
-      flash[:alert] = 'Error'
+      @user = User.create_user_from_session(session['devise.oauth_data'], user_params)
+      return sign_in_with_oauth(@user, session['devise.oauth_data']['provider']) if @user.persisted?
     end
 
-    redirect_to finish_signup_path
+    render :finish_signup
   end
 
   private
 
-  def redirect_if_confirmed
-    redirect_to root_path, notice: 'Registration successfully finished' if current_user.confirmed?
+  # ???
+  def redirect_if_no_oauth_sess_or_signed
+    redirect_to root_path, notice: 'Registration successfully finished' if signed_in? || !session['devise.oauth_data']
   end
 
   def user_params
-    params.require(:user).permit(:email)
+    params.permit(:email)
   end
 end

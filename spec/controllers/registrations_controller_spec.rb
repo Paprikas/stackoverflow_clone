@@ -1,87 +1,97 @@
 require 'rails_helper'
 
 describe RegistrationsController, type: :controller do
+  let(:user) { create(:user) }
+
   describe 'GET #finish_signup' do
-    context 'as guest' do
-      it 'redirects to new_user_session_path' do
+    context 'as user' do
+      before do
+        sign_in user
         get :finish_signup
-        expect(response).to redirect_to new_user_session_path
       end
+
+      it { should redirect_to root_path }
     end
 
-    context 'as user' do
-      context 'confirmed' do
-        let(:user) { create(:user) }
-
+    context 'as guest' do
+      context 'with omniauth_data in session' do
         before do
-          sign_in user
-          get :finish_signup
-        end
-
-        it { should redirect_to root_path }
-      end
-
-      context 'unconfirmed' do
-        let(:user) { create(:user, confirmed_at: nil) }
-
-        before do
-          sign_in user
+          session['devise.oauth_data'] = {provider: 'facebook'}
           get :finish_signup
         end
 
         it { should render_template :finish_signup }
       end
+
+      context 'without omniauth_data in session' do
+        before do
+          get :finish_signup
+        end
+
+        it { should redirect_to root_path }
+      end
     end
   end
 
   describe 'PATCH #send_confirmation_email' do
-    context 'as guest' do
+    context 'as user' do
+      before { sign_in user }
       it 'redirects to new_user_session_path' do
         patch :send_confirmation_email
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
     end
 
-    context 'as user' do
-      context 'confirmed' do
-        let(:user) { create(:user) }
-
+    context 'as guest' do
+      context 'without omniauth_data in session' do
         before do
-          sign_in user
           patch :send_confirmation_email
         end
 
         it { should redirect_to root_path }
       end
 
-      context 'unconfirmed' do
-        let(:user) { create(:user, confirmed_at: nil) }
-        subject(:patch_with_test_email) { patch :send_confirmation_email, params: {user: {email: 'test@example.com'}} }
+      context 'with omniauth_data in session' do
+        subject(:valid_submit) { patch :send_confirmation_email, params: {email: 'test@example.com'} }
 
         before do
-          sign_in user
+          session['devise.oauth_data'] = {'provider' => 'facebook', 'uid' => '123'}
         end
 
-        it 'redirects to finish_signup' do
-          patch_with_test_email
-          expect(response).to redirect_to :finish_signup
+        it 'renders finish_signup template' do
+          patch :send_confirmation_email
+          expect(response).to render_template :finish_signup
         end
 
-        it 'sets flash with that user exists' do
-          user = create(:user)
-          patch :send_confirmation_email, params: {user: {email: user.email}}
-          expect(controller).to set_flash[:notice].to 'User with provided email already registered'
+        it 'assigns user' do
+          patch :send_confirmation_email
+          expect(assigns(:user)).to be_a User
         end
 
-        it 'sets flash with that email sent' do
-          patch_with_test_email
-          expect(controller).to set_flash[:notice].to 'Confirmation email successfully sent'
+        it 'does not creates user' do
+          expect { patch :send_confirmation_email }.not_to change(User, :count)
         end
 
-        it 'updates unconfirmed email' do
-          patch_with_test_email
-          user.reload
-          expect(user.unconfirmed_email).to eq 'test@example.com'
+        it 'does not creates identites' do
+          expect { patch :send_confirmation_email }.not_to change(Identity, :count)
+        end
+
+        it 'does not creates user if exists' do
+          user
+          expect { patch :send_confirmation_email, params: {email: user.email} }.not_to change(User, :count)
+        end
+
+        it 'creates user' do
+          expect { valid_submit }.to change(User, :count).by(1)
+        end
+
+        it 'creates user with submitted email' do
+          valid_submit
+          expect(assigns(:user).email).to eq 'test@example.com'
+        end
+
+        it 'creates identities' do
+          expect { valid_submit }.to change(Identity, :count).by(1)
         end
       end
     end

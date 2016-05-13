@@ -58,24 +58,12 @@ RSpec.describe User, type: :model do
       context 'without email' do
         let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123') }
 
-        it 'returns user' do
-          expect(described_class.find_for_oauth(auth)).to be_a described_class
+        it 'returns nil' do
+          expect(described_class.find_for_oauth(auth)).to eq nil
         end
 
-        it 'creates user' do
-          expect { described_class.find_for_oauth(auth) }.to change(described_class, :count).by(1)
-        end
-
-        it 'creates identity' do
-          expect { described_class.find_for_oauth(auth) }.to change(Identity, :count).by(1)
-        end
-
-        it 'creates identity with provider and uid', :aggregate_failures do
-          identity = described_class.find_for_oauth(auth).identities.first
-
-          expect(identity.provider).to eq auth.provider
-          expect(identity.uid).to eq auth.uid
-          expect(identity.user.email).to match email_regex
+        it 'does not creates user' do
+          expect { described_class.find_for_oauth(auth) }.not_to change(described_class, :count)
         end
       end
     end
@@ -111,41 +99,49 @@ RSpec.describe User, type: :model do
     context 'without email' do
       let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123') }
 
-      it 'returns user' do
-        expect(described_class.create_user_from_auth(auth)).to be_a described_class
-      end
-
-      it 'creates user' do
-        expect { described_class.create_user_from_auth(auth) }.to change(described_class, :count).by(1)
-      end
-
-      it 'creates identity' do
-        expect { described_class.create_user_from_auth(auth) }.to change(Identity, :count).by(1)
-      end
-
-      it 'creates identity with provider, uid and email', :aggregate_failures do
-        identity = described_class.create_user_from_auth(auth).identities.first
-
-        expect(identity.provider).to eq auth.provider
-        expect(identity.uid).to eq auth.uid
-        expect(identity.user.email).to match email_regex
-      end
-
-      it 'does not skips confirmation' do
-        expect(described_class.create_user_from_auth(auth).confirmed?).to be false
+      it 'returns nil' do
+        expect(described_class.find_for_oauth(auth)).to eq nil
       end
     end
   end
 
-  describe '.email_verified?' do
-    it 'returns true' do
-      user = create(:user)
-      expect(user.email_verified?).to be true
+  describe '.create_user_from_session' do
+    let(:params) { {email: 'test@example.com'} }
+    context 'with email' do
+      it 'returns user' do
+        expect(described_class.create_user_from_session(auth, params)).to be_a described_class
+      end
+
+      it 'creates user' do
+        puts params
+        expect { described_class.create_user_from_session(auth, params) }.to change(described_class, :count).by(1)
+      end
+
+      it 'creates identity' do
+        expect { described_class.create_user_from_session(auth, params) }.to change(Identity, :count).by(1)
+      end
+
+      it 'creates identity with provider, uid and email', :aggregate_failures do
+        identity = described_class.create_user_from_session(auth, params).identities.first
+
+        expect(identity.provider).to eq auth.provider
+        expect(identity.uid).to eq auth.uid
+        expect(identity.user.email).to eq auth.info.email
+      end
+
+      it 'does not skips confirmation' do
+        expect(described_class.create_user_from_session(auth, params).confirmed?).to be false
+      end
     end
 
-    it 'returns false' do
-      user = create(:user, email: 'change@me-example.com')
-      expect(user.email_verified?).to be false
+    context 'without email' do
+      it 'returns user' do
+        expect(described_class.create_user_from_session(auth, email: nil)).to be_a described_class
+      end
+
+      it 'does not creates user' do
+        expect { described_class.create_user_from_session(auth, email: nil) }.not_to change(described_class, :count)
+      end
     end
   end
 
