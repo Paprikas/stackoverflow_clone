@@ -20,7 +20,7 @@ class RegistrationsController < ApplicationController
   private
 
   def redirect_if_no_oauth_session
-    redirect_to root_path, notice: 'Registration successfully finished' if !session['devise.oauth_data']
+    redirect_to root_path, notice: 'Registration successfully finished' unless session['devise.oauth_data']
   end
 
   def user_params
