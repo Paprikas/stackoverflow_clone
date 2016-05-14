@@ -1,10 +1,10 @@
-.votes class="#{signed_in? && votable.voted_by?(current_user) ? 'voted' : ''}"
+.votes class="#{policy(votable).vote? && votable.voted_by?(current_user) ? 'voted' : ''}"
   p
     | Score
     '
     span.score #{votable.vote_score}
 
-  - if signed_in? && current_user != votable.user
+  - if policy(votable).vote?
     p.vote-remove
       = link_to 'Remove vote', polymorphic_path([:cancel_vote, path_args].flatten), \
         method: :post, remote: true, data: { type: :json, resource_type: votable.class.name.underscore }, class: 'voting'

@@ -6,15 +6,15 @@
 
     = render answer.attachments
 
-    - if signed_in? && current_user == answer.user
+    - if policy(answer).destroy?
       p = link_to 'Delete', question_answer_path(answer.question, answer), method: :delete, remote: true, class: 'delete-answer'
       p = link_to 'Edit', '#', class: 'answer-edit-form-trigger', data: { answer_id: answer.id }
 
     - if answer.accepted?
       p Accepted answer
-      - if signed_in? && current_user == answer.question.user
+      - if policy(answer).accept?
         = link_to 'Do not accept this answer', accept_question_answer_path(answer.question, answer), method: :post
-    - elsif signed_in? && current_user == answer.question.user
+    - elsif policy(answer).accept?
       = link_to 'Accept answer', accept_question_answer_path(answer.question, answer), method: :post
 
     = render 'answers/form', answer: answer
