@@ -99,4 +99,4 @@ gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 
 # Authorization
-gem 'pundit'
+gem 'pundit', git: 'https://github.com/elabs/pundit.git'

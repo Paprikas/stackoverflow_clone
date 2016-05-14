@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/elabs/pundit.git
+  revision: 58eda659d44a2e9d5e022fd23cc0f65bad7f7d82
+  specs:
+    pundit (1.1.0)
+      activesupport (>= 3.0.0)
+
+GIT
   remote: https://github.com/gazay/gon.git
   revision: 3d221a0d81d8c5efe5ff590875b6fccb3819b773
   specs:
@@ -238,8 +245,6 @@ GEM
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (3.4.0)
-    pundit (1.1.0)
-      activesupport (>= 3.0.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (2.0.0.rc1)
@@ -419,7 +424,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma
-  pundit
+  pundit!
   quiet_assets
   rails (>= 5.0.0.rc1, < 5.1)
   rails-controller-testing
