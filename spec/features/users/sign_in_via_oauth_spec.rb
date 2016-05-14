@@ -45,8 +45,7 @@ shared_examples 'sign in via oauth' do
       expect(page).to have_content 'User with provided email already registered'
     end
 
-    # ??? blank screen
-    xscenario 'without email' do
+    scenario 'without email' do
       mock_auth_hash(provider: provider_sym, info: nil)
 
       visit new_user_session_path

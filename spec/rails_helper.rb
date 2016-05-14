@@ -99,7 +99,7 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-Capybara.default_driver = ENV['WEBKIT'] ? :webkit : :poltergeist
+Capybara.default_driver = ENV['WEBKIT'] ? :webkit : :poltergeist if ENV['SCREENSHOT'] || ENV['WEBKIT']
 Capybara.javascript_driver = ENV['WEBKIT'] ? :webkit : :poltergeist
 Capybara.default_max_wait_time = 5
 
