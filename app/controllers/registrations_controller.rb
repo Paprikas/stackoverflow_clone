@@ -2,9 +2,11 @@ class RegistrationsController < ApplicationController
   before_action :redirect_if_no_oauth_session
 
   def finish_signup
+    authorize :registration, :finish_signup?
   end
 
   def send_confirmation_email
+    authorize :registration, :send_confirmation_email?
     user = User.find_by(email: params[:email])
 
     if user.present?

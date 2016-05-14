@@ -1,4 +1,4 @@
-class OmniauthCallbacksControllerPolicy < ApplicationPolicy
+OmniauthCallbackPolicy = Struct.new(:user, :omniauth_callback) do
   def facebook?
     user.nil?
   end

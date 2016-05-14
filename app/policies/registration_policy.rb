@@ -1,4 +1,4 @@
-class RegistrationPolicy < ApplicationPolicy
+RegistrationPolicy = Struct.new(:user, :registration) do
   def finish_signup?
     user.nil?
   end

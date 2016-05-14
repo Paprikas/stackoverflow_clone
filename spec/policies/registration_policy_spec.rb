@@ -5,7 +5,7 @@ RSpec.describe RegistrationPolicy do
   subject { described_class }
 
   permissions :finish_signup?, :send_confirmation_email? do
-    # it { should permit(nil, RegistrationsController) } ???
-    # it { should_not permit(user, RegistrationsController) }
+    it { should permit(nil, :registration) }
+    it { should_not permit(user, :registration) }
   end
 end
