@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 shared_examples 'comments feature' do
-  context 'as user' do
+  context 'as user', :js do
     background do
       sign_in question.user
       visit question_path(question)
@@ -10,7 +10,7 @@ shared_examples 'comments feature' do
     it_behaves_like 'views comments'
 
     # Disabled until fix ActionCable response
-    xscenario 'create comment', :js do
+    xscenario 'create comment' do
       within commentable_selector do
         click_on 'add a comment'
         expect(page).not_to have_content 'add a comment'

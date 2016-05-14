@@ -24,7 +24,7 @@ feature 'accept answer' do
         expect(page).to have_content 'Accept answer'
       end
 
-      scenario 'user can accept another answer' do
+      scenario 'user can accept another answer', :js do # not work with rack_test
         accepted_answer = create(:answer, question: question, accepted: true)
         visit question_path(question)
 

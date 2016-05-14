@@ -4,7 +4,7 @@ shared_examples 'unable to edit question' do
   scenario 'cannot see edit link and textarea' do
     visit question_path(not_owned_question)
 
-    within '.question' do
+    within "#question_#{not_owned_question.id}" do
       expect(page).not_to have_selector('textarea')
       expect(page).not_to have_content('Edit')
     end

@@ -4,8 +4,8 @@ shared_examples 'unable to edit answer' do
   scenario 'cannot see edit link and textarea' do
     visit question_path(not_owned_answer.question)
 
-    within '.answer' do
-      expect(page).not_to have_selector('textarea')
+    within "#answer_#{not_owned_answer.id}" do
+      expect(page).not_to have_selector('.edit_answer')
       expect(page).not_to have_content('Edit')
     end
   end
@@ -54,7 +54,7 @@ feature 'edit answer' do
       end
     end
 
-    context 'not owner of the question' do
+    context 'not owner of the answer' do
       it_behaves_like 'unable to edit answer'
     end
   end
