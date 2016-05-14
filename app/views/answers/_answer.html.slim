@@ -17,6 +17,7 @@
     - elsif policy(answer).accept?
       = link_to 'Accept answer', accept_question_answer_path(answer.question, answer), method: :post
 
-    = render 'answers/form', answer: answer
+    - if policy(answer).update?
+      = render 'answers/form', answer: answer
 
     = render 'comments/comments', commentable: answer, path_args: [answer.question, answer]
