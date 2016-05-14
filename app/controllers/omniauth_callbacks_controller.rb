@@ -1,11 +1,11 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
-    authorize :omniauth_callback, :facebook?
+    authorize :omniauth_callback
     general_auth
   end
 
   def twitter
-    authorize :omniauth_callback, :twitter?
+    authorize :omniauth_callback
     general_auth
   end
 
