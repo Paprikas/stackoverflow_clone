@@ -1,6 +1,8 @@
 require "application_responder"
 
 class ApplicationController < ActionController::Base
+  include Pundit
+
   self.responder = ApplicationResponder
 
   # Prevent CSRF attacks by raising an exception.
