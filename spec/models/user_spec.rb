@@ -106,22 +106,22 @@ RSpec.describe User, type: :model do
   end
 
   describe '.create_user_from_session' do
-    let(:params) { {email: 'test@example.com'} }
+    let(:email) { 'test@example.com' }
     context 'with email' do
       it 'returns user' do
-        expect(described_class.create_user_from_session(auth, params)).to be_a described_class
+        expect(described_class.create_user_from_session(auth, email)).to be_a described_class
       end
 
       it 'creates user' do
-        expect { described_class.create_user_from_session(auth, params) }.to change(described_class, :count).by(1)
+        expect { described_class.create_user_from_session(auth, email) }.to change(described_class, :count).by(1)
       end
 
       it 'creates identity' do
-        expect { described_class.create_user_from_session(auth, params) }.to change(Identity, :count).by(1)
+        expect { described_class.create_user_from_session(auth, email) }.to change(Identity, :count).by(1)
       end
 
       it 'creates identity with provider, uid and email', :aggregate_failures do
-        identity = described_class.create_user_from_session(auth, params).identities.first
+        identity = described_class.create_user_from_session(auth, email).identities.first
 
         expect(identity.provider).to eq auth.provider
         expect(identity.uid).to eq auth.uid
@@ -129,7 +129,7 @@ RSpec.describe User, type: :model do
       end
 
       it 'does not skips confirmation' do
-        expect(described_class.create_user_from_session(auth, params).confirmed?).to be false
+        expect(described_class.create_user_from_session(auth, email).confirmed?).to be false
       end
     end
 

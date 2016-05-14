@@ -30,8 +30,8 @@ class User < ApplicationRecord
     user
   end
 
-  def self.create_user_from_session(auth, params)
-    user = new(email: params[:email], password: Devise.friendly_token[0, 20])
+  def self.create_user_from_session(auth, email)
+    user = new(email: email, password: Devise.friendly_token[0, 20])
     user.create_identities(auth) if user.save
     user
   end
