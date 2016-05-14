@@ -4,7 +4,7 @@ class QuestionPolicy < ApplicationPolicy
   end
 
   def update?
-    user&.admin? || user == record.user
+    user.try(:admin?) || user == record.user
   end
 
   def destroy?
