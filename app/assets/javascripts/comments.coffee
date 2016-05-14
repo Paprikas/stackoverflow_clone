@@ -1,5 +1,5 @@
 $ ->
-  $('.open-comment-form').on 'click', (e) ->
+  $(document).on 'click', '.open-comment-form', (e) ->
     e.preventDefault()
     comments = $(this).closest('.comments')
     comments.find('.comment-form').show()

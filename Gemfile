@@ -43,6 +43,7 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'listen', '~> 3.0.5'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -68,6 +69,7 @@ group :test do
   gem 'database_cleaner'
   gem 'codeclimate-test-reporter', require: false
   gem 'with_model'
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -91,3 +93,7 @@ gem 'gon', git: 'https://github.com/gazay/gon.git'
 
 # Skinny controllers
 gem 'responders'
+
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'

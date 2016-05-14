@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :users
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}
+
+  get '/finish_signup' => 'registrations#finish_signup', as: :finish_signup
+  patch '/finish_signup' => 'registrations#send_confirmation_email', as: :send_confirmation_email
 
   concern :votable do
     member do

@@ -17,6 +17,7 @@ html lang="en"
     - else
       => link_to 'Registration', new_user_registration_path
       = link_to 'Sign in', new_user_session_path
+
     = flash[:notice] if flash[:notice]
     = flash[:alert] if flash[:alert]
     = yield
