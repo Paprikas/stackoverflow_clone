@@ -2,7 +2,6 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: [:new, :create, :update, :destroy, :accept]
   before_action :set_answer, only: [:update, :destroy, :accept]
-  before_action :owner_check, only: [:update, :destroy]
 
   include Voted
 
@@ -10,6 +9,7 @@ class AnswersController < ApplicationController
   respond_to :html, only: :accept
 
   def create
+    authorize Answer
     @answer = @question.answers.new(answer_params.merge(user: current_user))
     @answer.save
     respond_with @answer, location: @question
@@ -40,13 +40,10 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = @question.answers.find(params[:id])
+    authorize @answer
   end
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy])
-  end
-
-  def owner_check
-    head :forbidden if @answer.user_id != current_user.id
   end
 end

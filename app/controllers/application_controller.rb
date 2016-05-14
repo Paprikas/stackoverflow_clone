@@ -10,6 +10,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :set_gon_user
+  # after_action :verify_authorized, unless: 'controller_path =~ /devise/' # ???
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   private
 
@@ -22,7 +25,14 @@ class ApplicationController < ActionController::Base
     flash[:notice] = t('devise.omniauth_callbacks.success', kind: provider.to_s.camelize) if is_navigational_format?
   end
 
-  def redirect_if_signed_in(path = root_path)
-    redirect_to path if signed_in?
+  def user_not_authorized
+    respond_to do |format|
+      format.html do
+        flash[:alert] = "You are not authorized to perform this action."
+        redirect_to root_path
+      end
+      format.json { head :forbidden }
+      format.js { head :forbidden }
+    end
   end
 end

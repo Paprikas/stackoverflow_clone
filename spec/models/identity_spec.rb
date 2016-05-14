@@ -7,7 +7,7 @@ RSpec.describe Identity, type: :model do
   it { should validate_presence_of :provider }
   it { should validate_uniqueness_of(:uid).scoped_to(:provider) }
 
-  describe '.find_for_oauth' do # ??? twitter?
+  describe '.find_for_oauth' do
     let!(:identity) { create(:identity, uid: 123) }
     let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: 123) }
 

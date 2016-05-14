@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :update, :destroy]
-  before_action :owner_check, only: [:update, :destroy]
   before_action :build_answer, only: :show
 
   include Voted
@@ -9,6 +8,7 @@ class QuestionsController < ApplicationController
   respond_to :html, except: :update
 
   def index
+    authorize Question
     respond_with(@questions = Question.all)
   end
 
@@ -17,10 +17,12 @@ class QuestionsController < ApplicationController
   end
 
   def new
+    authorize Question
     respond_with(@question = current_user.questions.new)
   end
 
   def create
+    authorize Question
     respond_with(@question = current_user.questions.create(question_params))
   end
 
@@ -40,15 +42,7 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
-  end
-
-  def owner_check
-    if @question.user_id != current_user.id
-      respond_to do |format|
-        format.html { redirect_to @question }
-        format.js { head :forbidden }
-      end
-    end
+    authorize @question
   end
 
   def build_answer
