@@ -14,10 +14,4 @@ class AnswerPolicy < ApplicationPolicy
   def accept?
     user.present? && user.id == record.question.user_id
   end
-
-  class Scope < Scope
-    def resolve
-      scope
-    end
-  end
 end
