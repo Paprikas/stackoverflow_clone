@@ -8,13 +8,6 @@ RSpec.describe QuestionPolicy do
   let(:user_question) { create(:question, user: user) }
   subject { described_class }
 
-  permissions :index? do
-    # ??? nil
-    it { should permit(guest, Question) }
-    it { should permit(user, Question) }
-    it { should permit(admin, Question) }
-  end
-
   permissions :show? do
     it { should permit(guest, question) }
   end

@@ -8,7 +8,6 @@ class QuestionsController < ApplicationController
   respond_to :html, except: :update
 
   def index
-    authorize Question
     respond_with(@questions = Question.all)
   end
 
