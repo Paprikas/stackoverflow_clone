@@ -4,7 +4,7 @@ class AnswerPolicy < ApplicationPolicy
   end
 
   def update?
-    user.try(:admin?) || user == record.user
+    user.present? && (user.admin? || user.id == record.user_id)
   end
 
   def destroy?
@@ -12,11 +12,11 @@ class AnswerPolicy < ApplicationPolicy
   end
 
   def vote?
-    user.present? && user != record.user
+    user.present? && user.id != record.user_id
   end
 
   def accept?
-    user.present? && user == record.question.user
+    user.present? && user.id == record.question.user_id
   end
 
   class Scope < Scope
