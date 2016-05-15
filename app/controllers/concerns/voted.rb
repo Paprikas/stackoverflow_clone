@@ -28,6 +28,6 @@ module Voted
 
   def set_votable
     @votable = model_klass.find(params[:id])
-    authorize @votable, :vote? # ???
+    authorize @votable, :vote?
   end
 end
