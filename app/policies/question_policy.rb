@@ -1,8 +1,4 @@
 class QuestionPolicy < ApplicationPolicy
-  def create?
-    user.present?
-  end
-
   def update?
     user.present? && (user.admin? || user.id == record.user_id)
   end
