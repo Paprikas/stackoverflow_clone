@@ -30,8 +30,7 @@ class ApplicationController < ActionController::Base
         flash[:alert] = "You are not authorized to perform this action."
         redirect_to root_path
       end
-      format.json { head :forbidden }
-      format.js { head :forbidden }
+      format.any(:js, :json) { head :forbidden }
     end
   end
 
