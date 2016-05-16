@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}
 
   get '/finish_signup' => 'registrations#finish_signup', as: :finish_signup

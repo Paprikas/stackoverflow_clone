@@ -100,3 +100,5 @@ gem 'omniauth-twitter'
 
 # Authorization
 gem 'pundit', git: 'https://github.com/elabs/pundit.git'
+
+gem 'doorkeeper', git: 'https://github.com/doorkeeper-gem/doorkeeper.git'

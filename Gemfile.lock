@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/doorkeeper-gem/doorkeeper.git
+  revision: aa0868e33d1bc584e5f72f7f97f290d8cb787650
+  specs:
+    doorkeeper (4.0.0.rc3)
+      railties (>= 4.2)
+
+GIT
   remote: https://github.com/elabs/pundit.git
   revision: 58eda659d44a2e9d5e022fd23cc0f65bad7f7d82
   specs:
@@ -403,6 +410,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   database_cleaner
   devise
+  doorkeeper!
   factory_girl_rails
   foundation-rails
   gon!
