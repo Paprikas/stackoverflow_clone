@@ -1,5 +1,6 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :redirect_if_signed_in
+  skip_after_action :verify_authorized
 
   def facebook
     general_auth
