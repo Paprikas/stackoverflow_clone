@@ -28,6 +28,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api do
+    namespace :v1 do
+      resource :profiles do
+        get :me, on: :collection
+        get :all, on: :collection
+      end
+    end
+  end
+
   root to: 'questions#index'
 
   # Serve websocket cable requests in-process
