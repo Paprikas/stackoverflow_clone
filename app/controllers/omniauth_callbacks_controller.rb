@@ -1,11 +1,11 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  before_action :redirect_if_signed_in
+
   def facebook
-    authorize :omniauth_callback
     general_auth
   end
 
   def twitter
-    authorize :omniauth_callback
     general_auth
   end
 
