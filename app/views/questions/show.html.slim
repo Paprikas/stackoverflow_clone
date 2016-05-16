@@ -5,7 +5,7 @@
 
   = render 'shared/errors', object: @question
 
-  - if signed_in? && current_user == @question.user
+  - if policy(@question).update?
     p = link_to 'Edit', '', class: 'question-edit-form-trigger', data: { question_id: @question.id }
 
     .question_form_wrapper id="form_#{dom_id(@question)}"
@@ -13,7 +13,7 @@
 
   = render 'comments/comments', commentable: @question, path_args: [@question]
 
-- if signed_in?
+- if policy(@answer).create?
   = render 'answers/form', answer: @answer
 - else
   | Please sign in to answer the question.

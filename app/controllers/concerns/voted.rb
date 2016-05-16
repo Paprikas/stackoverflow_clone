@@ -3,7 +3,6 @@ module Voted
 
   included do
     before_action :set_votable, only: [:vote_up, :vote_down, :cancel_vote]
-    before_action :can_vote?, only: [:vote_up, :vote_down, :cancel_vote]
   end
 
   def vote_up
@@ -29,9 +28,6 @@ module Voted
 
   def set_votable
     @votable = model_klass.find(params[:id])
-  end
-
-  def can_vote?
-    head :forbidden if @votable.user_id == current_user.id
+    authorize @votable, :vote?
   end
 end

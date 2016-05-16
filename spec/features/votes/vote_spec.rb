@@ -8,7 +8,7 @@ shared_examples 'votes feature' do
     end
 
     context 'as voter' do
-      scenario 'can vote', :aggregate_failures do
+      scenario 'can vote', :aggregate_failures, :js do
         within votable_selector do
           expect(page).to have_content 'Score 0'
           expect(page).to have_content 'Vote up'

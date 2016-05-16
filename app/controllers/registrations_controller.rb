@@ -1,5 +1,6 @@
 class RegistrationsController < ApplicationController
   before_action :redirect_if_signed_in, :redirect_if_no_oauth_session
+  skip_after_action :verify_authorized
 
   def finish_signup
   end

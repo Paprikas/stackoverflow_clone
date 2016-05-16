@@ -1,5 +1,6 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :redirect_if_signed_in
+  skip_after_action :verify_authorized
 
   def facebook
     general_auth
@@ -22,9 +23,5 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     session["devise.oauth_data"] = {provider: auth.provider, uid: auth.uid}
     redirect_to finish_signup_path
-  end
-
-  def redirect_if_signed_in
-    redirect_to root_path if signed_in?
   end
 end
