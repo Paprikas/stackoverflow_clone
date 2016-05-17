@@ -70,6 +70,7 @@ group :test do
   gem 'codeclimate-test-reporter', require: false
   gem 'with_model'
   gem 'capybara-email'
+  gem 'json_spec'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -100,3 +101,5 @@ gem 'omniauth-twitter'
 
 # Authorization
 gem 'pundit', git: 'https://github.com/elabs/pundit.git'
+
+gem 'doorkeeper', git: 'https://github.com/doorkeeper-gem/doorkeeper.git'
