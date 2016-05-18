@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-shared_examples 'unauthorized access' do |action|
+shared_examples 'unauthorized access profiles' do |action|
   it 'returns 401 status without access_token' do
     get "/api/v1/profiles/#{action}", params: {format: :json}
     expect(response.status).to eq 401
@@ -17,7 +17,7 @@ describe 'Profile API' do
   let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
   describe 'GET #me' do
-    it_behaves_like 'unauthorized access', 'me'
+    it_behaves_like 'unauthorized access profiles', 'me'
 
     context 'authorized' do
       before do
@@ -43,7 +43,7 @@ describe 'Profile API' do
   end
 
   describe 'GET #all' do
-    it_behaves_like 'unauthorized access', 'all'
+    it_behaves_like 'unauthorized access profiles', 'all'
 
     context 'authorized' do
       let!(:user) { create(:user) }
