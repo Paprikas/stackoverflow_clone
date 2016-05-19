@@ -119,27 +119,25 @@ RSpec.describe QuestionsController, type: :controller do
 
     describe 'POST #create' do
       context 'with valid attributes' do
+        let(:post_question) { post :create, params: {question: attributes_for(:question)} }
+        let(:post_invalid_question) { post :create, params: {question: attributes_for(:invalid_question)} }
         it 'creates new question in the database' do
-          expect {
-            post :create, params: {question: attributes_for(:question)}
-          }.to change(user.questions, :count).by(1)
+          expect { post_question }.to change(user.questions, :count).by(1)
         end
 
         it 'redirects to @question' do
-          post :create, params: {question: attributes_for(:question)}
+          post_question
           expect(response).to redirect_to assigns(:question)
         end
       end
 
       context 'with invalid attributes' do
         it "doesn't create new question in the database" do
-          expect {
-            post :create, params: {question: attributes_for(:invalid_question)}
-          }.not_to change(Question, :count)
+          expect { post_invalid_question }.not_to change(Question, :count)
         end
 
         it 'renders new template' do
-          post :create, params: {question: attributes_for(:invalid_question)}
+          post_invalid_question
           expect(response).to render_template :new
         end
       end
@@ -218,16 +216,12 @@ RSpec.describe QuestionsController, type: :controller do
       context 'owner of the question' do
         it 'deletes question from database' do
           owned_question
-          expect {
-            delete :destroy, params: {id: owned_question}
-          }.to change(user.questions, :count).by(-1)
+          expect { delete :destroy, params: {id: owned_question} }.to change(user.questions, :count).by(-1)
         end
 
         it 'deletes dependent answers from database' do
           create(:answer, question: owned_question)
-          expect {
-            delete :destroy, params: {id: owned_question}
-          }.to change(Answer, :count).by(-1)
+          expect { delete :destroy, params: {id: owned_question} }.to change(Answer, :count).by(-1)
         end
 
         it 'redirects to root_path' do
@@ -239,9 +233,7 @@ RSpec.describe QuestionsController, type: :controller do
       context 'not owner of the question' do
         it 'does not deletes question from database' do
           question
-          expect {
-            delete :destroy, params: {id: question}
-          }.not_to change(Question, :count)
+          expect { delete :destroy, params: {id: question} }.not_to change(Question, :count)
         end
 
         it 'redirects to root_path' do

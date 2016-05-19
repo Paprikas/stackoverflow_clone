@@ -26,37 +26,25 @@ shared_examples 'votable' do
       end
 
       context "owner" do
-        it 'does not votes up\down' do
-          expect {
-            post :vote_up, params: shared_context.merge(id: owned_votable)
-          }.not_to change(owned_votable.votes, :count)
-          expect {
-            post :vote_down, params: shared_context.merge(id: owned_votable)
-          }.not_to change(owned_votable.votes, :count)
-          expect {
-            post :cancel_vote, params: shared_context.merge(id: owned_votable)
-          }.not_to change(owned_votable.votes, :count)
+        it 'does not votes up\down', :aggregate_failures do
+          expect { post :vote_up, params: shared_context.merge(id: owned_votable) }.not_to change(owned_votable.votes, :count)
+          expect { post :vote_down, params: shared_context.merge(id: owned_votable) }.not_to change(owned_votable.votes, :count)
+          expect { post :cancel_vote, params: shared_context.merge(id: owned_votable) }.not_to change(owned_votable.votes, :count)
         end
       end
 
       context 'not owner' do
         it 'votes up' do
-          expect {
-            vote_up
-          }.to change(votable.votes, :count).by(1)
+          expect { vote_up }.to change(votable.votes, :count).by(1)
         end
 
         it 'votes down' do
-          expect {
-            vote_down
-          }.to change(votable.votes, :count).by(1)
+          expect { vote_down }.to change(votable.votes, :count).by(1)
         end
 
         it 'removes vote' do
           create(:vote, user: user, votable: votable)
-          expect {
-            post :cancel_vote, xhr: true, params: shared_context
-          }.to change(votable.votes, :count).by(-1)
+          expect { post :cancel_vote, xhr: true, params: shared_context }.to change(votable.votes, :count).by(-1)
         end
       end
     end
