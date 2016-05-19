@@ -120,7 +120,6 @@ RSpec.describe QuestionsController, type: :controller do
     describe 'POST #create' do
       context 'with valid attributes' do
         let(:post_question) { post :create, params: {question: attributes_for(:question)} }
-        let(:post_invalid_question) { post :create, params: {question: attributes_for(:invalid_question)} }
         it 'creates new question in the database' do
           expect { post_question }.to change(user.questions, :count).by(1)
         end
@@ -132,6 +131,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       context 'with invalid attributes' do
+        let(:post_invalid_question) { post :create, params: {question: attributes_for(:invalid_question)} }
         it "doesn't create new question in the database" do
           expect { post_invalid_question }.not_to change(Question, :count)
         end
@@ -144,6 +144,11 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     describe 'PATCH #update' do
+      it_behaves_like 'delete attachment' do
+        let(:attachable) { question }
+        let(:owned_attachable) { owned_question }
+      end
+
       context 'owner of the question' do
         context 'with valid attributes' do
           it 'renders update template' do
@@ -156,20 +161,6 @@ RSpec.describe QuestionsController, type: :controller do
             owned_question.reload
             expect(owned_question.title).to eq 'New title'
             expect(owned_question.body).to eq 'New body'
-          end
-
-          it 'deletes file' do
-            question_attachment = create(:answer_attachment, attachable: owned_question)
-            expect {
-              patch :update, xhr: true, params: {
-                id: owned_question,
-                question: {
-                  title: 'Title',
-                  body: 'Body',
-                  attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
-                }
-              }
-            }.to change(owned_question.attachments, :count).by(-1)
           end
         end
 
@@ -194,20 +185,6 @@ RSpec.describe QuestionsController, type: :controller do
           patch :update, xhr: true, params: {id: question, question: {title: 'New title'} }
           question.reload
           expect(question.title).not_to eq 'New title'
-        end
-
-        it 'does not deletes file' do
-          question_attachment = create(:answer_attachment, attachable: question)
-          expect {
-            patch :update, xhr: true, params: {
-              id: question,
-              question: {
-                title: 'Title',
-                body: 'Body',
-                attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
-              }
-            }
-          }.not_to change(question.attachments, :count)
         end
       end
     end

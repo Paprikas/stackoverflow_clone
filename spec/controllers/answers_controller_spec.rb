@@ -82,18 +82,14 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     describe 'PATCH #update' do
+      it_behaves_like 'delete attachment' do
+        let(:attachable) { answer }
+        let(:owned_attachable) { user_owned_answer }
+        let(:shared_context) { {question_id: answer.question} }
+      end
+
       context 'owner' do
         let!(:answer_attachment) { create(:answer_attachment, attachable: user_owned_answer) }
-        let(:delete_own_attachment) do
-          patch :update, xhr: true, params: {
-            question_id: user_owned_answer.question,
-            id: user_owned_answer,
-            answer: {
-              body: 'Body',
-              attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-            }
-          }
-        end
 
         context 'with valid attributes' do
           it 'returns http ok' do
@@ -105,10 +101,6 @@ RSpec.describe AnswersController, type: :controller do
             patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: {body: 'New body'}}
             user_owned_answer.reload
             expect(user_owned_answer.body).to eq 'New body'
-          end
-
-          it 'deletes attachment' do
-            expect { delete_own_attachment }.to change(user_owned_answer.attachments, :count).by(-1)
           end
 
           it do
@@ -143,18 +135,6 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'not owner of the question' do
-        let(:answer_attachment) { create(:answer_attachment, attachable: answer) }
-        let(:delete_attachment) do
-          patch :update, xhr: true, params: {
-            question_id: answer.question,
-            id: answer,
-            answer: {
-              body: 'Body',
-              attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-            }
-          }
-        end
-
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: attributes_for(:answer) }
           expect(response).to have_http_status :forbidden
@@ -165,11 +145,6 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: {body: 'New title'} }
           answer.reload
           expect(answer.body).not_to eq 'New title'
-        end
-
-        it 'does not deletes attachment' do
-          answer_attachment
-          expect { delete_attachment }.not_to change(answer.attachments, :count)
         end
       end
     end
