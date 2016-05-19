@@ -52,9 +52,7 @@ RSpec.describe AnswersController, type: :controller do
     describe 'POST #create' do
       context 'with valid attributes' do
         it 'creates new answer in the database' do
-          expect {
-            post_valid_answer
-          }.to change(question.answers, :count).by(1)
+          expect { post_valid_answer }.to change(question.answers, :count).by(1)
         end
 
         it 'returns http created' do
@@ -63,21 +61,21 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'checks that answer belongs to user' do
-          expect {
-            post_valid_answer
-          }.to change(user.answers, :count).by(1)
+          expect { post_valid_answer }.to change(user.answers, :count).by(1)
         end
       end
 
       context 'with invalid attributes' do
+        let(:create_invalid_answer) do
+          post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
+        end
+
         it "doesn't create new answer in the database" do
-          expect {
-            post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
-          }.not_to change(Answer, :count)
+          expect { create_invalid_answer }.not_to change(Answer, :count)
         end
 
         it 'returns http unprocessable_entity' do
-          post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
+          create_invalid_answer
           expect(response).to have_http_status :unprocessable_entity
         end
       end
@@ -86,7 +84,16 @@ RSpec.describe AnswersController, type: :controller do
     describe 'PATCH #update' do
       context 'owner' do
         let!(:answer_attachment) { create(:answer_attachment, attachable: user_owned_answer) }
-        before { user_owned_answer }
+        let(:delete_own_attachment) do
+          patch :update, xhr: true, params: {
+            question_id: user_owned_answer.question,
+            id: user_owned_answer,
+            answer: {
+              body: 'Body',
+              attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
+            }
+          }
+        end
 
         context 'with valid attributes' do
           it 'returns http ok' do
@@ -100,17 +107,8 @@ RSpec.describe AnswersController, type: :controller do
             expect(user_owned_answer.body).to eq 'New body'
           end
 
-          it 'deletes file' do
-            expect {
-              patch :update, xhr: true, params: {
-                question_id: user_owned_answer.question,
-                id: user_owned_answer,
-                answer: {
-                  body: 'Body',
-                  attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-                }
-              }
-            }.to change(user_owned_answer.attachments, :count).by(-1)
+          it 'deletes attachment' do
+            expect { delete_own_attachment }.to change(user_owned_answer.attachments, :count).by(-1)
           end
 
           it do
@@ -145,7 +143,17 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'not owner of the question' do
-        before { answer }
+        let(:answer_attachment) { create(:answer_attachment, attachable: answer) }
+        let(:delete_attachment) do
+          patch :update, xhr: true, params: {
+            question_id: answer.question,
+            id: answer,
+            answer: {
+              body: 'Body',
+              attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
+            }
+          }
+        end
 
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: attributes_for(:answer) }
@@ -159,18 +167,9 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer.body).not_to eq 'New title'
         end
 
-        it 'does not deletes file' do
-          answer_attachment = create(:answer_attachment, attachable: answer)
-          expect {
-            patch :update, xhr: true, params: {
-              question_id: answer.question,
-              id: answer,
-              answer: {
-                body: 'Body',
-                attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-              }
-            }
-          }.not_to change(answer.attachments, :count)
+        it 'does not deletes attachment' do
+          answer_attachment
+          expect { delete_attachment }.not_to change(answer.attachments, :count)
         end
       end
     end
@@ -183,16 +182,12 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'accepts the answer' do
-          expect {
-            accept_answer
-          }.to change { answer.reload.accepted }.from(false).to(true)
+          expect { accept_answer }.to change { answer.reload.accepted }.from(false).to(true)
         end
 
         it 'accepts another answer' do
           accepted_answer = create(:answer, question: question, accepted: true)
-          expect {
-            accept_answer
-          }.to change { accepted_answer.reload.accepted }.from(true).to(false)
+          expect { accept_answer }.to change { accepted_answer.reload.accepted }.from(true).to(false)
         end
 
         it 'redirects to @question' do
@@ -206,9 +201,7 @@ RSpec.describe AnswersController, type: :controller do
       context 'owner' do
         it 'deletes answer from database' do
           user_owned_answer
-          expect {
-            delete_own_answer
-          }.to change(question.answers, :count).by(-1)
+          expect { delete_own_answer }.to change(question.answers, :count).by(-1)
         end
 
         it 'returns http success' do
@@ -220,9 +213,7 @@ RSpec.describe AnswersController, type: :controller do
       context 'not owner' do
         it 'does not deletes answer from database' do
           answer
-          expect {
-            delete_answer
-          }.not_to change(question.answers, :count)
+          expect { delete_answer }.not_to change(question.answers, :count)
         end
 
         it 'responses with 401' do
