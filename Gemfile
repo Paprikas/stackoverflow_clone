@@ -103,3 +103,9 @@ gem 'omniauth-twitter'
 gem 'pundit', git: 'https://github.com/elabs/pundit.git'
 
 gem 'doorkeeper', git: 'https://github.com/doorkeeper-gem/doorkeeper.git'
+
+gem 'active_model_serializers', git: 'https://github.com/rails-api/active_model_serializers.git'
+
+# to_json replacement
+gem 'oj'
+gem 'oj_mimic_json'
