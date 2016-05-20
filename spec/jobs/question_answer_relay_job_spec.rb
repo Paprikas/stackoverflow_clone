@@ -1,5 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe QuestionAnswerRelayJob, type: :job do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:record) { create(:answer) }
+
+  it_behaves_like 'enqueue job'
 end
