@@ -9,5 +9,8 @@ RSpec.describe Comment, type: :model do
   it { should validate_presence_of :commentable_id }
   it { should validate_presence_of :commentable_type }
 
-  it 'tests after commit hook'
+  it_behaves_like 'perform relay job after commit' do
+    let(:job) { CommentRelayJob }
+    let(:subject) { build(:answer_comment) }
+  end
 end

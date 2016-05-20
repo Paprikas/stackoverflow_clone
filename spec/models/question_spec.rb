@@ -11,5 +11,8 @@ RSpec.describe Question, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
 
-  it 'tests after commit hook'
+  it_behaves_like 'perform relay job after commit' do
+    let(:job) { QuestionRelayJob }
+    let(:subject) { build(:question) }
+  end
 end

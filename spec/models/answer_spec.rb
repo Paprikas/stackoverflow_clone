@@ -33,5 +33,8 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  it 'tests after commit hook'
+  it_behaves_like 'perform relay job after commit' do
+    let(:job) { QuestionAnswerRelayJob }
+    let(:subject) { build(:answer) }
+  end
 end
