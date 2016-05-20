@@ -90,6 +90,7 @@ RSpec.configure do |config|
   config.include FeatureHelper, type: :feature
   config.include OmniauthMacros, type: :feature
   config.extend WithModel
+  config.extend PolicyHelpers, type: :policy
 end
 
 Shoulda::Matchers.configure do |config|

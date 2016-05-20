@@ -1,32 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe QuestionPolicy do
-  let(:guest) { nil }
-  let(:user) { create(:user) }
-  let(:admin) { create(:user, admin: true) }
-  let(:question) { create(:question) }
-  let(:user_question) { create(:question, user: user) }
-  subject { described_class }
+  let(:record) { build_stubbed(:question, user: user) }
 
   permissions :show? do
-    it { should permit(guest, question) }
+    let(:record) { create(:question) }
+
+    it_behaves_like "access allowed for guest"
   end
 
   permissions :create? do
-    it { should_not permit(nil, question) }
-    it { should permit(user, question) }
+    let(:record) { Question }
+
+    it_grants_access
+    it_behaves_like "access denied for guest"
   end
 
   permissions :update?, :destroy? do
-    it { should_not permit(guest, question) }
-    it { should_not permit(user, question) }
-    it { should permit(user, user_question) }
-    it { should permit(admin, question) }
+    it_grants_access
+    it_behaves_like "access denied for non-author"
+    it_behaves_like "access denied for guest"
   end
 
   permissions :vote? do
-    it { should_not permit(guest, question) }
-    it { should_not permit(user, user_question) }
-    it { should permit(user, question) }
+    it_denies_access
+    it_behaves_like "access denied for guest"
+    it_behaves_like "access allowed for non-author"
   end
 end
