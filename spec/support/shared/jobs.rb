@@ -1,5 +1,5 @@
 shared_context "shared job", type: :job do
-  ActiveJob::Base.queue_adapter = :test
+  before { ActiveJob::Base.queue_adapter = :test }
   let(:hash) { {} }
 end
 
