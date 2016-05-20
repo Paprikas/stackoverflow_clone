@@ -2,7 +2,7 @@ class Question < ApplicationRecord
   include Votable
   include Commentable
 
-  has_many :answers, -> { order(accepted: :desc) }, dependent: :destroy
+  has_many :answers, -> { order(accepted: :desc, created_at: :asc) }, dependent: :destroy
   belongs_to :user
 
   has_many :attachments, as: :attachable, dependent: :destroy
