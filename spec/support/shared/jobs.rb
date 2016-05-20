@@ -1,5 +1,6 @@
 shared_context "shared job", type: :job do
   ActiveJob::Base.queue_adapter = :test
+  let(:hash) { {} }
 end
 
 shared_examples "enqueue job" do
@@ -9,9 +10,8 @@ shared_examples "enqueue job" do
     }.to have_enqueued_job.with(record)
   end
 
-  # TODO: Add arguments
   it 'broadcasts to ActionCable' do
-    expect(ActionCable.server).to receive(:broadcast)
+    expect(ActionCable.server).to receive(:broadcast).with(channel, hash_including(hash))
     described_class.perform_now(record)
   end
 end
