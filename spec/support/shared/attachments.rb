@@ -7,7 +7,7 @@ shared_examples 'delete attachment' do
         body: 'Body',
         attachments_attributes: {"0": {_destroy: 1, id: attachment}}
       }
-    }.merge(shared_context)
+    }.merge(context_params)
   end
 
   context "owner" do

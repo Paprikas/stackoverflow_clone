@@ -147,7 +147,7 @@ RSpec.describe QuestionsController, type: :controller do
       it_behaves_like 'delete attachment' do
         let(:attachable) { question }
         let(:owned_attachable) { owned_question }
-        let(:shared_context) { {} }
+        let(:context_params) { {} }
       end
 
       context 'owner of the question' do
