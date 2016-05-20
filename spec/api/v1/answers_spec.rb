@@ -7,7 +7,7 @@ describe 'Answers API' do
   context 'authorized' do
     describe 'GET #index' do
       let!(:answers) { create_pair(:answer, question: question) }
-      let(:answer) { answers.last }
+      let(:answer) { answers.first }
 
       before do
         get "/api/v1/questions/#{question.id}/answers", params: {access_token: access_token.token, format: :json}
