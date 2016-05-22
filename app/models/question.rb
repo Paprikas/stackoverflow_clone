@@ -16,8 +16,7 @@ class Question < ApplicationRecord
 
   private
 
-  # test in controller???
   def subscribe_user
-    Notification.create(user_id: user_id, question: self)
+    notifications.create(user_id: user_id)
   end
 end
