@@ -112,3 +112,5 @@ gem 'oj_mimic_json'
 
 # Delayed jobs
 gem 'sidekiq'
+
+gem 'whenever'
