@@ -41,8 +41,6 @@ RSpec.describe NotificationsController, type: :controller do
         expect(response).to have_http_status(:success)
       end
 
-      # location???
-
       it "deletes notification" do
         expect { delete_notification }.to change(Notification, :count).by(-1)
       end
