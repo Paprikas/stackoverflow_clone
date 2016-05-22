@@ -5,13 +5,16 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question, user: user) }
   let(:user_owned_answer) { create(:answer, question: question, user: user) }
   let(:answer) { create(:answer, question: question) }
-  subject(:post_valid_answer) { post :create, xhr: true, params: {question_id: question, answer: attributes_for(:answer)} }
-  subject(:delete_answer) { delete :destroy, xhr: true, params: {question_id: question, id: answer} }
-  subject(:delete_own_answer) { delete :destroy, xhr: true, params: {question_id: question, id: user_owned_answer} }
-  subject(:accept_answer) { post :accept, params: {question_id: question, id: answer} }
+  let(:post_valid_answer) { post :create, xhr: true, params: {question_id: question, answer: attributes_for(:answer)} }
+  let(:delete_answer) { delete :destroy, xhr: true, params: {question_id: question, id: answer} }
+  let(:delete_own_answer) { delete :destroy, xhr: true, params: {question_id: question, id: user_owned_answer} }
+  let(:accept_answer) { post :accept, params: {question_id: question, id: answer} }
 
-  subject(:vote_up) { post :vote_up, xhr: true, params: {question_id: question, id: answer} }
-  subject(:vote_down) { post :vote_down, xhr: true, params: {question_id: question, id: answer} }
+  it_behaves_like 'votable' do
+    let(:votable) { answer }
+    let(:owned_votable) { user_owned_answer }
+    let(:shared_context) { {question_id: question, id: answer} }
+  end
 
   describe 'guest user' do
     describe 'PATCH #update' do
@@ -35,13 +38,6 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'POST #vote' do
-      it 'responses with 401' do
-        vote_up
-        expect(response.status).to eq 401
-      end
-    end
-
     describe 'DELETE #destroy' do
       it 'responses with 401' do
         delete_answer
@@ -56,9 +52,7 @@ RSpec.describe AnswersController, type: :controller do
     describe 'POST #create' do
       context 'with valid attributes' do
         it 'creates new answer in the database' do
-          expect {
-            post_valid_answer
-          }.to change(question.answers, :count).by(1)
+          expect { post_valid_answer }.to change(question.answers, :count).by(1)
         end
 
         it 'returns http created' do
@@ -67,30 +61,35 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'checks that answer belongs to user' do
-          expect {
-            post_valid_answer
-          }.to change(user.answers, :count).by(1)
+          expect { post_valid_answer }.to change(user.answers, :count).by(1)
         end
       end
 
       context 'with invalid attributes' do
+        let(:create_invalid_answer) do
+          post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
+        end
+
         it "doesn't create new answer in the database" do
-          expect {
-            post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
-          }.not_to change(Answer, :count)
+          expect { create_invalid_answer }.not_to change(Answer, :count)
         end
 
         it 'returns http unprocessable_entity' do
-          post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
+          create_invalid_answer
           expect(response).to have_http_status :unprocessable_entity
         end
       end
     end
 
     describe 'PATCH #update' do
+      it_behaves_like 'delete attachment' do
+        let(:attachable) { answer }
+        let(:owned_attachable) { user_owned_answer }
+        let(:context_params) { {question_id: answer.question} }
+      end
+
       context 'owner' do
         let!(:answer_attachment) { create(:answer_attachment, attachable: user_owned_answer) }
-        before { user_owned_answer }
 
         context 'with valid attributes' do
           it 'returns http ok' do
@@ -102,19 +101,6 @@ RSpec.describe AnswersController, type: :controller do
             patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: {body: 'New body'}}
             user_owned_answer.reload
             expect(user_owned_answer.body).to eq 'New body'
-          end
-
-          it 'deletes file' do
-            expect {
-              patch :update, xhr: true, params: {
-                question_id: user_owned_answer.question,
-                id: user_owned_answer,
-                answer: {
-                  body: 'Body',
-                  attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-                }
-              }
-            }.to change(user_owned_answer.attachments, :count).by(-1)
           end
 
           it do
@@ -149,8 +135,6 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'not owner of the question' do
-        before { answer }
-
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: attributes_for(:answer) }
           expect(response).to have_http_status :forbidden
@@ -161,20 +145,6 @@ RSpec.describe AnswersController, type: :controller do
           patch :update, xhr: true, params: {question_id: question, id: answer, answer: {body: 'New title'} }
           answer.reload
           expect(answer.body).not_to eq 'New title'
-        end
-
-        it 'does not deletes file' do
-          answer_attachment = create(:answer_attachment, attachable: answer)
-          expect {
-            patch :update, xhr: true, params: {
-              question_id: answer.question,
-              id: answer,
-              answer: {
-                body: 'Body',
-                attachments_attributes: {"0": {_destroy: 1, id: answer_attachment}}
-              }
-            }
-          }.not_to change(answer.attachments, :count)
         end
       end
     end
@@ -187,16 +157,12 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'accepts the answer' do
-          expect {
-            accept_answer
-          }.to change { answer.reload.accepted }.from(false).to(true)
+          expect { accept_answer }.to change { answer.reload.accepted }.from(false).to(true)
         end
 
         it 'accepts another answer' do
           accepted_answer = create(:answer, question: question, accepted: true)
-          expect {
-            accept_answer
-          }.to change { accepted_answer.reload.accepted }.from(true).to(false)
+          expect { accept_answer }.to change { accepted_answer.reload.accepted }.from(true).to(false)
         end
 
         it 'redirects to @question' do
@@ -206,60 +172,11 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'POST #vote' do
-      it 'assigns votable to @answer' do
-        vote_up
-        expect(assigns(:votable)).to eq answer
-      end
-
-      it 'responses with 200' do
-        vote_up
-        expect(response.status).to eq 200
-      end
-
-      context 'owner of the answer' do
-        it 'does not votes up\down answer' do
-          expect {
-            post :vote_up, params: {question_id: question, id: user_owned_answer}
-          }.not_to change(user_owned_answer.votes, :count)
-          expect {
-            post :vote_down, params: {question_id: question, id: user_owned_answer}
-          }.not_to change(user_owned_answer.votes, :count)
-          expect {
-            post :cancel_vote, params: {question_id: question, id: user_owned_answer}
-          }.not_to change(user_owned_answer.votes, :count)
-        end
-      end
-
-      context 'not owner of the answer' do
-        it 'votes up answer' do
-          expect {
-            vote_up
-          }.to change(answer.votes, :count).by(1)
-        end
-
-        it 'votes down answer' do
-          expect {
-            vote_down
-          }.to change(answer.votes, :count).by(1)
-        end
-
-        it 'removes vote' do
-          create(:answer_vote, user: user, votable: answer)
-          expect {
-            post :cancel_vote, xhr: true, params: {question_id: question, id: answer}
-          }.to change(answer.votes, :count).by(-1)
-        end
-      end
-    end
-
     describe 'DELETE #destroy' do
-      context 'owner of the answer' do
+      context 'owner' do
         it 'deletes answer from database' do
           user_owned_answer
-          expect {
-            delete_own_answer
-          }.to change(question.answers, :count).by(-1)
+          expect { delete_own_answer }.to change(question.answers, :count).by(-1)
         end
 
         it 'returns http success' do
@@ -268,12 +185,10 @@ RSpec.describe AnswersController, type: :controller do
         end
       end
 
-      context 'not owner of the answer' do
+      context 'not owner' do
         it 'does not deletes answer from database' do
           answer
-          expect {
-            delete_answer
-          }.not_to change(question.answers, :count)
+          expect { delete_answer }.not_to change(question.answers, :count)
         end
 
         it 'responses with 401' do

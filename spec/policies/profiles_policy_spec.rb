@@ -1,13 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ProfilesPolicy do
-  let(:guest) { nil }
-  let(:user) { create(:user) }
-
-  subject { described_class }
+  let(:record) { :profiles }
 
   permissions :me?, :all? do
-    it { should_not permit(nil, :profiles) }
-    it { should permit(user, :profiles) }
+    it_grants_access
+    it_behaves_like "access denied for guest"
   end
 end

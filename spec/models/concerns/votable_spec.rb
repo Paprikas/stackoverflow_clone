@@ -18,34 +18,26 @@ describe Votable do
 
   describe 'votes up' do
     it 'votes up' do
-      expect {
-        votable.vote_up(user)
-      }.to change(votable.votes, :count).by(1)
+      expect { votable.vote_up(user) }.to change(votable.votes, :count).by(1)
       expect(votable.vote_score).to eq 1
     end
 
     it 'cancels vote' do
       votable.vote_up(user)
-      expect {
-        votable.cancel_vote(user)
-      }.to change(votable.votes, :count).by(-1)
+      expect { votable.cancel_vote(user) }.to change(votable.votes, :count).by(-1)
       expect(votable.vote_score).to eq 0
     end
   end
 
   describe 'votes down' do
     it 'votes down votable' do
-      expect {
-        votable.vote_down(user)
-      }.to change(votable.votes, :count).by(1)
+      expect { votable.vote_down(user) }.to change(votable.votes, :count).by(1)
       expect(votable.vote_score).to eq(-1)
     end
 
     it 'cancels vote' do
       votable.vote_down(user)
-      expect {
-        votable.cancel_vote(user)
-      }.to change(votable.votes, :count).by(-1)
+      expect { votable.cancel_vote(user) }.to change(votable.votes, :count).by(-1)
       expect(votable.vote_score).to eq 0
     end
   end

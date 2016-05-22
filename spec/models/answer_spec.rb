@@ -14,32 +14,27 @@ RSpec.describe Answer, type: :model do
   describe 'toggle accepted' do
     it 'toggles' do
       answer = create(:answer)
-      expect {
-        answer.toggle_accept!
-      }.to change { answer.accepted }.from(false).to(true)
+      expect { answer.toggle_accept! }.to change { answer.reload.accepted }.from(false).to(true)
     end
 
     it 'untoggles' do
       answer = create(:answer, accepted: true)
-      expect {
-        answer.toggle_accept!
-      }.to change { answer.accepted }.from(true).to(false)
+      expect { answer.toggle_accept! }.to change { answer.reload.accepted }.from(true).to(false)
     end
 
     it 'toggles new answer' do
       answer = build(:answer)
-      expect {
-        answer.toggle_accept!
-      }.to change { answer.accepted }.from(false).to(true)
+      expect { answer.toggle_accept! }.to change { answer.accepted }.from(false).to(true)
     end
 
     it 'untoggles new answer' do
       answer = build(:answer, accepted: true)
-      expect {
-        answer.toggle_accept!
-      }.to change { answer.accepted }.from(true).to(false)
+      expect { answer.toggle_accept! }.to change { answer.accepted }.from(true).to(false)
     end
   end
 
-  it 'tests after commit hook'
+  it_behaves_like 'perform relay job after commit' do
+    let(:job) { QuestionAnswerRelayJob }
+    let(:subject) { build(:answer) }
+  end
 end

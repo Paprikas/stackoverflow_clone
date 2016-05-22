@@ -1,36 +1,11 @@
 require 'rails_helper'
 
-shared_examples 'unauthorized access' do |path|
-  it 'returns 401 status without access_token' do
-    get path, params: {format: :json}
-    expect(response.status).to eq 401
-  end
-
-  it 'returns 401 status when access_token invalid' do
-    get path, params: {access_token: '1234', format: :json}
-    expect(response.status).to eq 401
-  end
-end
-
-shared_examples 'unauthorized post access' do |path|
-  it 'returns 401 status without access_token' do
-    post path, params: {format: :json}
-    expect(response.status).to eq 401
-  end
-
-  it 'returns 401 status when access_token invalid' do
-    post path, params: {access_token: '1234', format: :json}
-    expect(response.status).to eq 401
-  end
-end
-
 describe 'Questions API' do
   let(:access_token) { create(:access_token) }
-  let(:question1) { create(:question) }
-  let(:question2) { create(:question) }
+  let(:question) { create(:question) }
 
   context 'authorized' do
-    describe 'GET /index' do
+    describe 'GET #index' do
       let!(:questions) { create_pair(:question) }
       let(:question) { questions.first }
       let!(:answer) { create(:answer, question: question) }
@@ -67,11 +42,11 @@ describe 'Questions API' do
     end
 
     describe 'GET #show' do
-      let!(:comment) { create(:comment, commentable: question1) }
-      let!(:attachment) { create(:attachment, attachable: question1) }
+      let!(:comment) { create(:comment, commentable: question) }
+      let!(:attachment) { create(:attachment, attachable: question) }
 
       before do
-        get "/api/v1/questions/#{question1.id}", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/questions/#{question.id}", params: {access_token: access_token.token, format: :json}
       end
 
       it 'returns 200 status' do
@@ -80,7 +55,7 @@ describe 'Questions API' do
 
       %w(id title body created_at updated_at).each do |attr|
         it "contains #{attr}" do
-          expect(response.body).to be_json_eql(question1.send(attr.to_sym).to_json).at_path(attr)
+          expect(response.body).to be_json_eql(question.send(attr.to_sym).to_json).at_path(attr)
         end
       end
 
@@ -146,15 +121,15 @@ describe 'Questions API' do
 
   context 'not authorized' do
     describe 'GET #index' do
-      it_behaves_like 'unauthorized access', '/api/v1/questions'
+      it_behaves_like 'API unaccessable', :get, "/api/v1/questions"
     end
 
     describe 'GET #show' do
-      it_behaves_like 'unauthorized access', "/api/v1/questions/1"
+      it_behaves_like 'API unaccessable', :get, "/api/v1/questions/1"
     end
 
     describe 'POST #create' do
-      it_behaves_like 'unauthorized post access', "/api/v1/questions"
+      it_behaves_like 'API unaccessable', :post, "/api/v1/questions"
     end
   end
 end

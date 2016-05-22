@@ -3,8 +3,7 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
   let(:question) { create(:question) }
-  subject(:vote_up) { post :vote_up, xhr: true, params: {id: question} }
-  subject(:vote_down) { post :vote_down, xhr: true, params: {id: question} }
+  let(:owned_question) { create(:question, user: user) }
 
   # DHH on testing templates and vars in controller
   # https://github.com/rails/rails/issues/18950
@@ -33,6 +32,12 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.answers).to eq([accepted_answer, answer])
       end
     end
+  end
+
+  it_behaves_like 'votable' do
+    let(:votable) { question }
+    let(:owned_votable) { owned_question }
+    let(:shared_context) { {id: question} }
   end
 
   describe 'guest user' do
@@ -64,13 +69,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'POST #vote' do
-      it 'responses with 401' do
-        vote_up
-        expect(response.status).to eq 401
-      end
-    end
-
     describe 'POST #create' do
       it 'redirects to user login form' do
         post :create
@@ -87,7 +85,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'authenticated user' do
-    let(:user_owned_question) { create(:question, user: user) }
     before { sign_in user }
 
     it_behaves_like 'public access'
@@ -122,77 +119,63 @@ RSpec.describe QuestionsController, type: :controller do
 
     describe 'POST #create' do
       context 'with valid attributes' do
+        let(:post_question) { post :create, params: {question: attributes_for(:question)} }
         it 'creates new question in the database' do
-          expect {
-            post :create, params: {question: attributes_for(:question)}
-          }.to change(user.questions, :count).by(1)
+          expect { post_question }.to change(user.questions, :count).by(1)
         end
 
         it 'redirects to @question' do
-          post :create, params: {question: attributes_for(:question)}
+          post_question
           expect(response).to redirect_to assigns(:question)
         end
       end
 
       context 'with invalid attributes' do
+        let(:post_invalid_question) { post :create, params: {question: attributes_for(:invalid_question)} }
         it "doesn't create new question in the database" do
-          expect {
-            post :create, params: {question: attributes_for(:invalid_question)}
-          }.not_to change(Question, :count)
+          expect { post_invalid_question }.not_to change(Question, :count)
         end
 
         it 'renders new template' do
-          post :create, params: {question: attributes_for(:invalid_question)}
+          post_invalid_question
           expect(response).to render_template :new
         end
       end
     end
 
     describe 'PATCH #update' do
-      context 'owner of the question' do
-        before { user_owned_question }
+      it_behaves_like 'delete attachment' do
+        let(:attachable) { question }
+        let(:owned_attachable) { owned_question }
+        let(:context_params) { {} }
+      end
 
+      context 'owner of the question' do
         context 'with valid attributes' do
           it 'renders update template' do
-            patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:question)}
+            patch :update, xhr: true, params: {id: owned_question, question: attributes_for(:question)}
             expect(response).to render_template :update
           end
 
           it 'updates question' do
-            patch :update, xhr: true, params: {id: user_owned_question, question: {title: 'New title', body: 'New body'}}
-            user_owned_question.reload
-            expect(user_owned_question.title).to eq 'New title'
-            expect(user_owned_question.body).to eq 'New body'
-          end
-
-          it 'deletes file' do
-            question_attachment = create(:answer_attachment, attachable: user_owned_question)
-            expect {
-              patch :update, xhr: true, params: {
-                id: user_owned_question,
-                question: {
-                  title: 'Title',
-                  body: 'Body',
-                  attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
-                }
-              }
-            }.to change(user_owned_question.attachments, :count).by(-1)
+            patch :update, xhr: true, params: {id: owned_question, question: {title: 'New title', body: 'New body'}}
+            owned_question.reload
+            expect(owned_question.title).to eq 'New title'
+            expect(owned_question.body).to eq 'New body'
           end
         end
 
         context 'with invalid attributes' do
           it 'does not updates question' do
-            patch :update, xhr: true, params: {id: user_owned_question, question: attributes_for(:invalid_question) }
-            user_owned_question.reload
-            expect(user_owned_question.title).not_to be_empty
+            patch :update, xhr: true, params: {id: owned_question, question: attributes_for(:invalid_question) }
+            owned_question.reload
+            expect(owned_question.title).not_to be_empty
             expect(response).to have_http_status :unprocessable_entity
           end
         end
       end
 
       context 'not owner of the question' do
-        before { question }
-
         it 'returns 404 with no content' do
           patch :update, xhr: true, params: {id: question, question: attributes_for(:question) }
           expect(response.status).to eq 403
@@ -204,41 +187,23 @@ RSpec.describe QuestionsController, type: :controller do
           question.reload
           expect(question.title).not_to eq 'New title'
         end
-
-        it 'does not deletes file' do
-          question_attachment = create(:answer_attachment, attachable: question)
-          expect {
-            patch :update, xhr: true, params: {
-              id: question,
-              question: {
-                title: 'Title',
-                body: 'Body',
-                attachments_attributes: {"0": {_destroy: 1, id: question_attachment}}
-              }
-            }
-          }.not_to change(question.attachments, :count)
-        end
       end
     end
 
     describe 'DELETE #destroy' do
       context 'owner of the question' do
         it 'deletes question from database' do
-          user_owned_question
-          expect {
-            delete :destroy, params: {id: user_owned_question}
-          }.to change(user.questions, :count).by(-1)
+          owned_question
+          expect { delete :destroy, params: {id: owned_question} }.to change(user.questions, :count).by(-1)
         end
 
         it 'deletes dependent answers from database' do
-          create(:answer, question: user_owned_question)
-          expect {
-            delete :destroy, params: {id: user_owned_question}
-          }.to change(Answer, :count).by(-1)
+          create(:answer, question: owned_question)
+          expect { delete :destroy, params: {id: owned_question} }.to change(Answer, :count).by(-1)
         end
 
         it 'redirects to root_path' do
-          delete :destroy, params: {id: user_owned_question}
+          delete :destroy, params: {id: owned_question}
           expect(response).to redirect_to root_path
         end
       end
@@ -246,58 +211,12 @@ RSpec.describe QuestionsController, type: :controller do
       context 'not owner of the question' do
         it 'does not deletes question from database' do
           question
-          expect {
-            delete :destroy, params: {id: question}
-          }.not_to change(Question, :count)
+          expect { delete :destroy, params: {id: question} }.not_to change(Question, :count)
         end
 
         it 'redirects to root_path' do
           delete :destroy, params: {id: question}
           expect(response).to redirect_to root_path
-        end
-      end
-    end
-
-    describe 'POST #vote' do
-      it 'assigns votable to @question' do
-        vote_up
-        expect(assigns(:votable)).to eq question
-      end
-
-      it 'responses with 200' do
-        vote_up
-        expect(response.status).to eq 200
-      end
-
-      context 'owner of the question' do
-        it 'does not votes up\down question' do
-          expect {
-            post :vote_up, params: {id: user_owned_question, format: :json}
-          }.not_to change(user_owned_question.votes, :count)
-          expect {
-            post :vote_down, params: {id: user_owned_question, format: :json}
-          }.not_to change(user_owned_question.votes, :count)
-        end
-      end
-
-      context 'not owner of the question' do
-        it 'votes up' do
-          expect {
-            vote_up
-          }.to change(question.votes, :count).by(1)
-        end
-
-        it 'votes down' do
-          expect {
-            vote_down
-          }.to change(question.votes, :count).by(1)
-        end
-
-        it 'removes vote' do
-          create(:answer_vote, user: user, votable: question)
-          expect {
-            post :cancel_vote, xhr: true, params: {id: question}
-          }.to change(question.votes, :count).by(-1)
         end
       end
     end

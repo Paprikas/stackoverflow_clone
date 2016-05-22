@@ -1,29 +1,5 @@
 require 'rails_helper'
 
-shared_examples 'unauthorized access answer' do |path|
-  it 'returns 401 status without access_token' do
-    get path, params: {format: :json}
-    expect(response.status).to eq 401
-  end
-
-  it 'returns 401 status when access_token invalid' do
-    get path, params: {access_token: '1234', format: :json}
-    expect(response.status).to eq 401
-  end
-end
-
-shared_examples 'unauthorized post access answer' do |path|
-  it 'returns 401 status without access_token' do
-    post path, params: {format: :json}
-    expect(response.status).to eq 401
-  end
-
-  it 'returns 401 status when access_token invalid' do
-    post path, params: {access_token: '1234', format: :json}
-    expect(response.status).to eq 401
-  end
-end
-
 describe 'Answers API' do
   let(:access_token) { create(:access_token) }
   let(:question) { create(:question) }
@@ -31,7 +7,7 @@ describe 'Answers API' do
   context 'authorized' do
     describe 'GET #index' do
       let!(:answers) { create_pair(:answer, question: question) }
-      let(:answer) { answers.last }
+      let(:answer) { answers.first }
 
       before do
         get "/api/v1/questions/#{question.id}/answers", params: {access_token: access_token.token, format: :json}
@@ -138,16 +114,16 @@ describe 'Answers API' do
   end
 
   context 'not authorized' do
-    describe 'GET /:question_id/answers' do
-      it_behaves_like 'unauthorized access answer', "/api/v1/questions/1/answers"
+    describe 'GET #index' do
+      it_behaves_like 'API unaccessable', :get, "/api/v1/questions/1/answers"
     end
 
-    describe 'GET /:question_id/answers/:id' do
-      it_behaves_like 'unauthorized access answer', "/api/v1/questions/1/answers/1"
+    describe 'GET #show' do
+      it_behaves_like 'API unaccessable', :get, "/api/v1/questions/1/answers/1"
     end
 
-    describe 'POST /:question_id/answers' do
-      it_behaves_like 'unauthorized post access answer', "/api/v1/questions/1/answers"
+    describe 'POST #create' do
+      it_behaves_like 'API unaccessable', :post, "/api/v1/questions/1/answers"
     end
   end
 end
