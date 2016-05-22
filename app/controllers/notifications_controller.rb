@@ -12,8 +12,8 @@ class NotificationsController < ApplicationController
   end
 
   def destroy
-    @notification = Notification.find_by(user: current_user, question_id: @question)
-    authorize @notification # Pundit::NotDefinedError: unable to find policy of nil???
+    @notification = Notification.find_by!(user: current_user, question_id: @question)
+    authorize @notification
     respond_with @notification.destroy, location: @question
   end
 
