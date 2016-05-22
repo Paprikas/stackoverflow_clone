@@ -1,5 +1,10 @@
 .question data-question-channel="#{@question.id}"
   .question_wrapper
+    .notification_buttons class="#{@notification.present? ? 'notified' : ''}"
+      - if policy(Notification).create?
+        = link_to 'Notify on updates for this question', question_notifications_path(@question), class: 'notify subscribe', remote: true, method: :post, data: {type: :json}
+        = link_to 'Do not notify', question_delete_notification_path(@question), class: 'notify unsubscribe', remote: true, method: :delete, data: {type: :json}
+
     = render @question
     = render @question.attachments
 

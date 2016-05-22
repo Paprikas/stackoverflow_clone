@@ -23,6 +23,19 @@
   }
 }
 
+.notify.unsubscribe {
+  display: none;
+}
+
+.notified {
+  .notify.subscribe {
+    display: none;
+  }
+  .notify.unsubscribe {
+    display: block;
+  }
+}
+
 .hidden {
   display: none;
 }

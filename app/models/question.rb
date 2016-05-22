@@ -3,6 +3,7 @@ class Question < ApplicationRecord
   include Commentable
 
   has_many :answers, -> { order(accepted: :desc, created_at: :asc) }, dependent: :destroy
+  has_many :notifications, dependent: :destroy
   belongs_to :user
 
   has_many :attachments, as: :attachable, dependent: :destroy
@@ -11,4 +12,12 @@ class Question < ApplicationRecord
   validates :title, :body, :user_id, presence: true
 
   after_commit { QuestionRelayJob.perform_later(self) }
+  after_create :subscribe_user
+
+  private
+
+  # test in controller???
+  def subscribe_user
+    Notification.create(user_id: user_id, question: self)
+  end
 end
