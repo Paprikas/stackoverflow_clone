@@ -10,14 +10,8 @@ class QuestionMailer < ApplicationMailer
     mail to: user.email, subject: t('question_mailer.new_answer.subject', question_title: question.title)
   end
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.question_mailer.update.subject
-  #
-  def update
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
+  def update(user, question)
+    @question = question
+    mail to: user.email, subject: t('question_mailer.update.subject', question_title: question.title)
   end
 end

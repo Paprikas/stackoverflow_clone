@@ -17,6 +17,8 @@ class QuestionPreview < ActionMailer::Preview
 
   # Preview this email at http://localhost:3000/rails/mailers/question/update
   def update
-    QuestionMailer.update
+    user = User.new(email: 'test@example.com')
+    question = Question.new(title: 'New question')
+    QuestionMailer.update(user, question)
   end
 end
