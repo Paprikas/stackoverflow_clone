@@ -6,9 +6,7 @@ class SubscriptionsController < ApplicationController
 
   def create
     authorize Subscription
-    @subscription = @question.subscriptions.new(user: current_user)
-    @subscription.save
-    respond_with @subscription, location: @question
+    respond_with @question.subscriptions.create(user: current_user), location: @question
   end
 
   def destroy

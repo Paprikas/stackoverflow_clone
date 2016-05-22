@@ -7,10 +7,9 @@ RSpec.describe SubscriptionsController, type: :controller do
 
   describe "POST #create" do
     context 'as user', :users, :auth do
-      it "returns http success, assigns @subscription", :aggregate_failures do
+      it "returns http created", :aggregate_failures do
         create_subscription
         expect(response).to have_http_status(:created)
-        expect(assigns(:subscription)).to eq Subscription.last
       end
 
       it 'creates subscription' do
