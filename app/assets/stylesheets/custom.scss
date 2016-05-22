@@ -23,15 +23,15 @@
   }
 }
 
-.notify.unsubscribe {
+.subscription.unsubscribe {
   display: none;
 }
 
-.notified {
-  .notify.subscribe {
+.subscribed {
+  .subscription.subscribe {
     display: none;
   }
-  .notify.unsubscribe {
+  .subscription.unsubscribe {
     display: block;
   }
 }

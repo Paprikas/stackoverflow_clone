@@ -126,7 +126,7 @@ RSpec.describe QuestionsController, type: :controller do
         end
 
         it 'creates subscription' do
-          expect { post_question }.to change(Notification, :count).by(1)
+          expect { post_question }.to change(Subscription, :count).by(1)
         end
 
         it 'redirects to @question' do

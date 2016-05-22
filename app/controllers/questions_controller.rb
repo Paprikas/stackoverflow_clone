@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :update, :destroy]
-  before_action :build_answer, :set_notification, only: :show
+  before_action :build_answer, :set_subscription, only: :show
 
   include Voted
 
@@ -48,7 +48,7 @@ class QuestionsController < ApplicationController
     @answer = @question.answers.build
   end
 
-  def set_notification
-    @notification = Notification.find_by(question: @question, user: current_user)
+  def set_subscription
+    @subscription = Subscription.find_by(question: @question, user: current_user)
   end
 end

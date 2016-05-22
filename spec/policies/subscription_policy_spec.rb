@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe NotificationPolicy do
-  let(:record) { build_stubbed(:notification, user: user) }
+RSpec.describe SubscriptionPolicy do
+  let(:record) { build_stubbed(:subscription, user: user) }
 
   permissions :create? do
-    let(:record) { Notification }
+    let(:record) { Subscription }
 
     it_grants_access
     it_behaves_like "access denied for guest"

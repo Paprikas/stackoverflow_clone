@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'notifications on question updates', :users do
+feature 'subscriptions on question updates', :users do
   given(:question) { create(:question) }
 
   context 'as user', :js, :auth do
@@ -12,7 +12,7 @@ feature 'notifications on question updates', :users do
     end
 
     scenario 'can unsubscribe' do
-      create(:notification, user: user, question: question)
+      create(:subscription, user: user, question: question)
       visit question_path(question)
       click_on 'Do not notify'
       expect(page).not_to have_content 'Do not notify'

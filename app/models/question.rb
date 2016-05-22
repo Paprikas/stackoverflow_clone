@@ -3,7 +3,7 @@ class Question < ApplicationRecord
   include Commentable
 
   has_many :answers, -> { order(accepted: :desc, created_at: :asc) }, dependent: :destroy
-  has_many :notifications, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
   belongs_to :user
 
   has_many :attachments, as: :attachable, dependent: :destroy
@@ -17,6 +17,6 @@ class Question < ApplicationRecord
   private
 
   def subscribe_user
-    notifications.create(user_id: user_id)
+    subscriptions.create(user_id: user_id)
   end
 end

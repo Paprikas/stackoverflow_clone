@@ -6,7 +6,5 @@ class CreateNotifications < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-
-    # ??? index
   end
 end
