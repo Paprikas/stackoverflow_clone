@@ -1,10 +1,10 @@
 shared_context "shared job", type: :job do
-  around do |example|
-    active_job_queue_adapter = ActiveJob::Base.queue_adapter
-    ActiveJob::Base.queue_adapter = :test
-    example.run
-    ActiveJob::Base.queue_adapter = active_job_queue_adapter
-  end
+  # around do |example|
+  #   active_job_queue_adapter = ActiveJob::Base.queue_adapter
+  #   ActiveJob::Base.queue_adapter = :test
+  #   example.run
+  #   ActiveJob::Base.queue_adapter = active_job_queue_adapter
+  # end
 
   let(:hash) { {} }
 end
