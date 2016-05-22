@@ -11,7 +11,7 @@ class Answer < ApplicationRecord
   validates :body, :question_id, :user_id, presence: true
 
   after_commit :question_answer_relay, on: :create
-  after_commit :question_answer_notification, on: :create # better ???
+  after_commit :question_answer_notification, on: :create
 
   def toggle_accept!
     transaction do
