@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Profile API' do # rubocop:disable RSpec/DescribeClass
+describe 'Profile API' do
   let(:me) { create(:user) }
   let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 

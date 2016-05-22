@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Answers API' do # rubocop:disable RSpec/DescribeClass
+describe 'Answers API' do
   let(:access_token) { create(:access_token) }
   let(:question) { create(:question) }
 
