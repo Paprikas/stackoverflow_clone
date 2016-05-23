@@ -1,5 +1,5 @@
 class QuestionDigestJob < ApplicationJob
-  queue_as :mailers
+  queue_as :default
 
   def perform
     questions = Question.where(created_at: Time.current.yesterday.all_day)

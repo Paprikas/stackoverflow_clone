@@ -1,5 +1,5 @@
 class QuestionAnswerNotificationJob < ApplicationJob
-  queue_as :mailers
+  queue_as :default
 
   def perform(answer)
     question = answer.question
