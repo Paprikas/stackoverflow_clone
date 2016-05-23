@@ -1,6 +1,6 @@
 class QuestionPolicy < ApplicationPolicy
   def update?
-    user.present? && (user.admin? || user.id == record.user_id)
+    manage?
   end
 
   def destroy?

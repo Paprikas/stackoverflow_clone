@@ -7,13 +7,15 @@ RSpec.describe CommentRelayJob, type: :job do
   context 'question' do
     let(:record) { create(:question_comment) }
 
-    it_behaves_like 'enqueue job'
+    it_behaves_like 'broadcast to ActionCable'
+    it_behaves_like 'job perform'
   end
 
   context 'answer' do
     let(:channel) { "question:#{record.commentable.question_id}:comments" }
     let(:record) { create(:answer_comment) }
 
-    it_behaves_like 'enqueue job'
+    it_behaves_like 'broadcast to ActionCable'
+    it_behaves_like 'job perform'
   end
 end

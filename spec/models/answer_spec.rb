@@ -37,4 +37,12 @@ RSpec.describe Answer, type: :model do
     let(:job) { QuestionAnswerRelayJob }
     let(:subject) { build(:answer) }
   end
+
+  context 'Subscription' do
+    let(:answer) { build(:answer) }
+    it 'performs QuestionAnswerNotificationJob' do
+      expect(QuestionAnswerNotificationJob).to receive(:perform_later).with(answer)
+      answer.save!
+    end
+  end
 end

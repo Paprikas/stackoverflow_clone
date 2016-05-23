@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :update, :destroy]
-  before_action :build_answer, only: :show
+  before_action :build_answer, :set_subscription, only: :show
 
   include Voted
 
@@ -46,5 +46,9 @@ class QuestionsController < ApplicationController
 
   def build_answer
     @answer = @question.answers.build
+  end
+
+  def set_subscription
+    @subscription = Subscription.find_by(question: @question, user: current_user)
   end
 end

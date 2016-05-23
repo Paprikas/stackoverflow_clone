@@ -109,3 +109,8 @@ gem 'active_model_serializers', git: 'https://github.com/rails-api/active_model_
 # to_json replacement
 gem 'oj'
 gem 'oj_mimic_json'
+
+# Delayed jobs
+gem 'sidekiq'
+
+gem 'whenever'

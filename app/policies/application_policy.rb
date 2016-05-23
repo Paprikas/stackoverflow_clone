@@ -34,6 +34,10 @@ class ApplicationPolicy
     false
   end
 
+  def manage?
+    user.present? && (user.admin? || user.id == record.user_id)
+  end
+
   def scope
     Pundit.policy_scope!(user, record.class)
   end

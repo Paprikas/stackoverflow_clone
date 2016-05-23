@@ -120,8 +120,13 @@ RSpec.describe QuestionsController, type: :controller do
     describe 'POST #create' do
       context 'with valid attributes' do
         let(:post_question) { post :create, params: {question: attributes_for(:question)} }
+
         it 'creates new question in the database' do
           expect { post_question }.to change(user.questions, :count).by(1)
+        end
+
+        it 'creates subscription' do
+          expect { post_question }.to change(Subscription, :count).by(1)
         end
 
         it 'redirects to @question' do
