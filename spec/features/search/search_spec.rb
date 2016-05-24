@@ -17,9 +17,7 @@ feature 'search and view results', :js do
     expect(page).to have_content answer.body
     expect(page).to have_content comment.body
     expect(page).to have_content user.email
-  end
 
-  xscenario 'questions' do
     fill_in 'search_query', with: question.title
     select 'question', from: 'search_type'
     click_on 'Search'
@@ -27,9 +25,7 @@ feature 'search and view results', :js do
     expect(page).not_to have_content answer.body
     expect(page).not_to have_content comment.body
     expect(page).not_to have_content user.email
-  end
 
-  xscenario 'answers' do
     fill_in 'search_query', with: answer.body
     select 'answer', from: 'search_type'
     click_on 'Search'
@@ -37,9 +33,7 @@ feature 'search and view results', :js do
     expect(page).to have_content answer.body
     expect(page).not_to have_content comment.body
     expect(page).not_to have_content user.email
-  end
 
-  xscenario 'comments' do
     fill_in 'search_query', with: comment.body
     select 'comment', from: 'search_type'
     click_on 'Search'
@@ -47,9 +41,7 @@ feature 'search and view results', :js do
     expect(page).not_to have_content answer.body
     expect(page).to have_content comment.body
     expect(page).not_to have_content user.email
-  end
 
-  xscenario 'users' do
     fill_in 'search_query', with: user.email
     select 'user', from: 'search_type'
     click_on 'Search'
