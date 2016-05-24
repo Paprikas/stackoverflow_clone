@@ -6,6 +6,7 @@ class Search
   end
 
   def self.perform_search(search_query, search_type)
+    search_query = Riddle::Query.escape(search_query)
     if search_type == 'all'
       ThinkingSphinx.search(search_query)
     else

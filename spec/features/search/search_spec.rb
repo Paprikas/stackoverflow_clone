@@ -1,14 +1,17 @@
 require 'rails_helper'
 
-feature 'search and view results' do
+feature 'search and view results', :js do
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer) }
   given!(:comment) { create(:answer_comment) }
   given!(:user) { create(:user) }
 
-  background { visit root_path }
+  background do
+    index
+    visit root_path
+  end
 
-  xscenario 'all', :sphinx_index do
+  scenario 'all' do
     click_on 'Search'
     expect(page).to have_content question.title
     expect(page).to have_content answer.body
@@ -16,7 +19,7 @@ feature 'search and view results' do
     expect(page).to have_content user.email
   end
 
-  xscenario 'questions', :sphinx_index do
+  xscenario 'questions' do
     fill_in 'search_query', with: question.title
     select 'question', from: 'search_type'
     click_on 'Search'
@@ -26,6 +29,33 @@ feature 'search and view results' do
     expect(page).not_to have_content user.email
   end
 
-  scenario 'answers'
-  scenario 'comments'
+  xscenario 'answers' do
+    fill_in 'search_query', with: answer.body
+    select 'answer', from: 'search_type'
+    click_on 'Search'
+    expect(page).not_to have_content question.title
+    expect(page).to have_content answer.body
+    expect(page).not_to have_content comment.body
+    expect(page).not_to have_content user.email
+  end
+
+  xscenario 'comments' do
+    fill_in 'search_query', with: comment.body
+    select 'comment', from: 'search_type'
+    click_on 'Search'
+    expect(page).not_to have_content question.title
+    expect(page).not_to have_content answer.body
+    expect(page).to have_content comment.body
+    expect(page).not_to have_content user.email
+  end
+
+  xscenario 'users' do
+    fill_in 'search_query', with: user.email
+    select 'user', from: 'search_type'
+    click_on 'Search'
+    expect(page).not_to have_content question.title
+    expect(page).not_to have_content answer.body
+    expect(page).not_to have_content comment.body
+    expect(page).to have_content user.email
+  end
 end
