@@ -26,12 +26,7 @@ html lang="en"
                 li = link_to 'Registration', new_user_registration_path
                 li = link_to 'Sign in', new_user_session_path
           .top-bar-right
-            = form_tag search_path, method: :get do
-              ul.menu
-                li = text_field_tag 'search_query', params[:search_query], type: 'search', placeholder: 'Search'
-                li
-                  = select_tag 'search_type', options_for_select(%w{all question answer comment user}, params[:search_type] || 'all')
-                li = submit_tag 'Search', { class: 'button' }
+            = render 'search/form'
 
     .row
       .medium-12.columns

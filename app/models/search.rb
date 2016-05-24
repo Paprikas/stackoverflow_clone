@@ -1,6 +1,8 @@
 class Search
+  SEARCH_TYPES = %w(all question answer comment user).freeze
+
   def self.query(search_query, search_type)
-    types = %w(all question answer comment user) # ???
+    types = SEARCH_TYPES
     return [] unless types.include? search_type
     @results = perform_search(search_query, search_type)
   end

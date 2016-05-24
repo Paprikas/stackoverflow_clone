@@ -39,4 +39,10 @@ RSpec.describe Search, type: :model do
     it_behaves_like 'searching', 'query', 'answer'
     it_behaves_like 'searching', 'query', 'user'
   end
+
+  describe '::SEARCH_TYPES' do
+    it 'returns search_types' do
+      expect(described_class::SEARCH_TYPES).to eq %w(all question answer comment user)
+    end
+  end
 end
