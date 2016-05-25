@@ -56,6 +56,12 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-spring', require: false
   gem 'pry-rails'
+
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano-rails', require: false
+  gem 'dotenv-rails'
 end
 
 group :test do
