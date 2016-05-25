@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'search', to: 'search#search'
+
   use_doorkeeper
   devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}
 

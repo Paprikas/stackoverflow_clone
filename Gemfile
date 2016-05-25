@@ -112,5 +112,8 @@ gem 'oj_mimic_json'
 
 # Delayed jobs
 gem 'sidekiq'
-
 gem 'whenever'
+
+# Full-text search
+gem 'mysql2', '~> 0.3.18'
+gem 'thinking-sphinx', '~> 3.2.0'
