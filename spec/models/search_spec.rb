@@ -11,15 +11,10 @@ shared_examples 'searching' do |query, type|
   end
 end
 
-RSpec.describe Search, type: :model do
-  context 'bad search type' do
-    it 'not receives perform_search for Search' do
-      expect(described_class).not_to receive(:perform_search).with('query', 'bad_type')
-      described_class.query('query', 'bad_type')
-    end
-
-    it 'returns []' do
-      expect(described_class.query('query', 'bad_type')).to eq []
+RSpec.describe Search, type: :sphinx do
+  describe '::SEARCH_TYPES' do
+    it 'returns search_types' do
+      expect(described_class::SEARCH_TYPES).to eq %w(all question answer comment user)
     end
   end
 
@@ -33,16 +28,33 @@ RSpec.describe Search, type: :model do
     end
   end
 
-  describe '.search' do
-    it_behaves_like 'searching', 'query', 'all'
-    it_behaves_like 'searching', 'query', 'question'
-    it_behaves_like 'searching', 'query', 'answer'
-    it_behaves_like 'searching', 'query', 'user'
-  end
+  describe '.query' do
+    it 'searches', :aggregate_failures do
+      user = create(:user)
+      question = create(:question, user: user)
+      answer = create(:answer, question: question, user: user)
+      comment = create(:comment, commentable: answer, user: user)
+      index
+      expect(Search.query('', 'all')).to match_array [user, question, answer, comment]
+      expect(Search.query(question.title, 'question')).to match_array [question]
+      expect(Search.query(answer.body, 'answer')).to match_array [answer]
+      expect(Search.query(comment.body, 'comment')).to match_array [comment]
+      expect(Search.query(user.email, 'user')).to match_array [user]
+    end
 
-  describe '::SEARCH_TYPES' do
-    it 'returns search_types' do
-      expect(described_class::SEARCH_TYPES).to eq %w(all question answer comment user)
+    described_class::SEARCH_TYPES.each do |search_type|
+      it_behaves_like 'searching', 'query', search_type
+    end
+
+    context 'bad search type' do
+      it 'not receives perform_search for Search' do
+        expect(described_class).not_to receive(:perform_search).with('query', 'bad_type')
+        described_class.query('query', 'bad_type')
+      end
+
+      it 'returns []' do
+        expect(described_class.query('query', 'bad_type')).to eq []
+      end
     end
   end
 end

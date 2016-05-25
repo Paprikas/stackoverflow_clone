@@ -12,6 +12,7 @@ end
 
 RSpec.configure do |config|
   config.include SphinxHelpers, type: :feature
+  config.include SphinxHelpers, type: :sphinx
 
   config.before(:suite) do
     # Ensure sphinx directories exist for the test environment
