@@ -35,11 +35,11 @@ RSpec.describe Search, type: :sphinx do
       answer = create(:answer, question: question, user: user)
       comment = create(:comment, commentable: answer, user: user)
       index
-      expect(Search.query('', 'all')).to match_array [user, question, answer, comment]
-      expect(Search.query(question.title, 'question')).to match_array [question]
-      expect(Search.query(answer.body, 'answer')).to match_array [answer]
-      expect(Search.query(comment.body, 'comment')).to match_array [comment]
-      expect(Search.query(user.email, 'user')).to match_array [user]
+      expect(described_class.query('', 'all')).to match_array [user, question, answer, comment]
+      expect(described_class.query(question.title, 'question')).to match_array [question]
+      expect(described_class.query(answer.body, 'answer')).to match_array [answer]
+      expect(described_class.query(comment.body, 'comment')).to match_array [comment]
+      expect(described_class.query(user.email, 'user')).to match_array [user]
     end
 
     described_class::SEARCH_TYPES.each do |search_type|
