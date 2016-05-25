@@ -62,6 +62,7 @@ group :development do
   gem 'capistrano-rbenv', require: false
   gem 'capistrano-rails', require: false
   gem 'dotenv-rails'
+  gem 'therubyracer'
 end
 
 group :test do
