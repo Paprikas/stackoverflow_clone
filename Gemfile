@@ -61,7 +61,6 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rbenv', require: false
   gem 'capistrano-rails', require: false
-  gem 'dotenv-rails'
 end
 
 group :test do
@@ -125,3 +124,4 @@ gem 'mysql2', '~> 0.3.18'
 gem 'thinking-sphinx', '~> 3.2.0'
 
 gem 'therubyracer'
+gem 'dotenv-rails'
