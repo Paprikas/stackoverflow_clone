@@ -62,7 +62,6 @@ group :development do
   gem 'capistrano-rbenv', require: false
   gem 'capistrano-rails', require: false
   gem 'dotenv-rails'
-  gem 'therubyracer'
 end
 
 group :test do
@@ -124,3 +123,5 @@ gem 'whenever'
 # Full-text search
 gem 'mysql2', '~> 0.3.18'
 gem 'thinking-sphinx', '~> 3.2.0'
+
+gem 'therubyracer'
