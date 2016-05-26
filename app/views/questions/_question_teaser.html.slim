@@ -1,1 +1,11 @@
-h2 = link_to question.title, question
+.row
+  .medium-1.columns.text-center
+    = question.vote_score
+    br
+    | votes
+  .medium-1.columns.text-center
+    = question.answers.size
+    br
+    | answers
+  .medium-10.columns
+    h3 = link_to question.title, question
