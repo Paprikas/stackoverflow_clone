@@ -40,7 +40,7 @@ Rails.application.configure do
 
   # Action Cable endpoint configuration
   config.action_cable.url = "ws://#{ENV['CABLE_SERVER']}/cable"
-  config.action_cable.allowed_request_origins = [ "http://#{ENV['CABLE_SERVER']}" ]
+  config.action_cable.allowed_request_origins = ["http://#{ENV['CABLE_SERVER']}"]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -84,4 +84,14 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.smtp_settings = {
+    user_name: ENV["SENDGRID_USER"],
+    password: ENV["SENDGRID_PASS"],
+    domain: ENV["SENDGRID_DOMAIN"],
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
 end
