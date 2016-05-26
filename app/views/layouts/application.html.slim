@@ -30,6 +30,8 @@ html lang="en"
 
     .row
       .medium-12.columns
-        = flash[:notice] if flash[:notice]
-        = flash[:alert] if flash[:alert]
+        - if flash[:notice]
+          .success.callout = flash[:notice]
+        - if flash[:alert]
+          .alert.callout = flash[:alert] 
         = yield
