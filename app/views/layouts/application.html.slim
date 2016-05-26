@@ -29,9 +29,9 @@ html lang="en"
             = render 'search/form'
 
     .row
-      .medium-12.columns
+      .small-12.columns
         - if flash[:notice]
           .success.callout = flash[:notice]
         - if flash[:alert]
-          .alert.callout = flash[:alert] 
+          .alert.callout = flash[:alert]
         = yield
