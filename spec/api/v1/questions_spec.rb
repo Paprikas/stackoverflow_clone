@@ -6,9 +6,9 @@ describe 'Questions API' do
 
   context 'authorized' do
     describe 'GET #index' do
-      let!(:questions) { create_pair(:question) }
-      let(:question) { questions.first }
-      let!(:answer) { create(:answer, question: question) }
+      let!(:answer) { create(:answer) }
+      let(:question) { answer.question }
+      let!(:question2) { create(:question) }
 
       before do
         get "/api/v1/questions", params: {access_token: access_token.token, format: :json}
