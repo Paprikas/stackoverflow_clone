@@ -18,7 +18,6 @@ Rails.application.configure do
 
     config.action_mailer.perform_caching = false
 
-    config.cache_store = :redis_store
     config.public_file_server.headers = {
       'Cache-Control' => 'public, max-age=172800'
     }
