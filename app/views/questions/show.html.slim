@@ -16,7 +16,8 @@
     .question_form_wrapper id="form_#{dom_id(@question)}"
       = render 'form'
 
-  = render 'comments/comments', commentable: @question, path_args: [@question]
+  - cache ['comments', @question] do
+    = render 'comments/comments', commentable: @question, path_args: [@question]
 
 - if policy(@answer).create?
   = render 'answers/form', answer: @answer

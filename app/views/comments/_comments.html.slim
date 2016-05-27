@@ -2,14 +2,15 @@
   - if policy(commentable).create?
     = link_to 'add a comment', '#', class: 'open-comment-form'
 
-    .comment-form
-      .comment_errors
-      - params = {commentable: commentable.class.name.underscore, commentable_id: commentable}
-      = form_for commentable.comments.build, \
-      url: polymorphic_path(path_args.push(:comments)), remote: true do |f|
+    - cache ['comments-form', commentable] do
+      .comment-form
+        .comment_errors
+        - params = {commentable: commentable.class.name.underscore, commentable_id: commentable}
+        = form_for commentable.comments.build, \
+        url: polymorphic_path(path_args.push(:comments)), remote: true do |f|
 
-        = f.label :body, 'Comment'
-        = f.text_area :body
-        = f.submit 'Add Comment', class: 'button'
+          = f.label :body, 'Comment'
+          = f.text_area :body
+          = f.submit 'Add Comment', class: 'button'
 
   = render commentable.comments
