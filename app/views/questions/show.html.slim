@@ -6,7 +6,9 @@
         = link_to 'Do not notify', unsubscribe_question_path(@question), class: 'subscription unsubscribe', remote: true, method: :delete, data: {type: :json}
 
     = render @question
-    = render @question.attachments
+
+    - cache ['attachments', @question]
+      = render @question.attachments
 
   = render 'shared/errors', object: @question
 
@@ -16,8 +18,7 @@
     .question_form_wrapper id="form_#{dom_id(@question)}"
       = render 'form'
 
-  - cache ['comments', @question] do
-    = render 'comments/comments', commentable: @question, path_args: [@question]
+  = render 'comments/comments', commentable: @question, path_args: [@question]
 
 - if policy(@answer).create?
   = render 'answers/form', answer: @answer

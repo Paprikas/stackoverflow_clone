@@ -1,9 +1,8 @@
 - if answer.persisted?
   .answer id="#{dom_id(answer)}"
+    = render 'shared/vote_actions', votable: answer, path_args: [answer.question, answer]
     - cache answer do
-      = render 'shared/vote_actions', votable: answer, path_args: [answer.question, answer]
       .body = answer.body
-
       = render answer.attachments
 
     - if policy(answer).destroy?
@@ -20,5 +19,4 @@
     - if policy(answer).update?
       = render 'answers/form', answer: answer
 
-    - cache ['comments', answer] do
-      = render 'comments/comments', commentable: answer, path_args: [answer.question, answer]
+    = render 'comments/comments', commentable: answer, path_args: [answer.question, answer]
