@@ -9,10 +9,10 @@ class CommentRelayJob < ApplicationJob
   private
 
   def render_comment(comment)
-    CommentsController.render(partial: 'comments/comment', locals: { comment: comment })
+    CommentsController.render(partial: "comments/comment", locals: { comment: comment })
   end
 
   def channel_id(comment)
-    comment.commentable_type == 'Answer' ? comment.commentable.question_id : comment.commentable_id
+    comment.commentable_type == "Answer" ? comment.commentable.question_id : comment.commentable_id
   end
 end

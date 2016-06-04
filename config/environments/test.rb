@@ -15,7 +15,7 @@ Rails.application.configure do
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'Cache-Control' => 'public, max-age=3600'
+    "Cache-Control" => "public, max-age=3600"
   }
 
   # Show full error reports and disable caching.
@@ -42,6 +42,6 @@ Rails.application.configure do
 
   config.action_cable.disable_request_forgery_protection = true
 
-  config.action_mailer.default_url_options = { host: 'localhost',
+  config.action_mailer.default_url_options = { host: "localhost",
                                                port: 3001 }
 end

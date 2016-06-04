@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
@@ -11,36 +11,36 @@ RSpec.describe Answer, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
 
-  describe 'toggle accepted' do
-    it 'toggles' do
+  describe "toggle accepted" do
+    it "toggles" do
       answer = create(:answer)
       expect { answer.toggle_accept! }.to change { answer.reload.accepted }.from(false).to(true)
     end
 
-    it 'untoggles' do
+    it "untoggles" do
       answer = create(:answer, accepted: true)
       expect { answer.toggle_accept! }.to change { answer.reload.accepted }.from(true).to(false)
     end
 
-    it 'toggles new answer' do
+    it "toggles new answer" do
       answer = build(:answer)
       expect { answer.toggle_accept! }.to change { answer.accepted }.from(false).to(true)
     end
 
-    it 'untoggles new answer' do
+    it "untoggles new answer" do
       answer = build(:answer, accepted: true)
       expect { answer.toggle_accept! }.to change { answer.accepted }.from(true).to(false)
     end
   end
 
-  it_behaves_like 'perform relay job after commit' do
+  it_behaves_like "perform relay job after commit" do
     let(:job) { QuestionAnswerRelayJob }
     let(:subject) { build(:answer) }
   end
 
-  context 'Subscription' do
+  context "Subscription" do
     let(:answer) { build(:answer) }
-    it 'performs QuestionAnswerNotificationJob' do
+    it "performs QuestionAnswerNotificationJob" do
       expect(QuestionAnswerNotificationJob).to receive(:perform_later).with(answer)
       answer.save!
     end

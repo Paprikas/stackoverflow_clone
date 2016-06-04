@@ -1,15 +1,15 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'view questions' do
+feature "view questions" do
   given(:question) { create(:question) }
 
-  scenario 'user views questions' do
+  scenario "user views questions" do
     question
     visit root_path
     expect(page).to have_content question.title
   end
 
-  scenario 'user can view question and answers' do
+  scenario "user can view question and answers" do
     answer = create(:answer, question: question)
     visit question_path(question)
     expect(page).to have_content question.title

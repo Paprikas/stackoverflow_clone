@@ -13,7 +13,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   private
 
   def general_auth
-    auth = request.env['omniauth.auth']
+    auth = request.env["omniauth.auth"]
 
     identity = Identity.find_for_oauth(auth)
     return sign_in_with_oauth(identity.user, auth.provider) if identity.present?

@@ -12,7 +12,7 @@ shared_context "test queue adapter", :test_queue_adapter do
 end
 
 shared_examples "broadcast to ActionCable" do
-  it 'broadcasts to ActionCable' do
+  it "broadcasts to ActionCable" do
     expect(ActionCable.server).to receive(:broadcast).with(channel, hash_including(hash))
     described_class.perform_now(record)
   end
