@@ -41,3 +41,4 @@ exclude_paths:
 - db/
 - spec/
 - vendor/
+- config/initializers/spring.rb

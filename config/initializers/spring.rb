@@ -1,5 +1,4 @@
 if Rails.env.test?
-  # config/spring.rb
   require "spring/application"
 
   module Spring
