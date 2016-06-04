@@ -15,5 +15,7 @@ module StackoverflowClone
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.active_job.queue_adapter = :sidekiq
+
+    config.cache_store = :redis_store, { expires_in: 60.minutes }
   end
 end

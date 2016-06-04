@@ -127,3 +127,6 @@ gem 'thinking-sphinx', '~> 3.2.0'
 
 gem 'therubyracer'
 gem 'dotenv-rails'
+
+# Caching
+gem 'redis-rails', git: 'https://github.com/redis-store/redis-rails.git'

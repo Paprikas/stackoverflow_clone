@@ -6,7 +6,9 @@
         = link_to 'Do not notify', unsubscribe_question_path(@question), class: 'subscription unsubscribe', remote: true, method: :delete, data: {type: :json}
 
     = render @question
-    = render @question.attachments
+
+    - cache ['attachments', @question]
+      = render @question.attachments
 
   = render 'shared/errors', object: @question
 
