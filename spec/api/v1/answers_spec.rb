@@ -10,7 +10,7 @@ describe "Answers API" do
       let(:answer) { answers.first }
 
       before do
-        get "/api/v1/questions/#{question.id}/answers", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/questions/#{question.id}/answers", params: { access_token: access_token.token, format: :json }
       end
 
       it "returns 200 status" do
@@ -34,7 +34,7 @@ describe "Answers API" do
       let!(:attachment) { create(:attachment, attachable: answer) }
 
       before do
-        get "/api/v1/questions/#{answer.question.id}/answers/#{answer.id}", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/questions/#{answer.question.id}/answers/#{answer.id}", params: { access_token: access_token.token, format: :json }
       end
 
       it "returns 200 status" do

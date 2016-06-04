@@ -11,7 +11,7 @@ describe "Questions API" do
       let!(:question2) { create(:question) }
 
       before do
-        get "/api/v1/questions", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/questions", params: { access_token: access_token.token, format: :json }
       end
 
       it "returns 200 status" do
@@ -46,7 +46,7 @@ describe "Questions API" do
       let!(:attachment) { create(:attachment, attachable: question) }
 
       before do
-        get "/api/v1/questions/#{question.id}", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, format: :json }
       end
 
       it "returns 200 status" do
@@ -89,7 +89,7 @@ describe "Questions API" do
     describe 'POST #create' do
       context "with valid params" do
         let(:post_question) do
-          post "/api/v1/questions", params: {access_token: access_token.token, format: :json, question: attributes_for(:question)}
+          post "/api/v1/questions", params: { access_token: access_token.token, format: :json, question: attributes_for(:question) }
         end
 
         it "returns 201 status" do
@@ -104,7 +104,7 @@ describe "Questions API" do
 
       context "with invalid params" do
         let(:post_invalid_question) do
-          post "/api/v1/questions", params: {access_token: access_token.token, format: :json, question: attributes_for(:invalid_question)}
+          post "/api/v1/questions", params: { access_token: access_token.token, format: :json, question: attributes_for(:invalid_question) }
         end
 
         it "returns 422 status" do

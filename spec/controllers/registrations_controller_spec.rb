@@ -16,7 +16,7 @@ describe RegistrationsController, type: :controller do
     context "as guest" do
       context "with omniauth_data in session" do
         before do
-          session["devise.oauth_data"] = {provider: "facebook"}
+          session["devise.oauth_data"] = { provider: "facebook" }
           get :finish_signup
         end
 
@@ -52,10 +52,10 @@ describe RegistrationsController, type: :controller do
       end
 
       context "with omniauth_data in session" do
-        subject(:valid_submit) { patch :send_confirmation_email, params: {email: "test@example.com"} }
+        subject(:valid_submit) { patch :send_confirmation_email, params: { email: "test@example.com" } }
 
         before do
-          session["devise.oauth_data"] = {"provider" => "facebook", "uid" => "123"}
+          session["devise.oauth_data"] = { "provider" => "facebook", "uid" => "123" }
         end
 
         it "renders finish_signup template" do
@@ -78,7 +78,7 @@ describe RegistrationsController, type: :controller do
 
         it "does not creates user if exists" do
           user
-          expect { patch :send_confirmation_email, params: {email: user.email} }.not_to change(User, :count)
+          expect { patch :send_confirmation_email, params: { email: user.email } }.not_to change(User, :count)
         end
 
         it "creates user" do

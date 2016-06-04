@@ -24,7 +24,7 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
+  EnforcedStyle: space
 
 RSpec/DescribedClass:
   Exclude:

@@ -16,14 +16,14 @@ shared_examples "sign in via oauth" do
     end
 
     scenario "with existing identity" do
-      mock_auth_hash(provider: identity.provider, uid: identity.uid, info: {email: identity.user.email})
+      mock_auth_hash(provider: identity.provider, uid: identity.uid, info: { email: identity.user.email })
       visit new_user_session_path
       click_on "Sign in with #{provider_name}"
       expect(page).to have_content "Successfully authenticated from #{provider_name} account"
     end
 
     scenario "user already exists, link with provider" do
-      mock_auth_hash(provider: provider_sym, info: {email: user.email})
+      mock_auth_hash(provider: provider_sym, info: { email: user.email })
 
       visit new_user_session_path
       click_on "Sign in with #{provider_name}"

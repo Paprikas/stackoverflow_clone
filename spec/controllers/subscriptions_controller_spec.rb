@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe SubscriptionsController, type: :controller do
   let!(:question) { create(:question) }
-  subject(:create_subscription) { post :create, params: {id: question, format: :json} }
-  subject(:delete_subscription) { delete :destroy, params: {id: question, format: :json} }
+  subject(:create_subscription) { post :create, params: { id: question, format: :json } }
+  subject(:delete_subscription) { delete :destroy, params: { id: question, format: :json } }
 
   describe "POST #create" do
     context "as user", :users, :auth do

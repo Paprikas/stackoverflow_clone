@@ -28,7 +28,7 @@ RSpec.describe QuestionsController, type: :controller do
         answer = create(:answer, question: question)
         accepted_answer = create(:answer, question: question, accepted: true)
 
-        get :show, params: {id: question}
+        get :show, params: { id: question }
         expect(question.answers).to eq([accepted_answer, answer])
       end
     end
@@ -37,14 +37,14 @@ RSpec.describe QuestionsController, type: :controller do
   it_behaves_like "votable" do
     let(:votable) { question }
     let(:owned_votable) { owned_question }
-    let(:shared_context) { {id: question} }
+    let(:shared_context) { { id: question } }
   end
 
   describe "guest user" do
     it_behaves_like "public access"
 
     describe 'GET #show' do
-      before { get :show, params: {id: question} }
+      before { get :show, params: { id: question } }
 
       it "assigns question to @question" do
         expect(assigns(:question)).to eq(question)
@@ -64,7 +64,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     describe 'PATCH #update' do
       it "responses with 401" do
-        patch :update, xhr: true, params: {id: question}
+        patch :update, xhr: true, params: { id: question }
         expect(response.status).to eq 401
       end
     end
@@ -78,7 +78,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     describe 'DELETE #destroy' do
       it "redirects to user login form" do
-        delete :destroy, params: {id: question}
+        delete :destroy, params: { id: question }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -90,7 +90,7 @@ RSpec.describe QuestionsController, type: :controller do
     it_behaves_like "public access"
 
     describe 'GET #show' do
-      before { get :show, params: {id: question} }
+      before { get :show, params: { id: question } }
 
       it "assigns question to @question" do
         expect(assigns(:question)).to eq(question)
@@ -119,7 +119,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     describe 'POST #create' do
       context "with valid attributes" do
-        let(:post_question) { post :create, params: {question: attributes_for(:question)} }
+        let(:post_question) { post :create, params: { question: attributes_for(:question) } }
 
         it "creates new question in the database" do
           expect { post_question }.to change(user.questions, :count).by(1)
@@ -136,7 +136,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       context "with invalid attributes" do
-        let(:post_invalid_question) { post :create, params: {question: attributes_for(:invalid_question)} }
+        let(:post_invalid_question) { post :create, params: { question: attributes_for(:invalid_question) } }
         it "doesn't create new question in the database" do
           expect { post_invalid_question }.not_to change(Question, :count)
         end
@@ -158,12 +158,12 @@ RSpec.describe QuestionsController, type: :controller do
       context "owner of the question" do
         context "with valid attributes" do
           it "renders update template" do
-            patch :update, xhr: true, params: {id: owned_question, question: attributes_for(:question)}
+            patch :update, xhr: true, params: { id: owned_question, question: attributes_for(:question) }
             expect(response).to render_template :update
           end
 
           it "updates question" do
-            patch :update, xhr: true, params: {id: owned_question, question: {title: "New title", body: "New body"}}
+            patch :update, xhr: true, params: { id: owned_question, question: { title: "New title", body: "New body" } }
             owned_question.reload
             expect(owned_question.title).to eq "New title"
             expect(owned_question.body).to eq "New body"
@@ -172,7 +172,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         context "with invalid attributes" do
           it "does not updates question" do
-            patch :update, xhr: true, params: {id: owned_question, question: attributes_for(:invalid_question) }
+            patch :update, xhr: true, params: { id: owned_question, question: attributes_for(:invalid_question) }
             owned_question.reload
             expect(owned_question.title).not_to be_empty
             expect(response).to have_http_status :unprocessable_entity
@@ -182,13 +182,13 @@ RSpec.describe QuestionsController, type: :controller do
 
       context "not owner of the question" do
         it "returns 404 with no content" do
-          patch :update, xhr: true, params: {id: question, question: attributes_for(:question) }
+          patch :update, xhr: true, params: { id: question, question: attributes_for(:question) }
           expect(response.status).to eq 403
           expect(response.body).to be_empty
         end
 
         it "does not updates question" do
-          patch :update, xhr: true, params: {id: question, question: {title: "New title"} }
+          patch :update, xhr: true, params: { id: question, question: { title: "New title" } }
           question.reload
           expect(question.title).not_to eq "New title"
         end
@@ -199,16 +199,16 @@ RSpec.describe QuestionsController, type: :controller do
       context "owner of the question" do
         it "deletes question from database" do
           owned_question
-          expect { delete :destroy, params: {id: owned_question} }.to change(user.questions, :count).by(-1)
+          expect { delete :destroy, params: { id: owned_question } }.to change(user.questions, :count).by(-1)
         end
 
         it "deletes dependent answers from database" do
           create(:answer, question: owned_question)
-          expect { delete :destroy, params: {id: owned_question} }.to change(Answer, :count).by(-1)
+          expect { delete :destroy, params: { id: owned_question } }.to change(Answer, :count).by(-1)
         end
 
         it "redirects to root_path" do
-          delete :destroy, params: {id: owned_question}
+          delete :destroy, params: { id: owned_question }
           expect(response).to redirect_to root_path
         end
       end
@@ -216,11 +216,11 @@ RSpec.describe QuestionsController, type: :controller do
       context "not owner of the question" do
         it "does not deletes question from database" do
           question
-          expect { delete :destroy, params: {id: question} }.not_to change(Question, :count)
+          expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
         end
 
         it "redirects to root_path" do
-          delete :destroy, params: {id: question}
+          delete :destroy, params: { id: question }
           expect(response).to redirect_to root_path
         end
       end

@@ -7,7 +7,7 @@ describe "Profile API" do
   context "authorized" do
     describe 'GET #me' do
       before do
-        get "/api/v1/profiles/me", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/profiles/me", params: { access_token: access_token.token, format: :json }
       end
 
       it "returns 200 status" do
@@ -31,7 +31,7 @@ describe "Profile API" do
       let!(:user) { create(:user) }
 
       before do
-        get "/api/v1/profiles/all", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/profiles/all", params: { access_token: access_token.token, format: :json }
       end
 
       it "returns 200 status" do

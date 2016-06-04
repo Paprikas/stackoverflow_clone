@@ -19,7 +19,7 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
       let(:identity) { create(:identity, user: user) }
 
       before do
-        stub_env_for_omniauth(provider: identity.provider, uid: identity.uid, info: {email: user.email})
+        stub_env_for_omniauth(provider: identity.provider, uid: identity.uid, info: { email: user.email })
         get :facebook
       end
 
@@ -30,7 +30,7 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
     context "user exists" do
       let(:user) { create(:user, email: "test@example.com") }
       before do
-        stub_env_for_omniauth(info: {email: user.email})
+        stub_env_for_omniauth(info: { email: user.email })
         get :facebook
       end
 
@@ -82,7 +82,7 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
       let(:identity) { create(:identity, user: user) }
 
       before do
-        stub_env_for_omniauth(provider: identity.provider, uid: identity.uid, info: {email: user.email})
+        stub_env_for_omniauth(provider: identity.provider, uid: identity.uid, info: { email: user.email })
         get :twitter
       end
 
@@ -111,6 +111,6 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
 end
 
 def stub_env_for_omniauth(hash = {})
-  hash = OmniAuth::AuthHash.new({provider: "facebook", uid: "123", info: {email: "test@example.com"}}.merge(hash))
+  hash = OmniAuth::AuthHash.new({ provider: "facebook", uid: "123", info: { email: "test@example.com" } }.merge(hash))
   request.env["omniauth.auth"] = OmniAuth.config.mock_auth[hash.provider.to_sym] = hash
 end

@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:identities).dependent(:destroy) }
 
   let(:email_regex) { /\Achange@me/ }
-  let(:auth) { OmniAuth::AuthHash.new(provider: "facebook", uid: "123", info: {email: "test@example.com"}) }
+  let(:auth) { OmniAuth::AuthHash.new(provider: "facebook", uid: "123", info: { email: "test@example.com" }) }
 
   describe ".find_with_oauth" do
     context "registered" do

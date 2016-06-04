@@ -5,21 +5,21 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question, user: user) }
   let(:user_owned_answer) { create(:answer, question: question, user: user) }
   let(:answer) { create(:answer, question: question) }
-  let(:post_valid_answer) { post :create, xhr: true, params: {question_id: question, answer: attributes_for(:answer)} }
-  let(:delete_answer) { delete :destroy, xhr: true, params: {question_id: question, id: answer} }
-  let(:delete_own_answer) { delete :destroy, xhr: true, params: {question_id: question, id: user_owned_answer} }
-  let(:accept_answer) { post :accept, params: {question_id: question, id: answer} }
+  let(:post_valid_answer) { post :create, xhr: true, params: { question_id: question, answer: attributes_for(:answer) } }
+  let(:delete_answer) { delete :destroy, xhr: true, params: { question_id: question, id: answer } }
+  let(:delete_own_answer) { delete :destroy, xhr: true, params: { question_id: question, id: user_owned_answer } }
+  let(:accept_answer) { post :accept, params: { question_id: question, id: answer } }
 
   it_behaves_like "votable" do
     let(:votable) { answer }
     let(:owned_votable) { user_owned_answer }
-    let(:shared_context) { {question_id: question, id: answer} }
+    let(:shared_context) { { question_id: question, id: answer } }
   end
 
   describe "guest user" do
     describe 'PATCH #update' do
       it "returns http unauthorized" do
-        patch :update, xhr: true, params: {question_id: question, id: answer.id}
+        patch :update, xhr: true, params: { question_id: question, id: answer.id }
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe AnswersController, type: :controller do
 
       context "with invalid attributes" do
         let(:create_invalid_answer) do
-          post :create, xhr: true, params: {question_id: question, answer: attributes_for(:invalid_answer)}
+          post :create, xhr: true, params: { question_id: question, answer: attributes_for(:invalid_answer) }
         end
 
         it "doesn't create new answer in the database" do
@@ -85,7 +85,7 @@ RSpec.describe AnswersController, type: :controller do
       it_behaves_like "delete attachment" do
         let(:attachable) { answer }
         let(:owned_attachable) { user_owned_answer }
-        let(:context_params) { {question_id: answer.question} }
+        let(:context_params) { { question_id: answer.question } }
       end
 
       context "owner" do
@@ -93,12 +93,12 @@ RSpec.describe AnswersController, type: :controller do
 
         context "with valid attributes" do
           it "returns http ok" do
-            patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: attributes_for(:answer)}
+            patch :update, xhr: true, params: { question_id: question, id: user_owned_answer, answer: attributes_for(:answer) }
             expect(response).to have_http_status :ok
           end
 
           it "updates answer" do
-            patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: {body: "New body"}}
+            patch :update, xhr: true, params: { question_id: question, id: user_owned_answer, answer: { body: "New body" } }
             user_owned_answer.reload
             expect(user_owned_answer.body).to eq "New body"
           end
@@ -119,14 +119,14 @@ RSpec.describe AnswersController, type: :controller do
               format: :json
             }
             should permit(:body, attachments_attributes: [:id, :file, :_destroy])
-              .for(:update, params: {params: params})
+              .for(:update, params: { params: params })
               .on(:answer)
           end
         end
 
         context "with invalid attributes" do
           it "does not updates answer" do
-            patch :update, xhr: true, params: {question_id: question, id: user_owned_answer, answer: attributes_for(:invalid_answer) }
+            patch :update, xhr: true, params: { question_id: question, id: user_owned_answer, answer: attributes_for(:invalid_answer) }
             user_owned_answer.reload
             expect(user_owned_answer.body).not_to be_empty
             expect(response).to have_http_status :unprocessable_entity
@@ -136,13 +136,13 @@ RSpec.describe AnswersController, type: :controller do
 
       context "not owner of the question" do
         it "returns 404 with no content" do
-          patch :update, xhr: true, params: {question_id: question, id: answer, answer: attributes_for(:answer) }
+          patch :update, xhr: true, params: { question_id: question, id: answer, answer: attributes_for(:answer) }
           expect(response).to have_http_status :forbidden
           expect(response.body).to be_empty
         end
 
         it "does not updates question" do
-          patch :update, xhr: true, params: {question_id: question, id: answer, answer: {body: "New title"} }
+          patch :update, xhr: true, params: { question_id: question, id: answer, answer: { body: "New title" } }
           answer.reload
           expect(answer.body).not_to eq "New title"
         end

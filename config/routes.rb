@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get "search", to: 'search#search'
 
   use_doorkeeper
-  devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
+  devise_for :users, controllers: { omniauth_callbacks: "omniauth_callbacks" }
 
   get "/finish_signup" => 'registrations#finish_signup', as: :finish_signup
   patch "/finish_signup" => 'registrations#send_confirmation_email', as: :send_confirmation_email
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :questions,
             only: [:new, :create, :show, :update, :destroy],
             concerns: :votable do
-    resources :comments, only: :create, defaults: {commentable: "questions"}
+    resources :comments, only: :create, defaults: { commentable: "questions" }
 
     member do
       post :subscribe, to: 'subscriptions#create'
@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     resources :answers,
               only: [:new, :create, :update, :destroy],
               concerns: :votable do
-      resources :comments, only: :create, defaults: {commentable: "answers"}
+      resources :comments, only: :create, defaults: { commentable: "answers" }
       member do
         post :accept
       end
