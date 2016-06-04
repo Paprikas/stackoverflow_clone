@@ -26,9 +26,6 @@ Style/StringLiterals:
 Style/SpaceInsideHashLiteralBraces:
   Enabled: false
 
-Style/BlockDelimiters:
-  Enabled: false
-
 RSpec/DescribedClass:
   Exclude:
     - 'spec/models/concerns/**/*'

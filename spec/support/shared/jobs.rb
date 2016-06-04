@@ -20,8 +20,6 @@ end
 
 shared_examples "job perform" do
   it "matches params with enqueued job", :test_queue_adapter do
-    expect {
-      described_class.perform_later(record)
-    }.to have_enqueued_job.with(record)
+    expect { described_class.perform_later(record) }.to have_enqueued_job.with(record)
   end
 end
