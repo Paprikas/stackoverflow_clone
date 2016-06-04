@@ -6,6 +6,8 @@ rvm:
 env:
   - "CHECK='rubocop -D'"
 
+script: "bundle exec $CHECK"
+
 matrix:
   exclude:
     - rvm: ruby-head
