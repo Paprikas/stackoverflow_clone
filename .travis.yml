@@ -4,6 +4,7 @@ rvm:
   - ruby-head
 
 env:
+  - "CHECK='rake"
   - "CHECK='rubocop -D'"
 
 script: "bundle exec $CHECK"
