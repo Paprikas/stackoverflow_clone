@@ -29,6 +29,9 @@ Style/StringLiterals:
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: space
 
+Metrics/AbcSize:
+  Enabled: false
+
 RSpec/DescribedClass:
   Exclude:
     - 'spec/models/concerns/**/*'
