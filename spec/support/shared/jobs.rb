@@ -12,7 +12,7 @@ shared_context "test queue adapter", :test_queue_adapter do
 end
 
 shared_examples "broadcast to ActionCable" do
-  it 'broadcasts to ActionCable' do
+  it "broadcasts to ActionCable" do
     expect(ActionCable.server).to receive(:broadcast).with(channel, hash_including(hash))
     described_class.perform_now(record)
   end
@@ -20,8 +20,6 @@ end
 
 shared_examples "job perform" do
   it "matches params with enqueued job", :test_queue_adapter do
-    expect {
-      described_class.perform_later(record)
-    }.to have_enqueued_job.with(record)
+    expect { described_class.perform_later(record) }.to have_enqueued_job.with(record)
   end
 end

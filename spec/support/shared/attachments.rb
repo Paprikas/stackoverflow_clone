@@ -1,11 +1,11 @@
-shared_examples 'delete attachment' do
+shared_examples "delete attachment" do
   let(:delete_attachment) do
     patch :update, xhr: true, params: {
       id: attachable,
       attachable.class.name.underscore => {
-        title: 'Title',
-        body: 'Body',
-        attachments_attributes: {"0": {_destroy: 1, id: attachment}}
+        title: "Title",
+        body: "Body",
+        attachments_attributes: { "0": { _destroy: 1, id: attachment } }
       }
     }.merge(context_params)
   end
@@ -22,7 +22,7 @@ shared_examples 'delete attachment' do
   context "not owner" do
     let!(:attachment) { create(:attachment, attachable: attachable) }
 
-    it 'does not deletes attachment' do
+    it "does not deletes attachment" do
       expect { delete_attachment }.not_to change(attachable.attachments, :count)
     end
   end

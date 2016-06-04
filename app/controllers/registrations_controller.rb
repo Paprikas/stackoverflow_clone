@@ -9,10 +9,10 @@ class RegistrationsController < ApplicationController
     user = User.find_by(email: params[:email])
 
     if user.present?
-      flash[:notice] = 'User with provided email already registered'
+      flash[:notice] = "User with provided email already registered"
     else
-      @user = User.create_user_from_session(session['devise.oauth_data'], params[:email])
-      return sign_in_with_oauth(@user, session['devise.oauth_data']['provider']) if @user.persisted?
+      @user = User.create_user_from_session(session["devise.oauth_data"], params[:email])
+      return sign_in_with_oauth(@user, session["devise.oauth_data"]["provider"]) if @user.persisted?
     end
 
     render :finish_signup
@@ -21,6 +21,6 @@ class RegistrationsController < ApplicationController
   private
 
   def redirect_if_no_oauth_session
-    redirect_to root_path, notice: 'Registration successfully finished' unless session['devise.oauth_data']
+    redirect_to root_path, notice: "Registration successfully finished" unless session["devise.oauth_data"]
   end
 end

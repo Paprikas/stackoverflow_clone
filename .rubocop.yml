@@ -18,18 +18,18 @@ Style/Documentation:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
-    Enabled: false
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
 
 Style/StringLiterals:
-  Enabled: false
-
-Style/BlockComments:
-  Enabled: false
+  EnforcedStyle: double_quotes
 
 Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
+  EnforcedStyle: space
 
-Style/BlockDelimiters:
+Metrics/AbcSize:
   Enabled: false
 
 RSpec/DescribedClass:

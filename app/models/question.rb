@@ -13,7 +13,7 @@ class Question < ApplicationRecord
 
   after_commit { QuestionRelayJob.perform_later(self) }
   after_create_commit :subscribe_user
-  after_update :notify_users, if: 'body_changed?'
+  after_update :notify_users, if: "body_changed?"
 
   private
 

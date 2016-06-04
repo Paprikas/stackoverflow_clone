@@ -1,23 +1,23 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Answers API' do
+describe "Answers API" do
   let(:access_token) { create(:access_token) }
   let(:question) { create(:question) }
 
-  context 'authorized' do
+  context "authorized" do
     describe 'GET #index' do
       let!(:answers) { create_pair(:answer, question: question) }
       let(:answer) { answers.first }
 
       before do
-        get "/api/v1/questions/#{question.id}/answers", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/questions/#{question.id}/answers", params: { access_token: access_token.token, format: :json }
       end
 
-      it 'returns 200 status' do
+      it "returns 200 status" do
         expect(response).to be_success
       end
 
-      it 'returns answers' do
+      it "returns answers" do
         expect(response.body).to have_json_size(2)
       end
 
@@ -34,10 +34,10 @@ describe 'Answers API' do
       let!(:attachment) { create(:attachment, attachable: answer) }
 
       before do
-        get "/api/v1/questions/#{answer.question.id}/answers/#{answer.id}", params: {access_token: access_token.token, format: :json}
+        get "/api/v1/questions/#{answer.question.id}/answers/#{answer.id}", params: { access_token: access_token.token, format: :json }
       end
 
-      it 'returns 200 status' do
+      it "returns 200 status" do
         expect(response).to be_success
       end
 
@@ -47,9 +47,9 @@ describe 'Answers API' do
         end
       end
 
-      context 'comments' do
-        it 'includes comments' do
-          expect(response.body).to have_json_size(1).at_path('comments')
+      context "comments" do
+        it "includes comments" do
+          expect(response.body).to have_json_size(1).at_path("comments")
         end
 
         %w(id body created_at updated_at).each do |attr|
@@ -59,9 +59,9 @@ describe 'Answers API' do
         end
       end
 
-      context 'attachments' do
-        it 'includes attachments' do
-          expect(response.body).to have_json_size(1).at_path('attachments')
+      context "attachments" do
+        it "includes attachments" do
+          expect(response.body).to have_json_size(1).at_path("attachments")
         end
 
         it "contains filename" do
@@ -77,53 +77,53 @@ describe 'Answers API' do
     describe 'POST #create' do
       let!(:question) { create(:question) }
 
-      context 'with valid params' do
+      context "with valid params" do
         let(:post_answer) do
           post "/api/v1/questions/#{question.id}/answers", params: {
             access_token: access_token.token, format: :json, answer: attributes_for(:answer), question_id: question
           }
         end
 
-        it 'returns 201 status' do
+        it "returns 201 status" do
           post_answer
           expect(response.status).to eq 201
         end
 
-        it 'creates answer' do
+        it "creates answer" do
           expect { post_answer }.to change(question.answers, :count).by(1)
         end
       end
 
-      context 'with invalid params' do
+      context "with invalid params" do
         let(:post_invalid_answer) do
           post "/api/v1/questions/#{question.id}/answers", params: {
             access_token: access_token.token, format: :json, answer: attributes_for(:invalid_answer), question_id: question
           }
         end
 
-        it 'returns 422 status' do
+        it "returns 422 status" do
           post_invalid_answer
           expect(response.status).to eq 422
         end
 
-        it 'does not creates answer' do
+        it "does not creates answer" do
           expect { post_invalid_answer }.not_to change(question.answers, :count)
         end
       end
     end
   end
 
-  context 'not authorized' do
+  context "not authorized" do
     describe 'GET #index' do
-      it_behaves_like 'API unaccessable', :get, "/api/v1/questions/1/answers"
+      it_behaves_like "API unaccessable", :get, "/api/v1/questions/1/answers"
     end
 
     describe 'GET #show' do
-      it_behaves_like 'API unaccessable', :get, "/api/v1/questions/1/answers/1"
+      it_behaves_like "API unaccessable", :get, "/api/v1/questions/1/answers/1"
     end
 
     describe 'POST #create' do
-      it_behaves_like 'API unaccessable', :post, "/api/v1/questions/1/answers"
+      it_behaves_like "API unaccessable", :post, "/api/v1/questions/1/answers"
     end
   end
 end

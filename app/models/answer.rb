@@ -13,11 +13,12 @@ class Answer < ApplicationRecord
   after_commit :question_answer_relay, on: :create
   after_commit :question_answer_notification, on: :create
 
+  scope :accepted, -> { where(accepted: true) }
+
   def toggle_accept!
     transaction do
       toggle(:accepted)
-      # TODO: move to scope
-      question.answers.where(accepted: true).update_all(accepted: false) if accepted?
+      question.answers.accepted.update_all(accepted: false) if accepted?
       save!
     end
   end

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe AnswerPolicy do
   let(:record) { build_stubbed(:answer, user: user) }

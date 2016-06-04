@@ -1,13 +1,13 @@
-scope groups: ['specs']
+scope groups: ["specs"]
 
-group 'specs' do
+group "specs" do
   guard :bundler do
-    require 'guard/bundler'
-    require 'guard/bundler/verify'
+    require "guard/bundler"
+    require "guard/bundler/verify"
     helper = Guard::Bundler::Verify.new
 
-    files = ['Gemfile']
-    files += Dir['*.gemspec'] if files.any? { |f| helper.uses_gemspec?(f) }
+    files = ["Gemfile"]
+    files += Dir["*.gemspec"] if files.any? { |f| helper.uses_gemspec?(f) }
 
     # Assume files are symlinked from somewhere
     files.each { |file| watch(helper.real_path(file)) }
@@ -56,16 +56,16 @@ group 'specs' do
     watch(%r{(?:.+/)?\.rubocop\.yml$}) { |m| File.dirname(m[0]) }
   end
 
-  guard 'spring', bundler: true do
-    watch('Gemfile.lock')
+  guard "spring", bundler: true do
+    watch("Gemfile.lock")
     watch(%r{^config/})
     watch(%r{^spec/(support|factories)/})
   end
 end
 
-group 'rails' do
-  guard 'rails' do
-    watch('Gemfile.lock')
+group "rails" do
+  guard "rails" do
+    watch("Gemfile.lock")
     watch(%r{^(config|lib)/.*})
   end
 end

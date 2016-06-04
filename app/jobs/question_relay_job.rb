@@ -7,6 +7,6 @@ class QuestionRelayJob < ApplicationJob
   private
 
   def render_question(question)
-    CommentsController.render(partial: 'questions/question_teaser', locals: { question: question })
+    CommentsController.render(partial: "questions/question_teaser", locals: { question: question })
   end
 end

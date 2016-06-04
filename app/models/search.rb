@@ -9,7 +9,7 @@ class Search
 
   def self.perform_search(search_query, search_type)
     search_query = Riddle::Query.escape(search_query.to_s)
-    if search_type == 'all'
+    if search_type == "all"
       ThinkingSphinx.search(search_query)
     else
       search_type.underscore.classify.constantize.search(search_query)

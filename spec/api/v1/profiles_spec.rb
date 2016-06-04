@@ -1,16 +1,16 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Profile API' do
+describe "Profile API" do
   let(:me) { create(:user) }
   let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-  context 'authorized' do
+  context "authorized" do
     describe 'GET #me' do
       before do
-        get '/api/v1/profiles/me', params: {access_token: access_token.token, format: :json}
+        get "/api/v1/profiles/me", params: { access_token: access_token.token, format: :json }
       end
 
-      it 'returns 200 status' do
+      it "returns 200 status" do
         expect(response).to be_success
       end
 
@@ -31,22 +31,22 @@ describe 'Profile API' do
       let!(:user) { create(:user) }
 
       before do
-        get '/api/v1/profiles/all', params: {access_token: access_token.token, format: :json}
+        get "/api/v1/profiles/all", params: { access_token: access_token.token, format: :json }
       end
 
-      it 'returns 200 status' do
+      it "returns 200 status" do
         expect(response).to be_success
       end
 
-      it 'includes user' do
+      it "includes user" do
         expect(response.body).to include_json(user.to_json)
       end
 
-      it 'does not includes signed in user' do
+      it "does not includes signed in user" do
         expect(response.body).not_to include_json(me.to_json)
       end
 
-      it 'returns 1 user' do
+      it "returns 1 user" do
         expect(response.body).to have_json_size(1)
       end
 
@@ -64,13 +64,13 @@ describe 'Profile API' do
     end
   end
 
-  context 'not authorized' do
+  context "not authorized" do
     describe 'GET #me' do
-      it_behaves_like 'API unaccessable', :get, "/api/v1/profiles/me"
+      it_behaves_like "API unaccessable", :get, "/api/v1/profiles/me"
     end
 
     describe 'GET #all' do
-      it_behaves_like 'API unaccessable', :get, "/api/v1/profiles/all"
+      it_behaves_like "API unaccessable", :get, "/api/v1/profiles/all"
     end
   end
 end

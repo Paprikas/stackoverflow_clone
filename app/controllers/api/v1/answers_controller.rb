@@ -8,7 +8,7 @@ class Api::V1::AnswersController < Api::V1::ApplicationController
   def create
     authorize Answer
     @answer = @question.answers.create(answer_params.merge(user: current_user))
-    respond_with @answer, location: @question, include: ''
+    respond_with @answer, location: @question, include: ""
   end
 
   def show

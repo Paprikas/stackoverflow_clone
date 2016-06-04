@@ -37,7 +37,7 @@ class User < ApplicationRecord
   end
 
   def create_identities(auth)
-    identities.create!(provider: auth['provider'], uid: auth['uid'])
+    identities.create!(provider: auth["provider"], uid: auth["uid"])
   end
 
   def self.auth_email(auth)

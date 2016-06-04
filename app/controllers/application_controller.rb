@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
 
   def sign_in_with_oauth(user, provider)
     sign_in_and_redirect user, event: :authentication
-    flash[:notice] = t('devise.omniauth_callbacks.success', kind: provider.to_s.camelize) if is_navigational_format?
+    flash[:notice] = t("devise.omniauth_callbacks.success", kind: provider.to_s.camelize) if is_navigational_format?
   end
 
   def user_not_authorized
