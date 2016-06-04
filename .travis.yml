@@ -3,12 +3,20 @@ rvm:
   - 2.3.1
   - ruby-head
 
+env:
+  - "CHECK='rubocop -D'"
+
 matrix:
+  exclude:
+    - rvm: ruby-head
+      env: "CHECK='rubocop -D'"
   allow_failures:
     - rvm: ruby-head
 
 addons:
   postgresql: "9.4"
+  code_climate:
+    repo_token: f6f41dcd6b5c35659170071bc801d338bf869ef28faf7e468c894e2645ee878a
 
 services:
   - postgresql
