@@ -36,5 +36,3 @@ gemfile:
   - Gemfile
 
 cache: bundler
-
-after_failure: "cat /home/travis/build/Paprikas/stackoverflow_clone/log/test.searchd.log"
