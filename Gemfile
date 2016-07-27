@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", ">= 5.0.0.rc1", "< 5.1"
+gem "rails", ">= 5.0.0", "< 5.1"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 0.18"
 # Use Puma as the app server
@@ -34,10 +34,8 @@ group :development do
   gem "better_errors"
   gem "binding_of_caller"
   gem "listen", "~> 3.0.5"
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
-  gem "quiet_assets"
   gem "brakeman", require: false
   gem "guard-rspec", "~> 4.6", require: false
   gem "guard-bundler", require: false
@@ -85,7 +83,7 @@ gem "cocoon"
 
 # JS templating
 gem "skim"
-gem "gon", git: "https://github.com/gazay/gon.git"
+gem "gon"
 
 # Skinny controllers
 gem "responders"
@@ -95,10 +93,10 @@ gem "omniauth-facebook"
 gem "omniauth-twitter"
 
 # Authorization
-gem "pundit", git: "https://github.com/elabs/pundit.git"
-gem "doorkeeper", git: "https://github.com/doorkeeper-gem/doorkeeper.git"
+gem "pundit"
+gem "doorkeeper"
 
-gem "active_model_serializers", git: "https://github.com/rails-api/active_model_serializers.git"
+gem "active_model_serializers"
 
 # to_json replacement
 gem "oj"
@@ -115,4 +113,4 @@ gem "thinking-sphinx", "~> 3.2.0"
 gem "dotenv-rails"
 
 # Caching
-gem "redis-rails", git: "https://github.com/redis-store/redis-rails.git"
+gem "redis-rails"
