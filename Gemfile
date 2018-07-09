@@ -53,7 +53,7 @@ group :development do
 end
 
 group :test do
-  gem "rubocop", require: false
+  gem "rubocop", "0.49.0", require: false
   gem "rubocop-rspec"
   gem "shoulda-matchers"
   gem "rails-controller-testing"
@@ -88,13 +88,13 @@ gem "gon"
 # Skinny controllers
 gem "responders"
 
-gem "omniauth"
+gem "omniauth", "~> 1.3.2"
 gem "omniauth-facebook"
 gem "omniauth-twitter"
 
 # Authorization
 gem "pundit"
-gem "doorkeeper"
+gem "doorkeeper", "4.2.6"
 
 gem "active_model_serializers", "~> 0.10.7"
 
