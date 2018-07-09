@@ -10,7 +10,7 @@ describe RegistrationsController, type: :controller do
         get :finish_signup
       end
 
-      it { should redirect_to root_path }
+      it { is_expected.to redirect_to root_path }
     end
 
     context "as guest" do
@@ -20,7 +20,7 @@ describe RegistrationsController, type: :controller do
           get :finish_signup
         end
 
-        it { should render_template :finish_signup }
+        it { is_expected.to render_template :finish_signup }
       end
 
       context "without omniauth_data in session" do
@@ -28,7 +28,7 @@ describe RegistrationsController, type: :controller do
           get :finish_signup
         end
 
-        it { should redirect_to root_path }
+        it { is_expected.to redirect_to root_path }
       end
     end
   end
@@ -36,6 +36,7 @@ describe RegistrationsController, type: :controller do
   describe "PATCH #send_confirmation_email" do
     context "as user" do
       before { sign_in user }
+
       it "redirects to new_user_session_path" do
         patch :send_confirmation_email
         expect(response).to redirect_to root_path
@@ -48,7 +49,7 @@ describe RegistrationsController, type: :controller do
           patch :send_confirmation_email
         end
 
-        it { should redirect_to root_path }
+        it { is_expected.to redirect_to root_path }
       end
 
       context "with omniauth_data in session" do

@@ -1,17 +1,17 @@
 require "rails_helper"
 
-feature "search and view results", :js do
-  given!(:question) { create(:question) }
-  given!(:answer) { create(:answer) }
-  given!(:comment) { create(:answer_comment) }
-  given!(:user) { create(:user) }
+describe "search and view results", :js do
+  let!(:question) { create(:question) }
+  let!(:answer) { create(:answer) }
+  let!(:comment) { create(:answer_comment) }
+  let!(:user) { create(:user) }
 
-  background do
+  before do
     index
     visit root_path
   end
 
-  scenario "all" do
+  it "all" do
     click_on "Search"
     expect(page).to have_content question.title
     expect(page).to have_content answer.body

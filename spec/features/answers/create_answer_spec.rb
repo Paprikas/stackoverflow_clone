@@ -1,18 +1,18 @@
 require "rails_helper"
 
-feature "answer on question" do
-  given!(:question) { create(:question) }
+describe "answer on question" do
+  let!(:question) { create(:question) }
 
   describe "authenticated user", :js do
-    given(:user) { create(:user) }
+    let(:user) { create(:user) }
 
-    background do
+    before do
       sign_in user
       visit question_path(question)
     end
 
     # Disabled until ActionCable fix
-    xscenario "can answer on question with valid attributes" do
+    xit "can answer on question with valid attributes" do
       fill_in "Answer", with: "Dunno"
       click_on "Submit answer"
       within ".answers" do
@@ -21,7 +21,7 @@ feature "answer on question" do
       expect(find_field("Answer").value).to be_empty
     end
 
-    scenario "cannot answer on question with invalid attributes" do
+    it "cannot answer on question with invalid attributes" do
       click_on "Submit answer"
       within ".answer_errors" do
         expect(page).to have_content "Body can't be blank"
@@ -29,7 +29,7 @@ feature "answer on question" do
     end
 
     # Re-enable when remotipart will be ready for rails 5
-    xscenario "answer with file" do
+    xit "answer with file" do
       fill_in "Answer", with: "Dunno"
       attach_file "File", "#{Rails.root}/spec/spec_helper.rb"
       click_on "Submit answer"
@@ -38,7 +38,7 @@ feature "answer on question" do
       end
     end
 
-    xscenario "adds files via cocoon", :js do
+    xit "adds files via cocoon", :js do
       fill_in "Answer", with: "Dunno"
       click_on "add file"
       within all(".nested-fields").last do
@@ -54,7 +54,7 @@ feature "answer on question" do
     end
   end
 
-  scenario "Guest user cannot answer on question" do
+  it "Guest user cannot answer on question" do
     visit root_path
     click_on question.title
     expect(page).to have_content "Please sign in to answer the question."

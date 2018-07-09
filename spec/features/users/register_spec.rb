@@ -1,7 +1,7 @@
 require "rails_helper"
 
-feature "Register User" do
-  scenario "new user" do
+describe "Register User" do
+  it "new user" do
     visit root_path
     click_on "Registration"
     fill_in "Email", with: "test@example.com"
@@ -11,7 +11,7 @@ feature "Register User" do
     expect(page).to have_content "Welcome! You have signed up successfully."
   end
 
-  scenario "with existing user in database" do
+  it "with existing user in database" do
     user = create(:user)
     visit new_user_registration_path
     fill_in "Email", with: user.email

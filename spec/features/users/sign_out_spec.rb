@@ -1,9 +1,9 @@
 require "rails_helper"
 
-feature "User sign out" do
-  given(:user) { create(:user) }
+describe "User sign out" do
+  let(:user) { create(:user) }
 
-  scenario "Logged in user signs out" do
+  it "Logged in user signs out" do
     visit new_user_session_path
     fill_in "Email", with: user.email
     fill_in "Password", with: user.password

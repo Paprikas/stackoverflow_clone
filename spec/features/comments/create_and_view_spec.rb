@@ -2,7 +2,7 @@ require "rails_helper"
 
 shared_examples "comments feature" do
   context "as user", :js do
-    background do
+    before do
       sign_in question.user
       visit question_path(question)
     end
@@ -10,7 +10,7 @@ shared_examples "comments feature" do
     it_behaves_like "views comments"
 
     # Disabled until fix ActionCable response
-    xscenario "create comment" do
+    xit "create comment" do
       within commentable_selector do
         click_on "add a comment"
         expect(page).not_to have_content "add a comment"
@@ -29,7 +29,7 @@ shared_examples "comments feature" do
       end
     end
 
-    scenario "can't create invalid comment" do
+    it "can't create invalid comment" do
       within commentable_selector do
         click_on "add a comment"
         click_on "Add Comment"
@@ -45,7 +45,7 @@ shared_examples "comments feature" do
   context "as guest" do
     it_behaves_like "views comments"
 
-    scenario "can't see add a comment link" do
+    it "can't see add a comment link" do
       visit question_path(question)
       expect(page).not_to have_content "add a comment"
     end
@@ -53,26 +53,26 @@ shared_examples "comments feature" do
 end
 
 shared_examples "views comments" do
-  scenario "views comment" do
+  it "views comment" do
     comment = create(:comment, commentable: commentable)
     visit question_path(question)
     expect(page).to have_content comment.body
   end
 end
 
-feature "comment answer" do
-  given(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question) }
-  given(:commentable) { answer }
-  given(:commentable_selector) { ".answer" }
+describe "comment answer" do
+  let(:question) { create(:question) }
+  let!(:answer) { create(:answer, question: question) }
+  let(:commentable) { answer }
+  let(:commentable_selector) { ".answer" }
 
   it_behaves_like "comments feature"
 end
 
-feature "comment question" do
-  given(:question) { create(:question) }
-  given(:commentable) { question }
-  given(:commentable_selector) { ".question" }
+describe "comment question" do
+  let(:question) { create(:question) }
+  let(:commentable) { question }
+  let(:commentable_selector) { ".question" }
 
   it_behaves_like "comments feature"
 end

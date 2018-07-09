@@ -1,7 +1,7 @@
 require "rails_helper"
 
 shared_examples "unable to edit answer" do
-  scenario "cannot see edit link and textarea" do
+  it "cannot see edit link and textarea" do
     visit question_path(not_owned_answer.question)
 
     within "#answer_#{not_owned_answer.id}" do
@@ -11,23 +11,23 @@ shared_examples "unable to edit answer" do
   end
 end
 
-feature "edit answer" do
-  given!(:user) { create(:user) }
-  given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question, user: user) }
-  given!(:not_owned_answer) { create(:answer) }
+describe "edit answer" do
+  let!(:user) { create(:user) }
+  let!(:question) { create(:question) }
+  let!(:answer) { create(:answer, question: question, user: user) }
+  let!(:not_owned_answer) { create(:answer) }
 
   describe "guest user" do
     it_behaves_like "unable to edit answer"
   end
 
   describe "authenticated user" do
-    background { sign_in user }
+    before { sign_in user }
 
     context "owner of the answer" do
-      background { visit question_path(question) }
+      before { visit question_path(question) }
 
-      scenario "edits with valid attributes", :js do
+      it "edits with valid attributes", :js do
         within ".answer" do
           expect(page).not_to have_selector("textarea")
           click_on "Edit"
@@ -40,7 +40,7 @@ feature "edit answer" do
         end
       end
 
-      scenario "edits with invalid attributes", :js do
+      it "edits with invalid attributes", :js do
         within ".answer" do
           expect(page).not_to have_selector("textarea")
           click_on "Edit"

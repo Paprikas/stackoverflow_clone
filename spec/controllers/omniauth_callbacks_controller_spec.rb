@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe OmniauthCallbacksController, type: :controller do
   let(:user) { create(:user) }
+
   before { request.env["devise.mapping"] = Devise.mappings[:user] }
 
   describe "GET #facebook" do
@@ -11,8 +12,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
         get :facebook
       end
 
-      it { should respond_with(302) }
-      it { should redirect_to root_path }
+      it { is_expected.to respond_with(302) }
+      it { is_expected.to redirect_to root_path }
     end
 
     context "identity exists" do
@@ -23,19 +24,20 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
         get :facebook
       end
 
-      it { should be_user_signed_in }
-      it { should redirect_to root_path }
+      it { is_expected.to be_user_signed_in }
+      it { is_expected.to redirect_to root_path }
     end
 
     context "user exists" do
       let(:user) { create(:user, email: "test@example.com") }
+
       before do
         stub_env_for_omniauth(info: { email: user.email })
         get :facebook
       end
 
-      it { should be_user_signed_in }
-      it { should redirect_to root_path }
+      it { is_expected.to be_user_signed_in }
+      it { is_expected.to redirect_to root_path }
     end
 
     context "user not exists" do
@@ -45,8 +47,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           get :facebook
         end
 
-        it { should be_user_signed_in }
-        it { should redirect_to root_path }
+        it { is_expected.to be_user_signed_in }
+        it { is_expected.to redirect_to root_path }
       end
 
       context "email not provided" do
@@ -61,8 +63,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           expect(session["devise.oauth_data"][:uid]).to eq hash.uid
         end
 
-        it { should_not be_user_signed_in }
-        it { should redirect_to finish_signup_path }
+        it { is_expected.not_to be_user_signed_in }
+        it { is_expected.to redirect_to finish_signup_path }
       end
     end
   end
@@ -74,8 +76,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
         get :twitter
       end
 
-      it { should respond_with(302) }
-      it { should redirect_to root_path }
+      it { is_expected.to respond_with(302) }
+      it { is_expected.to redirect_to root_path }
     end
 
     context "identity exists" do
@@ -86,8 +88,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
         get :twitter
       end
 
-      it { should be_user_signed_in }
-      it { should redirect_to root_path }
+      it { is_expected.to be_user_signed_in }
+      it { is_expected.to redirect_to root_path }
     end
 
     context "user not exists" do
@@ -103,8 +105,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           expect(session["devise.oauth_data"][:uid]).to eq hash.uid
         end
 
-        it { should_not be_user_signed_in }
-        it { should redirect_to finish_signup_path }
+        it { is_expected.not_to be_user_signed_in }
+        it { is_expected.to redirect_to finish_signup_path }
       end
     end
   end

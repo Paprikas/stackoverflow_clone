@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-  it { should have_many(:questions).dependent(:destroy) }
-  it { should have_many(:answers).dependent(:destroy) }
-  it { should have_many(:identities).dependent(:destroy) }
-
-  let(:email_regex) { /\Achange@me/ }
   let(:auth) { OmniAuth::AuthHash.new(provider: "facebook", uid: "123", info: { email: "test@example.com" }) }
+  let(:email_regex) { /\Achange@me/ }
+
+  it { is_expected.to have_many(:questions).dependent(:destroy) }
+  it { is_expected.to have_many(:answers).dependent(:destroy) }
+  it { is_expected.to have_many(:identities).dependent(:destroy) }
 
   describe ".find_with_oauth" do
     context "registered" do
@@ -107,6 +107,7 @@ RSpec.describe User, type: :model do
 
   describe ".create_user_from_session" do
     let(:email) { "test@example.com" }
+
     context "with email" do
       it "returns user" do
         expect(described_class.create_user_from_session(auth, email)).to be_a described_class

@@ -61,7 +61,7 @@ group :test do
   gem "launchy"
   gem "poltergeist"
   gem "rails-controller-testing"
-  gem "rubocop", "0.49.0", require: false
+  gem "rubocop", require: false
   gem "rubocop-rspec"
   gem "shoulda-matchers"
   gem "with_model"

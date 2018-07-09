@@ -2,13 +2,13 @@ require "rails_helper"
 
 shared_examples "votes feature" do
   context "as user" do
-    background do
+    before do
       sign_in user
       visit question_path(question)
     end
 
     context "as voter" do
-      scenario "can vote", :aggregate_failures, :js do
+      it "can vote", :aggregate_failures, :js do
         within votable_selector do
           expect(page).to have_content "Score 0"
           expect(page).to have_content "Vote up"
@@ -32,7 +32,7 @@ shared_examples "votes feature" do
 
   context "as votable author" do
     it_behaves_like "can't participate in voting" do
-      background { sign_in votable.user }
+      before { sign_in votable.user }
     end
   end
 
@@ -43,7 +43,7 @@ shared_examples "votes feature" do
 end
 
 shared_examples "can't participate in voting" do
-  scenario "can't see vote links", :aggregate_failures do
+  it "can't see vote links", :aggregate_failures do
     visit question_path(question)
     within votable_selector do
       expect(page).not_to have_content "Vote up"
@@ -53,7 +53,7 @@ shared_examples "can't participate in voting" do
 end
 
 shared_examples "view vote score" do
-  scenario "can view vote score" do
+  it "can view vote score" do
     visit question_path(question)
     within votable_selector do
       expect(page).to have_content "Score 0"
@@ -61,23 +61,23 @@ shared_examples "view vote score" do
   end
 end
 
-feature "vote for answer" do
-  given(:user) { create(:user) }
-  given(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question) }
+describe "vote for answer" do
+  let(:user) { create(:user) }
+  let(:question) { create(:question) }
+  let!(:answer) { create(:answer, question: question) }
 
-  given(:votable) { answer }
-  given(:votable_selector) { "#answer_#{answer.id}" }
+  let(:votable) { answer }
+  let(:votable_selector) { "#answer_#{answer.id}" }
 
   it_behaves_like "votes feature"
 end
 
-feature "vote for question" do
-  given(:user) { create(:user) }
-  given(:question) { create(:question) }
+describe "vote for question" do
+  let(:user) { create(:user) }
+  let(:question) { create(:question) }
 
-  given(:votable) { question }
-  given(:votable_selector) { "#question_#{question.id}" }
+  let(:votable) { question }
+  let(:votable_selector) { "#question_#{question.id}" }
 
   it_behaves_like "votes feature"
 end

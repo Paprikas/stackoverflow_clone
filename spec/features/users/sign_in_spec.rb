@@ -1,14 +1,14 @@
 require "rails_helper"
 
-feature "User sign in" do
-  given(:user) { create(:user) }
+describe "User sign in" do
+  let(:user) { create(:user) }
 
-  scenario "User can visit login page through root_path" do
+  it "User can visit login page through root_path" do
     visit root_path
     click_on "Sign in"
   end
 
-  scenario "Registered user trying to sign in" do
+  it "Registered user trying to sign in" do
     visit new_user_session_path
     fill_in "Email", with: user.email
     fill_in "Password", with: user.password
@@ -18,7 +18,7 @@ feature "User sign in" do
     expect(current_path).to eq root_path
   end
 
-  scenario "Non-registered user trying to sign in" do
+  it "Non-registered user trying to sign in" do
     visit new_user_session_path
     fill_in "Email", with: "yest12@example.com"
     fill_in "Password", with: "12345678"

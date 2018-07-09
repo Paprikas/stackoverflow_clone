@@ -118,7 +118,7 @@ RSpec.describe AnswersController, type: :controller do
               id: user_owned_answer,
               format: :json
             }
-            should permit(:body, attachments_attributes: %i[id file _destroy])
+            is_expected.to permit(:body, attachments_attributes: %i[id file _destroy])
               .for(:update, params: { params: params })
               .on(:answer)
           end

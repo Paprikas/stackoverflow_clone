@@ -137,6 +137,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       context "with invalid attributes" do
         let(:post_invalid_question) { post :create, params: { question: attributes_for(:invalid_question) } }
+
         it "doesn't create new question in the database" do
           expect { post_invalid_question }.not_to change(Question, :count)
         end

@@ -5,11 +5,11 @@ shared_examples "sees question form" do
   expect(page).to have_content "Create Question"
 end
 
-feature "create question" do
-  given(:user) { create(:user) }
+describe "create question" do
+  let(:user) { create(:user) }
 
   describe "authenticated user" do
-    background do
+    before do
       sign_in user
       visit new_question_path
     end
@@ -18,7 +18,7 @@ feature "create question" do
       expect(page).to have_button "Create Question"
     end
 
-    scenario "creates question with valid attributes" do
+    it "creates question with valid attributes" do
       fill_in "Title", with: "How much is the fish?"
       fill_in "Body", with: "Can't find price"
       click_on "Create Question"
@@ -28,13 +28,13 @@ feature "create question" do
       end
     end
 
-    scenario "cannot create question with invalid attributes" do
+    it "cannot create question with invalid attributes" do
       click_on "Create Question"
       expect(page).to have_content "Title can't be blank"
       expect(page).to have_content "Body can't be blank"
     end
 
-    xscenario "adds file" do
+    xit "adds file" do
       fill_in "Title", with: "How much is the fish?"
       fill_in "Body", with: "Can't find price"
       attach_file "File", "#{Rails.root}/spec/spec_helper.rb"
@@ -42,7 +42,7 @@ feature "create question" do
       expect(page).to have_link "spec_helper.rb", href: "/uploads/attachment/file/1/spec_helper.rb"
     end
 
-    xscenario "adds files via cocoon", :js do
+    xit "adds files via cocoon", :js do
       fill_in "Title", with: "How much is the fish?"
       fill_in "Body", with: "Can't find price"
       click_on "add file"
@@ -60,7 +60,7 @@ feature "create question" do
   end
 
   describe "guest user" do
-    scenario "creates question" do
+    it "creates question" do
       visit root_path
       click_on "Ask Question"
       expect(page).to have_content "You need to sign in or sign up before continuing."
