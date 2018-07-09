@@ -24,8 +24,8 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "parallel_tests"
   gem "pry-byebug"
-  gem "rspec", "~> 3.5.0.beta3"
-  gem "rspec-rails", "~> 3.5.0beta3"
+  gem "rspec"
+  gem "rspec-rails"
   gem "spring-commands-rspec"
 end
 
