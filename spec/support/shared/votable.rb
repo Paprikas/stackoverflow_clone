@@ -3,7 +3,7 @@ shared_examples "votable" do
   let(:vote_down) { post :vote_down, xhr: true, params: shared_context }
 
   context "as guest" do
-    describe 'POST #vote' do
+    describe "POST #vote" do
       it "responses with 401" do
         vote_up
         expect(response.status).to eq 401
@@ -14,7 +14,7 @@ shared_examples "votable" do
   context "as user" do
     before { sign_in user }
 
-    describe 'POST #vote' do
+    describe "POST #vote" do
       it "assigns votable to @votable" do
         vote_up
         expect(assigns(:votable)).to eq votable

@@ -1,5 +1,5 @@
 class Api::V1::AnswersController < Api::V1::ApplicationController
-  before_action :set_question, only: [:index, :show, :create]
+  before_action :set_question, only: %i[index show create]
 
   def index
     respond_with @question.answers

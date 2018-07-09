@@ -17,28 +17,28 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe "guest user" do
-    describe 'PATCH #update' do
+    describe "PATCH #update" do
       it "returns http unauthorized" do
         patch :update, xhr: true, params: { question_id: question, id: answer.id }
         expect(response).to have_http_status :unauthorized
       end
     end
 
-    describe 'POST #create' do
+    describe "POST #create" do
       it "redirects to user login form" do
         post_valid_answer
         expect(response.status).to eq 401
       end
     end
 
-    describe 'POST #accept' do
+    describe "POST #accept" do
       it "redirects to user login form" do
         accept_answer
         expect(response).to redirect_to(new_user_session_url)
       end
     end
 
-    describe 'DELETE #destroy' do
+    describe "DELETE #destroy" do
       it "responses with 401" do
         delete_answer
         expect(response.status).to eq 401
@@ -49,7 +49,7 @@ RSpec.describe AnswersController, type: :controller do
   describe "authenticated user" do
     before { sign_in user }
 
-    describe 'POST #create' do
+    describe "POST #create" do
       context "with valid attributes" do
         it "creates new answer in the database" do
           expect { post_valid_answer }.to change(question.answers, :count).by(1)
@@ -81,7 +81,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'PATCH #update' do
+    describe "PATCH #update" do
       it_behaves_like "delete attachment" do
         let(:attachable) { answer }
         let(:owned_attachable) { user_owned_answer }
@@ -118,7 +118,7 @@ RSpec.describe AnswersController, type: :controller do
               id: user_owned_answer,
               format: :json
             }
-            should permit(:body, attachments_attributes: [:id, :file, :_destroy])
+            should permit(:body, attachments_attributes: %i[id file _destroy])
               .for(:update, params: { params: params })
               .on(:answer)
           end
@@ -149,7 +149,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'POST #accept' do
+    describe "POST #accept" do
       context "owner of the answer" do
         it "assigns answer to @answer" do
           accept_answer
@@ -172,7 +172,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'DELETE #destroy' do
+    describe "DELETE #destroy" do
       context "owner" do
         it "deletes answer from database" do
           user_owned_answer

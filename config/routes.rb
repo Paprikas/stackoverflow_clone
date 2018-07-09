@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  get "search", to: 'search#search'
+  get "search", to: "search#search"
 
   use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: "omniauth_callbacks" }
 
-  get "/finish_signup" => 'registrations#finish_signup', as: :finish_signup
-  patch "/finish_signup" => 'registrations#send_confirmation_email', as: :send_confirmation_email
+  get "/finish_signup" => "registrations#finish_signup", as: :finish_signup
+  patch "/finish_signup" => "registrations#send_confirmation_email", as: :send_confirmation_email
 
   concern :votable do
     member do
@@ -16,17 +16,17 @@ Rails.application.routes.draw do
   end
 
   resources :questions,
-            only: [:new, :create, :show, :update, :destroy],
+            only: %i[new create show update destroy],
             concerns: :votable do
     resources :comments, only: :create, defaults: { commentable: "questions" }
 
     member do
-      post :subscribe, to: 'subscriptions#create'
-      delete :unsubscribe, to: 'subscriptions#destroy'
+      post :subscribe, to: "subscriptions#create"
+      delete :unsubscribe, to: "subscriptions#destroy"
     end
 
     resources :answers,
-              only: [:new, :create, :update, :destroy],
+              only: %i[new create update destroy],
               concerns: :votable do
       resources :comments, only: :create, defaults: { commentable: "answers" }
       member do
@@ -42,13 +42,13 @@ Rails.application.routes.draw do
         get :all, on: :collection
       end
 
-      resources :questions, only: [:index, :show, :create] do
-        resources :answers, only: [:index, :show, :create]
+      resources :questions, only: %i[index show create] do
+        resources :answers, only: %i[index show create]
       end
     end
   end
 
-  root to: 'questions#index'
+  root to: "questions#index"
 
   # Serve websocket cable requests in-process
   mount ActionCable.server => "/cable"

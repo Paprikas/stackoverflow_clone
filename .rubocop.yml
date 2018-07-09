@@ -6,7 +6,7 @@ AllCops:
     - 'public/uploads/**/*'
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4.1
 
 Rails:
   Enabled: true
@@ -26,7 +26,7 @@ Style/ClassAndModuleChildren:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Style/SpaceInsideHashLiteralBraces:
+Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: space
 
 Metrics/AbcSize:
@@ -39,3 +39,33 @@ RSpec/DescribedClass:
 RSpec/DescribeClass:
   Exclude:
     - 'spec/api/**/*'
+
+Metrics/BlockLength:
+  Max: 182
+
+RSpec/ExampleLength:
+  Exclude:
+  - 'spec/controllers/answers_controller_spec.rb'
+  - 'spec/models/search_spec.rb'
+
+RSpec/VerifiedDoubles:
+  Exclude:
+  - 'spec/controllers/search_controller_spec.rb'
+  - 'spec/jobs/question_answer_notification_job_spec.rb'
+  - 'spec/jobs/question_digest_job_spec.rb'
+  - 'spec/jobs/question_update_notify_job_spec.rb'
+
+Rails/FilePath:
+  Exclude:
+  - 'config/environments/development.rb'
+  - 'spec/factories/attachments.rb'
+  - 'spec/features/answers/create_answer_spec.rb'
+  - 'spec/features/questions/create_question_spec.rb'
+  - 'spec/rails_helper.rb'
+
+Rails/SkipsModelValidations:
+  Exclude:
+  - 'app/models/answer.rb'
+
+Style/EmptyMethod:
+  Enabled: false

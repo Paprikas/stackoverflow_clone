@@ -3,7 +3,7 @@ require "rails_helper"
 describe RegistrationsController, type: :controller do
   let(:user) { create(:user) }
 
-  describe 'GET #finish_signup' do
+  describe "GET #finish_signup" do
     context "as user" do
       before do
         sign_in user
@@ -33,7 +33,7 @@ describe RegistrationsController, type: :controller do
     end
   end
 
-  describe 'PATCH #send_confirmation_email' do
+  describe "PATCH #send_confirmation_email" do
     context "as user" do
       before { sign_in user }
       it "redirects to new_user_session_path" do

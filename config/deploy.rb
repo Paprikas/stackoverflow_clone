@@ -11,7 +11,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/pids", "tmp/cache", "
 
 set :rbenv_ruby, "2.3.1"
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w(rake gem bundle ruby rails sidekiq sidekiqctl)
+set :rbenv_map_bins, %w[rake gem bundle ruby rails sidekiq sidekiqctl]
 
 set :puma_init_active_record, true
 set :nginx_config_name, "stackoverflow_clone"

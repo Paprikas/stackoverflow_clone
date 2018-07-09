@@ -14,7 +14,7 @@ end
 RSpec.describe Search, type: :sphinx do
   describe "::SEARCH_TYPES" do
     it "returns search_types" do
-      expect(described_class::SEARCH_TYPES).to eq %w(all question answer comment user)
+      expect(described_class::SEARCH_TYPES).to eq %w[all question answer comment user]
     end
   end
 

@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:new, :create, :update, :destroy, :accept]
-  before_action :set_answer, only: [:update, :destroy, :accept]
+  before_action :set_question, only: %i[new create update destroy accept]
+  before_action :set_answer, only: %i[update destroy accept]
 
   include Voted
 
@@ -44,6 +44,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy])
+    params.require(:answer).permit(:body, attachments_attributes: %i[id file _destroy])
   end
 end

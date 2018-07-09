@@ -9,7 +9,7 @@ RSpec.describe QuestionsController, type: :controller do
   # https://github.com/rails/rails/issues/18950
 
   shared_examples "public access" do
-    describe 'GET #index' do
+    describe "GET #index" do
       before { get :index }
 
       it "assigns questions to @questions" do
@@ -22,7 +22,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'GET #show' do
+    describe "GET #show" do
       it "shows first in list if accepted" do
         question = create(:question)
         answer = create(:answer, question: question)
@@ -43,7 +43,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe "guest user" do
     it_behaves_like "public access"
 
-    describe 'GET #show' do
+    describe "GET #show" do
       before { get :show, params: { id: question } }
 
       it "assigns question to @question" do
@@ -55,28 +55,28 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'GET #new' do
+    describe "GET #new" do
       it "redirects to user login form" do
         get :new
         expect(response).to redirect_to(new_user_session_url)
       end
     end
 
-    describe 'PATCH #update' do
+    describe "PATCH #update" do
       it "responses with 401" do
         patch :update, xhr: true, params: { id: question }
         expect(response.status).to eq 401
       end
     end
 
-    describe 'POST #create' do
+    describe "POST #create" do
       it "redirects to user login form" do
         post :create
         expect(response).to redirect_to(new_user_session_url)
       end
     end
 
-    describe 'DELETE #destroy' do
+    describe "DELETE #destroy" do
       it "redirects to user login form" do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to(new_user_session_url)
@@ -89,7 +89,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it_behaves_like "public access"
 
-    describe 'GET #show' do
+    describe "GET #show" do
       before { get :show, params: { id: question } }
 
       it "assigns question to @question" do
@@ -105,7 +105,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'GET #new' do
+    describe "GET #new" do
       before { get :new }
 
       it "assigns new question to @question" do
@@ -117,7 +117,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'POST #create' do
+    describe "POST #create" do
       context "with valid attributes" do
         let(:post_question) { post :create, params: { question: attributes_for(:question) } }
 
@@ -148,7 +148,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'PATCH #update' do
+    describe "PATCH #update" do
       it_behaves_like "delete attachment" do
         let(:attachable) { question }
         let(:owned_attachable) { owned_question }
@@ -195,7 +195,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'DELETE #destroy' do
+    describe "DELETE #destroy" do
       context "owner of the question" do
         it "deletes question from database" do
           owned_question

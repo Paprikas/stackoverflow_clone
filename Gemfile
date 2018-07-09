@@ -21,59 +21,59 @@ gem "turbolinks", "~> 5.x"
 gem "jbuilder", "~> 2.0"
 
 group :development, :test do
+  gem "factory_girl_rails"
+  gem "parallel_tests"
   gem "pry-byebug"
   gem "rspec", "~> 3.5.0.beta3"
   gem "rspec-rails", "~> 3.5.0beta3"
-  gem "factory_girl_rails"
   gem "spring-commands-rspec"
-  gem "parallel_tests"
 end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem "better_errors"
   gem "binding_of_caller"
+  gem "brakeman", require: false
+  gem "guard-bundler", require: false
+  gem "guard-rails", require: false
+  gem "guard-rspec", "~> 4.6", require: false
+  gem "guard-rubocop", require: false
+  gem "guard-spring", require: false
   gem "listen", "~> 3.0.5"
+  gem "pry-rails"
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
-  gem "brakeman", require: false
-  gem "guard-rspec", "~> 4.6", require: false
-  gem "guard-bundler", require: false
-  gem "guard-rubocop", require: false
-  gem "guard-rails", require: false
-  gem "guard-spring", require: false
-  gem "pry-rails"
 
   gem "capistrano", require: false
   gem "capistrano-bundler", require: false
-  gem "capistrano-rbenv", require: false
   gem "capistrano-rails", require: false
-  gem "capistrano3-puma", require: false
+  gem "capistrano-rbenv", require: false
   gem "capistrano-sidekiq", require: false
+  gem "capistrano3-puma", require: false
 end
 
 group :test do
+  gem "capybara"
+  gem "capybara-email"
+  gem "codeclimate-test-reporter", require: false
+  gem "database_cleaner"
+  gem "json_spec"
+  gem "launchy"
+  gem "poltergeist"
+  gem "rails-controller-testing"
   gem "rubocop", "0.49.0", require: false
   gem "rubocop-rspec"
   gem "shoulda-matchers"
-  gem "rails-controller-testing"
-  gem "capybara"
-  gem "poltergeist"
-  gem "launchy"
-  gem "database_cleaner"
-  gem "codeclimate-test-reporter", require: false
   gem "with_model"
-  gem "capybara-email"
-  gem "json_spec"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
-gem "slim-rails"
+gem "carrierwave"
 gem "devise"
 gem "foundation-rails"
-gem "carrierwave"
+gem "slim-rails"
 
 # To help submit files with remote forms
 gem "remotipart"
@@ -82,8 +82,8 @@ gem "remotipart"
 gem "cocoon"
 
 # JS templating
-gem "skim"
 gem "gon"
+gem "skim"
 
 # Skinny controllers
 gem "responders"
@@ -93,8 +93,8 @@ gem "omniauth-facebook"
 gem "omniauth-twitter"
 
 # Authorization
-gem "pundit"
 gem "doorkeeper", "4.2.6"
+gem "pundit"
 
 gem "active_model_serializers", "~> 0.10.7"
 

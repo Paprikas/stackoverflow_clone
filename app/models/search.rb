@@ -1,5 +1,5 @@
 class Search
-  SEARCH_TYPES = %w(all question answer comment user).freeze
+  SEARCH_TYPES = %w[all question answer comment user].freeze
 
   def self.query(search_query, search_type)
     types = SEARCH_TYPES
