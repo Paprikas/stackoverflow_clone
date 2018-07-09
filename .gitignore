@@ -25,3 +25,6 @@
 # Ignore sphinx configs and indices
 db/sphinx/*
 config/*.sphinx.conf
+
+# Ignore coverage logs
+coverage/*

@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", ">= 5.0.0", "< 5.1"
+gem "rails", "5.0.1"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 0.18"
 # Use Puma as the app server
@@ -76,7 +76,7 @@ gem "foundation-rails"
 gem "carrierwave"
 
 # To help submit files with remote forms
-gem "remotipart", git: "https://github.com/mshibuya/remotipart.git", ref: "3a6acb3"
+gem "remotipart"
 
 # For nested forms
 gem "cocoon"
@@ -96,7 +96,7 @@ gem "omniauth-twitter"
 gem "pundit"
 gem "doorkeeper"
 
-gem "active_model_serializers"
+gem "active_model_serializers", "~> 0.10.7"
 
 # to_json replacement
 gem "oj"
