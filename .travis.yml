@@ -4,9 +4,10 @@ rvm:
   - ruby-head
 
 env:
+  global:
+  - CC_TEST_REPORTER_ID=f6f41dcd6b5c35659170071bc801d338bf869ef28faf7e468c894e2645ee878a
   - "CHECK='rake'"
   - "CHECK='rubocop -D'"
-
 script: "bundle exec $CHECK"
 
 matrix:
@@ -18,8 +19,6 @@ matrix:
 
 addons:
   postgresql: "9.4"
-  code_climate:
-    repo_token: f6f41dcd6b5c35659170071bc801d338bf869ef28faf7e468c894e2645ee878a
 
 services:
   - postgresql
@@ -27,11 +26,20 @@ services:
 bundler_args: --without development --deployment --jobs=3 --retry=3
 
 before_script:
+  # cc test reporter
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  # sphinxsearch
   - sudo bash -c "$(curl -fsSL https://gist.githubusercontent.com/Paprikas/12afff6e9a59f8be2abdf2f564271945/raw/b905617807cb02f6d9dc2bf48dcfc60c3adbd384/install-sphinx)" 2.2.11
+  # rails setup
   - psql -c 'create database stackoverflow_clone_test;' -U postgres
   - cp config/database.yml.example config/database.yml
   - bundle exec rake db:setup
   - mkdir -p tmp/pids
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 gemfile:
   - Gemfile
