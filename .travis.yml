@@ -5,7 +5,7 @@ rvm:
 
 env:
   global:
-  - CC_TEST_REPORTER_ID=f6f41dcd6b5c35659170071bc801d338bf869ef28faf7e468c894e2645ee878a
+    - CC_TEST_REPORTER_ID=f6f41dcd6b5c35659170071bc801d338bf869ef28faf7e468c894e2645ee878a
   - "CHECK='rake'"
   - "CHECK='rubocop -D'"
 script: "bundle exec $CHECK"
