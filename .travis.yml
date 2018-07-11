@@ -31,7 +31,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   # sphinxsearch
-  - sudo bash -c "$(curl -fsSL https://gist.githubusercontent.com/Paprikas/12afff6e9a59f8be2abdf2f564271945/raw/b905617807cb02f6d9dc2bf48dcfc60c3adbd384/install-sphinx)" 2.2.11
+  - sudo bash -c "$(curl -fsSL https://gist.githubusercontent.com/Paprikas/12afff6e9a59f8be2abdf2f564271945/raw/a88b2e34454bbec8f22fbeb2118be15127529f93/install-sphinx)" 2.2.11
   # rails setup
   - psql -c 'create database stackoverflow_clone_test;' -U postgres
   - cp config/database.yml.example config/database.yml
